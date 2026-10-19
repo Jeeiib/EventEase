@@ -7,13 +7,14 @@ export type MonthSection = { monthKey: string; days: DaySection[] };
 
 const byStart = (a: EventWithStatus, b: EventWithStatus) => Date.parse(a.startsAt) - Date.parse(b.startsAt);
 
+/** À venir (le plus proche d'abord) et passés (le plus récent d'abord). */
 export function splitByTime(events: EventWithStatus[], now: Date) {
   const upcoming = events.filter((e) => isUpcoming(e.startsAt, now)).sort(byStart);
   const past = events.filter((e) => !isUpcoming(e.startsAt, now)).sort((a, b) => byStart(b, a));
   return { upcoming, past };
 }
 
-// Ce que compte chaque ligne du profil : les événements créés, ou ceux où l'on participe.
+/** Ce que compte chaque ligne du profil : les événements créés par `userId`, ou ceux où il participe. */
 export function selectProfileEvents(
   events: EventWithStatus[],
   kind: 'created' | 'participations',
@@ -22,6 +23,7 @@ export function selectProfileEvents(
   return events.filter((e) => (kind === 'created' ? e.authorId === userId : e.isParticipating));
 }
 
+/** Événements de l'onglet choisi, limités à ceux où l'on participe si `onlyMine`. */
 export function selectVisible(
   events: EventWithStatus[],
   filter: { tab: 'upcoming' | 'past'; onlyMine: boolean },
@@ -31,6 +33,7 @@ export function selectVisible(
   return filter.onlyMine ? list.filter((e) => e.isParticipating) : list;
 }
 
+/** Regroupe par mois puis par jour, dans l'ordre reçu : l'entrée doit déjà être triée. */
 export function buildListSections(events: EventWithStatus[]): MonthSection[] {
   const months: MonthSection[] = [];
   for (const event of events) {
@@ -51,12 +54,13 @@ export function buildListSections(events: EventWithStatus[]): MonthSection[] {
   return months;
 }
 
+/** Les sept jours de la semaine de `now`, du lundi au dimanche. */
 export function weekDays(now: Date): Date[] {
   const monday = startOfWeek(now);
   return Array.from({ length: 7 }, (_, i) => addDays(monday, i));
 }
 
-// Anneau = événement ce jour-là, point plein = je participe ; la participation prime.
+/** Marqueur par clé de jour : `participating` (point plein) l'emporte sur `event` (anneau). */
 export function dayMarkers(events: EventWithStatus[]): Record<string, 'event' | 'participating'> {
   const markers: Record<string, 'event' | 'participating'> = {};
   for (const event of events) {
@@ -67,7 +71,7 @@ export function dayMarkers(events: EventWithStatus[]): Record<string, 'event' | 
   return markers;
 }
 
-// Événements de la semaine affichée par le bandeau, du lundi au dimanche.
+/** Événements de la semaine `week`, triés par début. */
 export function eventsInWeek(events: EventWithStatus[], week: Date[]): EventWithStatus[] {
   const days = new Set(week.map(toDayKey));
   return events.filter((e) => days.has(toDayKey(new Date(e.startsAt)))).sort(byStart);

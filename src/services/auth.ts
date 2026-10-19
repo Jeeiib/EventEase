@@ -10,9 +10,10 @@ export type Digest = (text: string) => Promise<string>;
 export type RegisterError = 'emailTaken';
 export type LoginError = 'invalidCredentials';
 
-// Digest de production ; les tests injectent une version Node.
+/** Digest de production (SHA-256) ; les tests injectent une version Node. */
 export const sha256: Digest = (text) => Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, text);
 
+/** Condensat du mot de passe salé (`sel + mot de passe`) ; `digest` est injecté pour tourner sous Node en test. */
 export function hashPassword(password: string, salt: string, digest: Digest): Promise<string> {
   return digest(salt + password);
 }
@@ -20,10 +21,12 @@ export function hashPassword(password: string, salt: string, digest: Digest): Pr
 // Hachage de production, tel que le branchent le jeu de démo et sa réinitialisation.
 export const hashWithSha256 = (password: string, salt: string): Promise<string> => hashPassword(password, salt, sha256);
 
+/** Sel aléatoire de 16 octets, en hexadécimal (32 caractères). */
 export function makeSalt(): string {
   return Array.from(Crypto.getRandomBytes(16), (b) => b.toString(16).padStart(2, '0')).join('');
 }
 
+/** Crée le compte (e-mail normalisé, nom rogné) ; `emailTaken` si l'e-mail existe déjà. Ne renvoie jamais le condensat ni le sel. */
 export async function register(
   db: Db,
   input: { name: string; email: string; password: string },
@@ -42,6 +45,7 @@ export async function register(
   return { ok: true, user };
 }
 
+/** Vérifie e-mail et mot de passe ; renvoie l'utilisateur sans condensat ni sel, ou `invalidCredentials`. */
 export async function login(
   db: Db,
   input: { email: string; password: string },
