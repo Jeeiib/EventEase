@@ -1,0 +1,46 @@
+// Ligne d'information d'une fiche : icône, texte principal et sous-ligne, lus comme un seul élément.
+import { Feather } from '@expo/vector-icons';
+import type { ReactNode } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { joinA11y } from '@/i18n/a11y';
+import { colors, font } from '@/theme/tokens';
+
+type Props = {
+  icon: React.ComponentProps<typeof Feather>['name'];
+  title: string;
+  subtitle?: string;
+  last?: boolean;
+  // Boutons de la ligne (distance, météo) : frères du bloc lu, jamais ses enfants.
+  children?: ReactNode;
+};
+
+export function InfoRow({ icon, title, subtitle, last = false, children }: Props): React.JSX.Element {
+  return (
+    <View style={[styles.row, last && styles.last]}>
+      <Feather name={icon} size={20} color={colors.text} style={styles.icon} />
+      <View style={styles.texts}>
+        <View accessible accessibilityLabel={joinA11y([title, subtitle])}>
+          <Text style={styles.title}>{title}</Text>
+          {!!subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+        </View>
+        {children}
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 14,
+    paddingVertical: 14,
+    borderTopWidth: 1,
+    borderTopColor: colors.line,
+  },
+  last: { borderBottomWidth: 1, borderBottomColor: colors.line },
+  icon: { marginTop: 1 },
+  texts: { flex: 1 },
+  title: { fontFamily: font.medium, fontSize: font.size.row, lineHeight: 20, color: colors.text },
+  subtitle: { fontFamily: font.regular, fontSize: font.size.meta, lineHeight: 20, color: colors.muted, marginTop: 2 },
+});

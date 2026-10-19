@@ -1,6 +1,7 @@
 // Aiguillage selon la session : pile d'authentification, ou onglets + fiche + formulaire.
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '@/auth/AuthContext';
+import { EventDetailScreen } from '@/screens/EventDetailScreen';
 import { PlaceholderScreen } from '@/screens/PlaceholderScreen';
 import { colors } from '@/theme/tokens';
 import { AuthStack } from './AuthStack';
@@ -17,7 +18,7 @@ export function RootNavigator(): React.JSX.Element {
       {status === 'signedIn' ? (
         <>
           <Stack.Screen name="Main" component={MainTabs} />
-          <Stack.Screen name="EventDetail" component={PlaceholderScreen} />
+          <Stack.Screen name="EventDetail" component={EventDetailScreen} />
           {/* Sur iOS, « modal » donne la feuille pageSheet qu'on glisse pour fermer. */}
           <Stack.Group screenOptions={{ presentation: 'modal' }}>
             <Stack.Screen name="EventForm" component={PlaceholderScreen} />
