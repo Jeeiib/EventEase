@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
 import { EventListScreen } from '@/screens/EventListScreen';
 import { PlaceholderScreen } from '@/screens/PlaceholderScreen';
+import { ProfileScreen } from '@/screens/ProfileScreen';
 import { colors, font } from '@/theme/tokens';
 import type { MainTabParamList } from './types';
 
@@ -45,7 +46,7 @@ export function MainTabs(): React.JSX.Element {
       />
       <Tab.Screen
         name="Profile"
-        component={PlaceholderScreen}
+        component={ProfileScreen}
         options={{ title: t('common.tabs.profile'), tabBarAccessibilityLabel: t('common.tabs.profile'), tabBarIcon: tabIcon('user') }}
       />
     </Tab.Navigator>
