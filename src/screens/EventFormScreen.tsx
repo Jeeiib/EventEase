@@ -168,8 +168,13 @@ function EventForm({ original, navigation }: { original: EventWithStatus | null;
     };
     const now = new Date().toISOString();
     try {
-      if (original) await eventsRepo.update(db, original.id, user.id, input, now);
-      else await eventsRepo.create(db, user.id, input, now);
+      if (original) {
+        // Faux si l'événement a disparu ou n'appartient plus à l'utilisateur : ne pas fermer comme si c'était enregistré.
+        if (!(await eventsRepo.update(db, original.id, user.id, input, now))) {
+          Alert.alert(t('common.unexpectedError'));
+          return;
+        }
+      } else await eventsRepo.create(db, user.id, input, now);
       setSaved(true);
     } catch {
       Alert.alert(t('common.unexpectedError'));
