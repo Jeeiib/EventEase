@@ -56,6 +56,18 @@ describe('eventsRepo', () => {
     expect((await eventsRepo.listAll(db, alice)).map((e) => e.id)).toEqual([a, b]);
   });
 
+  it('listAll renvoie une ligne par événement avec le statut de chaque spectateur', async () => {
+    const carol = await newUser('Carol');
+    const first = await eventsRepo.create(db, alice, { ...base, title: 'A' }, NOW);
+    const second = await eventsRepo.create(db, alice, { ...base, title: 'B' }, NOW);
+    await participationsRepo.toggle(db, bob, first, NOW);
+    await participationsRepo.toggle(db, carol, first, NOW);
+    const asBob = await eventsRepo.listAll(db, bob);
+    const asAlice = await eventsRepo.listAll(db, alice);
+    expect(asBob.map((e) => [e.id, e.participantCount, e.isParticipating])).toEqual([[first, 2, true], [second, 0, false]]);
+    expect(asAlice.map((e) => [e.id, e.participantCount, e.isParticipating])).toEqual([[first, 2, false], [second, 0, false]]);
+  });
+
   it('update par l\'auteur change le contenu et updatedAt', async () => {
     const id = await eventsRepo.create(db, alice, base, NOW);
     const location = { label: 'Opéra', latitude: 45.76, longitude: 4.83 };
