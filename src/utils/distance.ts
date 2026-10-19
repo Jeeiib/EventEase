@@ -15,7 +15,9 @@ export function distanceMeters(a: Point, b: Point): number {
 }
 
 function unit(value: number, unit: 'meter' | 'kilometer', maximumFractionDigits: number, locale: string): string {
-  return new Intl.NumberFormat(locale, { style: 'unit', unit, unitDisplay: 'short', maximumFractionDigits }).format(value);
+  return new Intl.NumberFormat(locale, { style: 'unit', unit, unitDisplay: 'short', maximumFractionDigits }).format(
+    value,
+  );
 }
 
 export function formatDistance(meters: number, locale: string = getAppLocale()): string {

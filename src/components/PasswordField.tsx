@@ -30,7 +30,13 @@ export function PasswordField(props: Omit<TextFieldProps, 'secureTextEntry' | 'a
 }
 
 const styles = StyleSheet.create({
-  toggle: { minHeight: size.touch, minWidth: size.touch, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' },
+  toggle: {
+    minHeight: size.touch,
+    minWidth: size.touch,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   pressed: { opacity: 0.5 },
   toggleLabel: { fontFamily: font.semiBold, fontSize: font.size.row, color: colors.text },
 });

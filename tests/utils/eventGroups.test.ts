@@ -1,13 +1,6 @@
 // Tri, regroupement par jour et par mois, marqueurs du calendrier.
 import type { EventWithStatus } from '@/data/types';
-import {
-  buildListSections,
-  dayMarkers,
-  eventsInWeek,
-  selectVisible,
-  splitByTime,
-  weekDays,
-} from '@/utils/eventGroups';
+import { buildListSections, dayMarkers, eventsInWeek, selectVisible, splitByTime, weekDays } from '@/utils/eventGroups';
 import { toDayKey } from '@/utils/dates';
 
 const now = new Date('2026-10-19T12:00:00.000Z');

@@ -59,7 +59,7 @@ describe('register et login', () => {
     }
   });
 
-  it("refuse deux inscriptions avec le même e-mail, même écrit autrement", async () => {
+  it('refuse deux inscriptions avec le même e-mail, même écrit autrement', async () => {
     await register(db, input, { digest: fakeDigest, now });
     const again = await register(db, { ...input, email: ' MARIE@Exemple.fr ' }, { digest: fakeDigest, now });
     expect(again).toEqual({ ok: false, error: 'emailTaken' });

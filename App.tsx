@@ -18,7 +18,13 @@ void SplashScreen.preventAutoHideAsync();
 
 const theme = {
   ...DefaultTheme,
-  colors: { ...DefaultTheme.colors, background: colors.background, card: colors.background, text: colors.text, border: colors.line },
+  colors: {
+    ...DefaultTheme.colors,
+    background: colors.background,
+    card: colors.background,
+    text: colors.text,
+    border: colors.line,
+  },
 };
 
 export default function App(): React.JSX.Element | null {

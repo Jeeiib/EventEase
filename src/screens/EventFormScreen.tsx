@@ -3,7 +3,16 @@ import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { usePreventRemove } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useRef, useState } from 'react';
-import { AccessibilityInfo, Alert, Platform, ScrollView, StyleSheet, TextInput, View, findNodeHandle } from 'react-native';
+import {
+  AccessibilityInfo,
+  Alert,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+  findNodeHandle,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/auth/AuthContext';
 import { DateField } from '@/components/DateField';

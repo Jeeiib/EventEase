@@ -15,25 +15,16 @@ type Props = {
   onFooterPress: () => void;
 };
 
-export function AuthLayout({
-  children,
-  top,
-  footerText,
-  footerAction,
-  onFooterPress,
-}: Props): React.JSX.Element {
+export function AuthLayout({ children, top, footerText, footerAction, onFooterPress }: Props): React.JSX.Element {
   const insets = useSafeAreaInsets();
   return (
     <ScrollView
       style={styles.screen}
       // iOS décale lui-même le contenu sous le clavier et garde le champ actif visible.
       automaticallyAdjustKeyboardInsets
-      contentContainerStyle={[
-        styles.content,
-        { paddingTop: insets.top, paddingBottom: insets.bottom + 8 },
-      ]}
-      keyboardShouldPersistTaps='handled'
-      keyboardDismissMode='interactive'
+      contentContainerStyle={[styles.content, { paddingTop: insets.top, paddingBottom: insets.bottom + 8 }]}
+      keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="interactive"
     >
       {top}
       <View style={styles.body}>{children}</View>

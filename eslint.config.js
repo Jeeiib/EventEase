@@ -1,6 +1,6 @@
 // https://docs.expo.dev/guides/using-eslint/
 const { defineConfig } = require('eslint/config');
-const expoConfig = require("eslint-config-expo/flat");
+const expoConfig = require('eslint-config-expo/flat');
 const i18next = require('eslint-plugin-i18next');
 
 // Attributs qui portent du texte visible ou lu par VoiceOver.
@@ -10,7 +10,7 @@ const UI_FOLDERS = ['src/screens/**', 'src/components/**', 'src/navigation/**'];
 module.exports = defineConfig([
   expoConfig,
   {
-    ignores: ["dist/*"],
+    ignores: ['dist/*'],
   },
   {
     // Aucun texte visible en dur dans l'interface : tout passe par t().

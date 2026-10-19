@@ -117,7 +117,8 @@ export const demoEvents: {
   },
   {
     title: 'Visite du musée La Piscine',
-    description: 'Visite guidée de l’exposition d’automne. Entrée gratuite pour les adhérents, rendez-vous devant l’accueil.',
+    description:
+      'Visite guidée de l’exposition d’automne. Entrée gratuite pour les adhérents, rendez-vous devant l’accueil.',
     dayOffset: 25,
     hour: 14,
     minute: 0,

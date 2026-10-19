@@ -4,9 +4,7 @@ import { addDays, fromDayKey, isUpcoming, toDayKey } from '@/utils/dates';
 const FORECAST_DAYS = 15;
 
 export type WeatherAvailability =
-  | { kind: 'past' }
-  | { kind: 'available'; dayKey: string }
-  | { kind: 'tooFar'; availableFrom: Date };
+  { kind: 'past' } | { kind: 'available'; dayKey: string } | { kind: 'tooFar'; availableFrom: Date };
 
 export function weatherAvailability(startsAtIso: string, now: Date): WeatherAvailability {
   if (!isUpcoming(startsAtIso, now)) return { kind: 'past' };

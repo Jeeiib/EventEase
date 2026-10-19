@@ -20,4 +20,3 @@ export async function openDatabase(): Promise<Db> {
   const db: Db = database;
   return db;
 }
-
