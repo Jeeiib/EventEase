@@ -18,6 +18,9 @@ const MIN_LENGTH = 3;
 const PAUSE_MS = 350;
 const MAX_SHOWN = 4;
 
+// La liste précédente ne reste affichée que si l'on affine la même recherche.
+const related = (a: string, b: string) => a.startsWith(b) || b.startsWith(a);
+
 type Search = { query: string; status: 'searching' | 'done' | 'offline' | 'unavailable'; hits: AddressHit[] };
 
 type Props = {
@@ -43,11 +46,13 @@ export function PlaceField({ value, chosen, onChangeText, onChoose, onClear, err
     if (!active) return;
     const controller = new AbortController();
     const timer = setTimeout(() => {
-      setSearch((s) => ({ query, status: 'searching', hits: s?.query === query ? s.hits : (s?.hits ?? []) }));
+      setSearch((s) => ({ query, status: 'searching', hits: s && related(s.query, query) ? s.hits : [] }));
       searchAddress(query, { near: ASSOCIATION_AREA, signal: controller.signal }).then((result) => {
         if (controller.signal.aborted) return;
         if (!result.ok) {
-          setSearch({ query, status: result.error === 'network' ? 'offline' : 'unavailable', hits: [] });
+          const offline = result.error === 'network';
+          setSearch({ query, status: offline ? 'offline' : 'unavailable', hits: [] });
+          AccessibilityInfo.announceForAccessibility(offline ? t('form.place.offline') : t('form.locationError'));
           return;
         }
         const hits = result.hits.slice(0, MAX_SHOWN);
@@ -73,7 +78,7 @@ export function PlaceField({ value, chosen, onChangeText, onChoose, onClear, err
   // Les messages ne parlent que de la saisie en cours ; la liste précédente reste affichée pendant qu'on affine.
   const current = active && search?.query === query ? search : null;
   const searching = active && (!current || current.status === 'searching');
-  const hits = active && search ? search.hits : [];
+  const hits = active && search && related(search.query, query) ? search.hits : [];
 
   const clear = value !== '' && (
     <Pressable
@@ -145,7 +150,7 @@ export function PlaceField({ value, chosen, onChangeText, onChoose, onClear, err
   );
 }
 
-// Message sous le champ : un statut, pas une erreur. VoiceOver l'entend déjà par annonce.
+// Message sous le champ : un statut, pas une erreur. Les résultats et les échecs sont aussi annoncés à VoiceOver.
 function Status({
   icon,
   spinner = false,
