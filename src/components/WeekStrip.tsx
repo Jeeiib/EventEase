@@ -1,10 +1,14 @@
 // Bandeau de la semaine en cours : un seul bouton pour VoiceOver, qui résume la semaine et ouvre le calendrier.
+import { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { EventWithStatus } from '@/data/types';
-import { joinA11y } from '@/i18n/a11y';
 import { colors, font, size } from '@/theme/tokens';
-import { formatDateOnly, formatWeekdayDay, formatWeekdayShort, toDayKey } from '@/utils/dates';
+import { formatWeekdayShort, toDayKey } from '@/utils/dates';
+import { weekStripLabel } from '@/utils/weekLabel';
+
+// Sept colonnes de 44 pt doivent tenir sur la largeur : au-delà, les chiffres déborderaient.
+const MAX_SCALE = 1.6;
 
 type Props = {
   week: Date[];
@@ -14,63 +18,45 @@ type Props = {
   onPress: () => void;
 };
 
-export function WeekStrip({ week, weekEvents, markers, now, onPress }: Props): React.JSX.Element {
+export const WeekStrip = memo(function WeekStrip({ week, weekEvents, markers, now, onPress }: Props) {
   const { t } = useTranslation();
   const todayKey = toDayKey(now);
-  const label = t('list.weekStrip.label', {
-    period: periodLabel(week, now, t),
-    summary: summaryLabel(weekEvents, t),
-  });
 
   return (
     <Pressable
       accessible
       accessibilityRole="button"
-      accessibilityLabel={label}
+      accessibilityLabel={weekStripLabel(week, weekEvents, now, t)}
       accessibilityHint={t('list.weekStrip.hint')}
       onPress={onPress}
       style={({ pressed }) => [styles.strip, pressed && styles.pressed]}
     >
-      {week.map((day) => {
-        const key = toDayKey(day);
-        const marker = markers[key];
-        return (
-          <View key={key} style={styles.day}>
-            <Text style={styles.weekday}>{formatWeekdayShort(day)}</Text>
-            <View style={[styles.number, key === todayKey && styles.today]}>
-              <Text style={[styles.numberText, key === todayKey && styles.todayText]}>{day.getDate()}</Text>
+      <View style={styles.days} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
+        {week.map((day) => {
+          const key = toDayKey(day);
+          const marker = markers[key];
+          const isToday = key === todayKey;
+          return (
+            <View key={key} style={styles.day}>
+              <Text style={styles.weekday} maxFontSizeMultiplier={MAX_SCALE}>
+                {formatWeekdayShort(day)}
+              </Text>
+              <View style={[styles.number, isToday && styles.today]}>
+                <Text style={[styles.numberText, isToday && styles.todayText]} maxFontSizeMultiplier={MAX_SCALE}>
+                  {day.getDate()}
+                </Text>
+              </View>
+              <View style={[styles.dot, marker === 'event' && styles.dotEvent, marker === 'participating' && styles.dotMine]} />
             </View>
-            <View style={[styles.dot, marker === 'event' && styles.dotEvent, marker === 'participating' && styles.dotMine]} />
-          </View>
-        );
-      })}
+          );
+        })}
+      </View>
     </Pressable>
   );
-}
-
-type T = ReturnType<typeof useTranslation>['t'];
-
-// « du 19 au 25 octobre », ou « du 26 octobre au 1 novembre » quand la semaine change de mois.
-function periodLabel(week: Date[], now: Date, t: T): string {
-  const first = week[0];
-  const last = week[week.length - 1];
-  const sameMonth = first.getMonth() === last.getMonth();
-  return t('list.weekStrip.period', {
-    from: sameMonth ? String(first.getDate()) : formatDateOnly(first, now),
-    to: formatDateOnly(last, now),
-  });
-}
-
-function summaryLabel(events: EventWithStatus[], t: T): string {
-  const day = events.length === 1 ? formatWeekdayDay(new Date(events[0].startsAt)) : '';
-  const count = events.length === 0 ? t('list.weekStrip.none') : t('list.weekStrip.event', { count: events.length, day });
-  return joinA11y([count, events.some((e) => e.isParticipating) && t('list.weekStrip.youParticipate')]);
-}
+});
 
 const styles = StyleSheet.create({
   strip: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     marginTop: 6,
     marginHorizontal: 13,
     marginBottom: 2,
@@ -78,6 +64,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
   },
   pressed: { opacity: 0.6 },
+  days: { flexDirection: 'row', justifyContent: 'space-between' },
   day: { minWidth: size.weekDay, alignItems: 'center', gap: 5 },
   weekday: { fontFamily: font.regular, fontSize: font.size.weekday, color: colors.muted },
   number: {

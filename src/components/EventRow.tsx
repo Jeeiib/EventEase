@@ -1,8 +1,10 @@
 // Ligne d'événement de la liste : toute la ligne est la cible, lue d'un seul bloc par VoiceOver.
 import { Feather } from '@expo/vector-icons';
+import { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { EventWithStatus } from '@/data/types';
+import { getAppLocale } from '@/i18n';
 import { joinA11y } from '@/i18n/a11y';
 import { colors, font, size } from '@/theme/tokens';
 import { formatDayLong, formatTime, formatWeekdayShort } from '@/utils/dates';
@@ -13,17 +15,18 @@ type Props = {
   firstOfDay: boolean;
   past: boolean;
   now: Date;
-  onPress: () => void;
+  // Reçoit l'identifiant : la liste passe une seule fonction stable à toutes ses lignes.
+  onOpen: (eventId: number) => void;
 };
 
-export function EventRow({ event, firstOfDay, past, now, onPress }: Props): React.JSX.Element {
+export const EventRow = memo(function EventRow({ event, firstOfDay, past, now, onOpen }: Props) {
   const { t } = useTranslation();
   const start = new Date(event.startsAt);
   const time = formatTime(start);
   const status = event.isParticipating ? (past ? t('list.participated') : t('list.participating')) : null;
   const label = joinA11y([
     event.title,
-    t('list.row.when', { day: formatDayLong(start, now).toLocaleLowerCase(), time }),
+    t('list.row.when', { day: formatDayLong(start, now).toLocaleLowerCase(getAppLocale()), time }),
     event.location?.label,
     event.isParticipating && (past ? t('list.row.participated') : t('list.row.participating')),
   ]);
@@ -32,7 +35,7 @@ export function EventRow({ event, firstOfDay, past, now, onPress }: Props): Reac
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={label}
-      onPress={onPress}
+      onPress={() => onOpen(event.id)}
       style={({ pressed }) => [styles.row, firstOfDay ? styles.first : styles.sub, pressed && styles.pressed]}
     >
       <View style={styles.date} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
@@ -57,14 +60,14 @@ export function EventRow({ event, firstOfDay, past, now, onPress }: Props): Reac
       </View>
     </Pressable>
   );
-}
+});
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', gap: 16, minHeight: size.touch, paddingBottom: 12 },
   first: { paddingTop: 16, borderTopWidth: 1, borderTopColor: colors.line },
   sub: { paddingTop: 4 },
   pressed: { opacity: 0.6 },
-  date: { width: size.dateColumn },
+  date: { minWidth: size.dateColumn },
   dayNumber: {
     fontFamily: font.semiBold,
     fontSize: font.size.dayNumber,

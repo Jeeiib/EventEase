@@ -1,14 +1,15 @@
 // Confirmation discrète après une suppression : annoncée à VoiceOver, elle s'efface seule.
 import { Feather } from '@expo/vector-icons';
 import { useEffect } from 'react';
-import { AccessibilityInfo, StyleSheet, Text, View } from 'react-native';
+import { AccessibilityInfo, Platform, StyleSheet, Text, View } from 'react-native';
 import { colors, font } from '@/theme/tokens';
 
 const VISIBLE_MS = 4000;
 
 export function DeletedBanner({ message, onHide }: { message: string; onHide: () => void }): React.JSX.Element {
   useEffect(() => {
-    AccessibilityInfo.announceForAccessibility(message);
+    // iOS n'a pas de région live : on annonce. Android lit la région live, une annonce ferait doublon.
+    if (Platform.OS === 'ios') AccessibilityInfo.announceForAccessibility(message);
     const timer = setTimeout(onHide, VISIBLE_MS);
     return () => clearTimeout(timer);
   }, [message, onHide]);
