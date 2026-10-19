@@ -50,5 +50,5 @@ export function useEventList() {
   // Indépendant du filtre « mes participations » : sert à dire combien d'événements attendent l'utilisateur.
   const total = useMemo(() => splitByTime(events, now).upcoming.length, [events, now]);
 
-  return { view, setView, mineOnly, setMineOnly, sections, markers, week, weekEvents, now, total, refresh };
+  return { view, setView, mineOnly, setMineOnly, events, sections, markers, week, weekEvents, now, total, refresh };
 }

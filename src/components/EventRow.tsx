@@ -17,8 +17,10 @@ type Props = {
   now: Date;
   // Reçoit l'identifiant : la liste passe une seule fonction stable à toutes ses lignes.
   onOpen: (eventId: number) => void;
-  // Liste sans en-têtes de mois (profil) : le mois passe sous le numéro, le jour de la semaine dans la ligne.
-  withMonth?: boolean;
+  // Colonne de gauche : jour de la semaine sous le numéro (liste), mois sous le numéro (profil, sans en-têtes
+  // de mois), ou heure seule (calendrier, où le jour est déjà choisi).
+  column?: 'weekday' | 'month' | 'time';
+  // Badge « Tu participes » ; VoiceOver annonce la participation dans tous les cas.
   showStatus?: boolean;
 };
 
@@ -28,7 +30,7 @@ export const EventRow = memo(function EventRow({
   past,
   now,
   onOpen,
-  withMonth = false,
+  column = 'weekday',
   showStatus = true,
 }: Props) {
   const { t } = useTranslation();
@@ -36,13 +38,19 @@ export const EventRow = memo(function EventRow({
   const time = formatTime(start);
   const status = showStatus && event.isParticipating ? (past ? t('list.participated') : t('list.participating')) : null;
   const timeAndPlace = event.location ? t('list.row.meta', { time, place: event.location.label }) : time;
+  const meta =
+    column === 'month'
+      ? t('profile.list.row.meta', { weekday: formatWeekdayShort(start), rest: timeAndPlace })
+      : column === 'time'
+        ? event.location?.label
+        : timeAndPlace;
   // Dans le profil, les événements passés côtoient les autres : on les estompe.
-  const dim = withMonth && past;
+  const dim = column === 'month' && past;
   const label = joinA11y([
     event.title,
     t('list.row.when', { day: formatDayLong(start, now).toLocaleLowerCase(getAppLocale()), time }),
     event.location?.label,
-    showStatus && event.isParticipating && (past ? t('list.row.participated') : t('list.row.participating')),
+    event.isParticipating && (past ? t('list.row.participated') : t('list.row.participating')),
   ]);
 
   return (
@@ -53,11 +61,17 @@ export const EventRow = memo(function EventRow({
       style={({ pressed }) => [styles.row, firstOfDay ? styles.first : styles.sub, pressed && styles.pressed]}
     >
       <View style={styles.date} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
-        {firstOfDay && (
-          <>
-            <Text style={[styles.dayNumber, dim && styles.dim]}>{start.getDate()}</Text>
-            <Text style={styles.weekday}>{withMonth ? formatMonthShort(start) : formatWeekdayShort(start)}</Text>
-          </>
+        {column === 'time' ? (
+          <Text style={styles.time}>{time}</Text>
+        ) : (
+          firstOfDay && (
+            <>
+              <Text style={[styles.dayNumber, dim && styles.dim]}>{start.getDate()}</Text>
+              <Text style={styles.weekday}>
+                {column === 'month' ? formatMonthShort(start) : formatWeekdayShort(start)}
+              </Text>
+            </>
+          )
         )}
       </View>
       <View style={styles.body} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
@@ -68,11 +82,7 @@ export const EventRow = memo(function EventRow({
           </View>
         )}
         <Text style={[styles.title, dim && styles.dim]}>{event.title}</Text>
-        <Text style={styles.meta}>
-          {withMonth
-            ? t('profile.list.row.meta', { weekday: formatWeekdayShort(start), rest: timeAndPlace })
-            : timeAndPlace}
-        </Text>
+        {!!meta && <Text style={styles.meta}>{meta}</Text>}
       </View>
     </Pressable>
   );
@@ -92,6 +102,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   weekday: { fontFamily: font.regular, fontSize: font.size.small, color: colors.muted, marginTop: 2 },
+  time: { fontFamily: font.semiBold, fontSize: font.size.row, lineHeight: 21, color: colors.text },
   body: { flex: 1, gap: 4 },
   status: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   statusText: { fontFamily: font.medium, fontSize: font.size.small, color: colors.success },
