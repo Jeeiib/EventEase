@@ -1,3 +1,4 @@
+# Publication : un tag v* lance les builds EAS (APK et simulateur iOS) et les joint à la release GitHub.
 name: release
 
 on:
