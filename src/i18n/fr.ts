@@ -7,7 +7,6 @@ export const fr = {
       cancel: 'Annuler',
       ok: 'OK',
       retry: 'Réessayer',
-      back: 'Retour',
       optional: '(facultatif)',
       showPassword: 'Afficher',
       hidePassword: 'Masquer',
@@ -16,7 +15,6 @@ export const fr = {
         hidePassword: 'Masquer le mot de passe',
         fieldError: '{{label}}, erreur : {{error}}',
       },
-      loading: 'Chargement…',
       unexpectedError: 'Une erreur inattendue est survenue. Réessaie dans un instant.',
       startupError: "EventEase n'a pas pu ouvrir ses données. Réessaie ; si ça recommence, ferme puis rouvre l'app.",
     },
@@ -158,8 +156,6 @@ export const fr = {
         notNow: 'Pas maintenant',
         denied: "Ta position n'est pas autorisée pour EventEase. Pour voir la distance, active-la dans les Réglages.",
         openSettings: 'Ouvrir les réglages',
-        permissionPlist:
-          "EventEase utilise ta position uniquement pour calculer la distance jusqu'au lieu d'un événement.",
       },
     },
     weather: {
@@ -211,8 +207,6 @@ export const fr = {
         credit: "Adresses et lieux : Géoplateforme de l'IGN",
       },
       locationSearching: 'Recherche du lieu…',
-      locationFound: 'Lieu trouvé : {{label}}',
-      locationNotFound: "Adresse introuvable. Vérifie l'orthographe, ou crée l'événement sans lieu.",
       locationError: "Impossible de vérifier l'adresse pour le moment. Réessaie ou crée l'événement sans lieu.",
       removeLocation: 'Retirer le lieu',
       errors: {
@@ -226,11 +220,6 @@ export const fr = {
         title: 'Tes modifications ne sont pas enregistrées.',
         confirm: 'Abandonner les modifications',
         cancel: 'Continuer la saisie',
-      },
-      picker: {
-        day: 'Jour',
-        hour: 'Heure',
-        minutes: 'Minutes, par pas de 5',
       },
     },
     calendar: {
@@ -291,10 +280,6 @@ export const fr = {
           'Tous les comptes et événements de ce téléphone seront effacés, puis les données de démonstration seront recréées.',
         confirm: 'Réinitialiser',
       },
-    },
-    errors: {
-      generic: 'Une erreur est survenue. Réessaie dans un instant.',
-      eventNotFound: "Cet événement n'existe plus.",
     },
   },
 } as const;
