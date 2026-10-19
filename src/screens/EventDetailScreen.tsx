@@ -1,17 +1,20 @@
 // Fiche d'un événement : informations, participation à bascule, modification et suppression pour l'auteur.
 import * as Haptics from 'expo-haptics';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { AccessibilityInfo, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { AccessibilityInfo, Alert, Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { DangerLink } from '@/components/DangerLink';
 import { InfoRow } from '@/components/InfoRow';
+import { InlineButton } from '@/components/InlineButton';
 import { ParticipationButton } from '@/components/ParticipationButton';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { StatusTag } from '@/components/StatusTag';
+import { TextLink } from '@/components/TextLink';
 import { useEventDetail } from '@/hooks/useEventDetail';
 import type { RootStackParamList } from '@/navigation/types';
+import { addToDeviceCalendar } from '@/services/deviceCalendar';
 import { colors, font, space } from '@/theme/tokens';
 import { text } from '@/theme/typography';
 import { formatDayLong, formatTime, isUpcoming } from '@/utils/dates';
@@ -29,6 +32,7 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
   const insets = useSafeAreaInsets();
   const { event, status, isAuthor, toggleParticipation, remove } = useEventDetail(route.params.eventId);
   const [toggling, setToggling] = useState(false);
+  const [calendar, setCalendar] = useState<'idle' | 'busy' | 'denied'>('idle');
   // Pendant la suppression, l'événement disparaît de la base : ce n'est pas un « supprimé ailleurs ».
   const deleting = useRef(false);
 
@@ -53,6 +57,29 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
       setToggling(false);
     }
   }, [toggleParticipation, t]);
+
+  const addToCalendar = useCallback(async () => {
+    if (!event) return;
+    setCalendar('busy');
+    try {
+      const result = await addToDeviceCalendar({
+        title: event.title,
+        startsAt: event.startsAt,
+        description: event.description,
+        location: event.location?.label ?? null,
+      });
+      setCalendar(result === 'denied' ? 'denied' : 'idle');
+      // Le focus reste sur le bouton : sans annonce, VoiceOver ne verrait pas le message apparu dessous.
+      if (result === 'denied') AccessibilityInfo.announceForAccessibility(t('event.calendar.denied'));
+      if (result === 'saved') {
+        void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        AccessibilityInfo.announceForAccessibility(t('event.calendar.added'));
+      }
+    } catch {
+      setCalendar('idle');
+      Alert.alert(t('common.unexpectedError'));
+    }
+  }, [event, t]);
 
   const confirmDelete = useCallback(() => {
     if (!event) return;
@@ -121,7 +148,22 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
           {event.title}
         </Text>
 
-        <InfoRow icon="calendar" title={formatDayLong(start, now)} subtitle={formatTime(start)} />
+        <InfoRow icon="calendar" title={formatDayLong(start, now)} subtitle={formatTime(start)}>
+          {!past && (
+            <InlineButton
+              label={t('event.calendar.add')}
+              icon="calendar"
+              busy={calendar === 'busy'}
+              onPress={addToCalendar}
+            />
+          )}
+          {!past && calendar === 'denied' && (
+            <View style={styles.calendarDenied}>
+              <Text style={styles.calendarDeniedText}>{t('event.calendar.denied')}</Text>
+              <TextLink label={t('event.calendar.openSettings')} onPress={() => void Linking.openSettings()} />
+            </View>
+          )}
+        </InfoRow>
         {place && <InfoRow icon="map-pin" title={place.name} subtitle={place.city} />}
         <InfoRow
           icon="users"
@@ -149,6 +191,8 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
 }
 
 const styles = StyleSheet.create({
+  calendarDenied: { marginTop: 10, gap: 4, alignItems: 'flex-start' },
+  calendarDeniedText: { fontFamily: font.regular, fontSize: font.size.meta, lineHeight: 19, color: colors.text },
   screen: { flex: 1, backgroundColor: colors.background },
   body: { paddingTop: 8, paddingHorizontal: space.screen, paddingBottom: 24 },
   tags: { flexDirection: 'row', flexWrap: 'wrap', columnGap: 14, rowGap: 6 },
