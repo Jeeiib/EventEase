@@ -14,8 +14,11 @@ export const fr = {
       a11y: {
         showPassword: 'Afficher le mot de passe',
         hidePassword: 'Masquer le mot de passe',
+        fieldError: '{{label}}, erreur : {{error}}',
       },
       loading: 'Chargement…',
+      unexpectedError: 'Une erreur inattendue est survenue. Réessaie dans un instant.',
+      startupError: "EventEase n'a pas pu ouvrir ses données. Réessaie ; si ça recommence, ferme puis rouvre l'app.",
     },
     time: {
       hm: '{{h}}h{{m}}',
@@ -196,7 +199,6 @@ export const fr = {
         dateRequired: 'Choisis une date et une heure.',
         datePast: 'Cette date est passée. Choisis une date à venir.',
       },
-      a11y: { fieldError: '{{label}}, erreur : {{error}}' },
       discard: {
         title: 'Tes modifications ne sont pas enregistrées.',
         confirm: 'Abandonner les modifications',
