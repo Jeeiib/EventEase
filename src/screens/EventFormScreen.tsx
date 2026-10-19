@@ -25,7 +25,7 @@ import type { EventLocation, EventWithStatus } from '@/data/types';
 import { useDb } from '@/db/DbContext';
 import type { RootStackParamList } from '@/navigation/types';
 import { colors, space } from '@/theme/tokens';
-import { formatDayWithTime } from '@/utils/dates';
+import { formatDayWithTime, STEP_MS } from '@/utils/dates';
 import { validateEventForm, type EventFormErrors } from '@/utils/validation';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'EventForm'>;
@@ -33,7 +33,6 @@ type Values = { title: string; description: string; startsAt: string | null; pla
 type Field = keyof EventFormErrors;
 
 const FIELD_ORDER: Field[] = ['title', 'description', 'startsAt', 'place'];
-const STEP_MS = 5 * 60 * 1000;
 
 // Le sélecteur avance par 5 minutes : on part du prochain créneau rond.
 function nextSlot(from: Date): Date {
@@ -168,8 +167,13 @@ function EventForm({ original, navigation }: { original: EventWithStatus | null;
     };
     const now = new Date().toISOString();
     try {
-      if (original) await eventsRepo.update(db, original.id, user.id, input, now);
-      else await eventsRepo.create(db, user.id, input, now);
+      if (original) {
+        // Faux si l'événement a disparu ou n'appartient plus à l'utilisateur : ne pas fermer comme si c'était enregistré.
+        if (!(await eventsRepo.update(db, original.id, user.id, input, now))) {
+          Alert.alert(t('common.unexpectedError'));
+          return;
+        }
+      } else await eventsRepo.create(db, user.id, input, now);
       setSaved(true);
     } catch {
       Alert.alert(t('common.unexpectedError'));

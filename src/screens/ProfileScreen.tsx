@@ -13,9 +13,8 @@ import { SecondaryButton } from '@/components/PrimaryButton';
 import { participationsRepo } from '@/data/participations';
 import { usersRepo } from '@/data/users';
 import { useDb } from '@/db/DbContext';
-import { resetDemoData } from '@/db/seed';
+import { resetDemo } from '@/db/startup';
 import { joinA11y } from '@/i18n/a11y';
-import { hashPassword, makeSalt, sha256 } from '@/services/auth';
 import { colors, font, space } from '@/theme/tokens';
 import { text } from '@/theme/typography';
 
@@ -53,7 +52,7 @@ export function ProfileScreen({ navigation }: MainTabScreenProps<'Profile'>): Re
         style: 'destructive',
         onPress: async () => {
           try {
-            await resetDemoData(db, new Date(), (password, salt) => hashPassword(password, salt, sha256), makeSalt);
+            await resetDemo(db);
             // Les comptes ont été recréés : la session courante ne désigne plus personne.
             await signOut();
           } catch {

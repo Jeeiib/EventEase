@@ -4,10 +4,8 @@ import { t } from 'i18next';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AccessibilityInfo } from 'react-native';
 import type { EventLocation } from '@/data/types';
-import { getLocationPermission, getPositionForDistance } from '@/services/location';
+import { getLocationPermission, getPositionForDistance, type Coords } from '@/services/location';
 import { distanceMeters } from '@/utils/distance';
-
-type Coords = { latitude: number; longitude: number };
 
 export type DistanceState =
   | { status: 'idle' }
@@ -63,9 +61,18 @@ export function useDistance(location: EventLocation | null) {
   const request = useCallback(async () => {
     if (pending.current) return;
     pending.current = true;
-    const permission = await getLocationPermission().finally(() => {
+    let permission: Awaited<ReturnType<typeof getLocationPermission>>;
+    try {
+      permission = await getLocationPermission();
+    } catch {
+      if (alive.current) {
+        setState({ status: 'error' });
+        announce('event.distance.unavailable');
+      }
+      return;
+    } finally {
       pending.current = false;
-    });
+    }
     if (!alive.current) return;
     if (permission === 'granted') void locate();
     else if (permission === 'undetermined') setState({ status: 'explaining' });

@@ -48,7 +48,12 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
     if (status === 'missing' && !deleting.current) navigation.goBack();
   }, [status, navigation]);
 
+  // Le bouton ne se bloque qu'au rendu suivant : un second appui dans la même frame lancerait une transaction imbriquée.
+  const toggleInFlight = useRef(false);
+
   const toggle = useCallback(async () => {
+    if (toggleInFlight.current) return;
+    toggleInFlight.current = true;
     setToggling(true);
     try {
       const result = await toggleParticipation();
@@ -61,6 +66,7 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
     } catch {
       Alert.alert(t('common.unexpectedError'));
     } finally {
+      toggleInFlight.current = false;
       setToggling(false);
     }
   }, [toggleParticipation, t]);

@@ -18,8 +18,17 @@ function withFirst(text: string, d: Date, locale: string): string {
     : text;
 }
 
+// Pas des heures proposées pour un événement : 5 minutes.
+export const STEP_MS = 5 * 60 * 1000;
+
 export function toDayKey(d: Date): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+// Jour à sélectionner quand le calendrier affiche ce mois : aujourd'hui s'il en fait partie, sinon le 1er.
+export function defaultDayKeyForMonth(month: Date, now: Date): string {
+  const sameMonth = month.getFullYear() === now.getFullYear() && month.getMonth() === now.getMonth();
+  return toDayKey(sameMonth ? now : new Date(month.getFullYear(), month.getMonth(), 1));
 }
 
 export function fromDayKey(key: string): Date {
