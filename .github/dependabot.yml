@@ -1,0 +1,7 @@
+version: 2
+updates:
+  # Pas d'entrée npm : les versions des dépendances sont fixées par le SDK Expo.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
