@@ -120,6 +120,7 @@ export function CalendarScreen({ navigation }: MainTabScreenProps<'Calendar'>): 
 
       <Calendar
         key={toDayKey(month)}
+        testID="calendar"
         initialDate={toDayKey(month)}
         firstDay={1}
         hideExtraDays
