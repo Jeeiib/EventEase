@@ -24,9 +24,14 @@ export function AuthProvider({ db, children }: { db: Db; children: ReactNode }):
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const id = await settingsRepo.get(db, 'session_user_id');
-      // Un compte supprimé depuis (réinitialisation de la démo) rend l'identifiant orphelin.
-      const restored = id ? await usersRepo.findById(db, Number(id)) : null;
+      let restored: User | null = null;
+      try {
+        const id = await settingsRepo.get(db, 'session_user_id');
+        // Un compte supprimé depuis (réinitialisation de la démo) rend l'identifiant orphelin.
+        restored = id ? await usersRepo.findById(db, Number(id)) : null;
+      } catch {
+        // Une session illisible ne doit pas bloquer l'app : on repart déconnecté.
+      }
       if (cancelled) return;
       setUser(restored);
       setLoaded(true);
