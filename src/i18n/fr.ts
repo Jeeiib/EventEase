@@ -19,6 +19,7 @@ export const fr = {
     },
     time: {
       hm: '{{h}}h{{m}}',
+      dayAt: '{{day}}, {{time}}',
     },
     auth: {
       login: {
