@@ -1,3 +1,4 @@
+// Migrations : schéma v1, idempotence, clés étrangères et atomicité.
 import { createTestDb } from '../helpers/testDb';
 import { migrate, SCHEMA_VERSION } from '@/db/migrations';
 import type { Db } from '@/db/connection';
@@ -31,7 +32,7 @@ describe('migrate', () => {
     expect(await db.getAllAsync('SELECT id FROM users')).toHaveLength(1);
   });
 
-  it('rejette un événement dont l auteur n existe pas (clés étrangères actives)', async () => {
+  it('rejette un événement sans auteur existant (clés étrangères actives)', async () => {
     const db = createTestDb();
     await migrate(db);
     await expect(
@@ -39,6 +40,14 @@ describe('migrate', () => {
         "INSERT INTO events (title, description, starts_at, author_id, created_at, updated_at) VALUES ('t', 'd', 'x', 999, 'n', 'n')",
       ),
     ).rejects.toThrow();
+  });
+
+  it('laisse la base intacte quand une migration échoue', async () => {
+    const db = createTestDb();
+    await db.execAsync('CREATE TABLE users (x)');
+    await expect(migrate(db)).rejects.toThrow();
+    expect(await version(db)).toBe(0);
+    expect(await tables(db)).toEqual(['users']);
   });
 
   it('annule la transaction quand la tâche rejette', async () => {

@@ -4,7 +4,7 @@ import type { Db, SqlValue } from '@/db/connection';
 
 export function createTestDb(): Db {
   const raw = new DatabaseSync(':memory:');
-  // expo-sqlite ouvre les connexions avec les clés étrangères actives via openDatabase().
+  // Même réglage que openDatabase() : SQLite désactive les clés étrangères par défaut.
   raw.exec('PRAGMA foreign_keys = ON');
 
   const bind = (params: SqlValue[]): SQLInputValue[] => params;
