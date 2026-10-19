@@ -45,6 +45,11 @@ export function formatWeekdayShort(d: Date, locale: string = getAppLocale()): st
   return new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(d);
 }
 
+// « samedi 24 » : jour de la semaine et numéro, pour une phrase.
+export function formatWeekdayDay(d: Date, locale: string = getAppLocale()): string {
+  return new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric' }).format(d);
+}
+
 export function formatDayLong(d: Date, now: Date, locale: string = getAppLocale()): string {
   const withYear = d.getFullYear() !== now.getFullYear();
   const text = new Intl.DateTimeFormat(locale, {

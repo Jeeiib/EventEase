@@ -1,37 +1,59 @@
 // Champ de saisie avec libellé, aide et erreur sous le champ, lus d'un seul tenant par VoiceOver.
-import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import type { ReactNode, Ref } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 import type { TextInputProps } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { joinA11y } from '@/i18n/a11y';
 import { colors, font, radius, size } from '@/theme/tokens';
-import { text } from '@/theme/typography';
+import { FieldLabel, FieldMessage } from './FieldError';
 
 export type TextFieldProps = Omit<TextInputProps, 'style' | 'accessibilityLabel' | 'accessibilityHint'> & {
   label: string;
+  // Mention affichée après le libellé, ex. « (facultatif) ».
+  optional?: string;
   hint?: string;
   error?: string | null;
   // Élément à droite dans le cadre du champ (bouton Afficher du mot de passe).
   accessory?: ReactNode;
+  // Zone de texte sur plusieurs lignes (description).
+  tall?: boolean;
   ref?: Ref<TextInput>;
 };
 
-export function TextField({ label, hint, error, accessory, ref, onFocus, onBlur, ...input }: TextFieldProps): React.JSX.Element {
+export function TextField({
+  label,
+  optional,
+  hint,
+  error,
+  accessory,
+  tall = false,
+  ref,
+  onFocus,
+  onBlur,
+  ...input
+}: TextFieldProps): React.JSX.Element {
   const { t } = useTranslation();
   const [focused, setFocused] = useState(false);
+  const spoken = joinA11y([label, optional]);
 
   return (
     <View>
-      {/* Le libellé visible est masqué à VoiceOver : il est déjà porté par le champ. */}
-      <Text style={[text.label, styles.label]} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-        {label}
-      </Text>
-      <View style={[styles.frame, focused && styles.focused, !!error && styles.invalid, !!accessory && styles.withAccessory]}>
+      <FieldLabel label={label} optional={optional} />
+      <View
+        style={[
+          styles.frame,
+          tall && styles.tallFrame,
+          focused && styles.focused,
+          !!error && styles.invalid,
+          !!accessory && styles.withAccessory,
+        ]}
+      >
         <TextInput
           ref={ref}
+          multiline={tall}
           {...input}
-          accessibilityLabel={error ? t('common.a11y.fieldError', { label, error }) : label}
+          accessibilityLabel={error ? t('common.a11y.fieldError', { label: spoken, error }) : spoken}
           accessibilityHint={hint}
           placeholderTextColor={colors.muted}
           onFocus={(e) => {
@@ -42,26 +64,16 @@ export function TextField({ label, hint, error, accessory, ref, onFocus, onBlur,
             setFocused(false);
             onBlur?.(e);
           }}
-          style={styles.input}
+          style={[styles.input, tall && styles.tallInput]}
         />
         {accessory}
       </View>
-      {error ? (
-        <View style={styles.message} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-          <Feather name="alert-circle" size={16} color={colors.danger} style={styles.errorIcon} />
-          <Text style={[text.error, styles.messageText]}>{error}</Text>
-        </View>
-      ) : hint ? (
-        <Text style={[text.hint, styles.hint]} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-          {hint}
-        </Text>
-      ) : null}
+      <FieldMessage error={error} hint={hint} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  label: { marginBottom: 8 },
   frame: {
     minHeight: size.input,
     borderWidth: 1.5,
@@ -72,6 +84,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
   },
+  tallFrame: { minHeight: 112, alignItems: 'stretch' },
   // Le focus épaissit le trait sans décaler le texte : on retire la demi-épaisseur ajoutée.
   focused: { borderWidth: 2, borderColor: colors.text, paddingHorizontal: 15.5 },
   invalid: { borderColor: colors.danger },
@@ -85,8 +98,5 @@ const styles = StyleSheet.create({
     fontSize: font.size.body,
     color: colors.text,
   },
-  message: { flexDirection: 'row', gap: 6, alignItems: 'flex-start', marginTop: 8 },
-  errorIcon: { marginTop: 2 },
-  messageText: { flex: 1 },
-  hint: { marginTop: 8 },
+  tallInput: { paddingTop: 14, paddingBottom: 14, lineHeight: 23, textAlignVertical: 'top' },
 });
