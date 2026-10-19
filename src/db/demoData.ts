@@ -11,12 +11,12 @@ export const demoUsers: { name: string; email: string }[] = [
   { name: 'Julien Moreau', email: 'julien.moreau@exemple.fr' },
 ];
 
-// Coordonnées issues de la Géoplateforme (data.geopf.fr/geocodage), au plus près du lieu :
-// pour un parc ou un équipement, l'adresse postale la plus précise trouvée est indiquée en commentaire.
+// Coordonnées issues de la Géoplateforme (data.geopf.fr/geocodage) : adresse postale ou, pour un lieu-dit,
+// point d'intérêt (index poi) ; la source est indiquée en commentaire à côté de chaque coordonnée.
 const parcBarbieux: EventLocation = {
   label: 'Parc Barbieux, Roubaix',
-  latitude: 50.68478, // Boulevard du Général de Gaulle, 59100 Roubaix
-  longitude: 3.171598,
+  latitude: 50.677569, // point d'intérêt « Parc Barbieux » (Géoplateforme, index poi)
+  longitude: 3.1616,
 };
 const corderie: EventLocation = {
   label: 'Médiathèque La Corderie, Marcq-en-Barœul',
@@ -25,8 +25,8 @@ const corderie: EventLocation = {
 };
 const lacHeron: EventLocation = {
   label: "Lac du Héron, Villeneuve-d'Ascq",
-  latitude: 50.626867, // Allée du Parc, 59650 Villeneuve-d'Ascq
-  longitude: 3.16254,
+  latitude: 50.635536, // point d'intérêt « Lac du Héron » (Géoplateforme, index poi)
+  longitude: 3.171167,
 };
 const grandPlaceArmentieres: EventLocation = {
   label: 'Grand Place, Armentières',
@@ -39,9 +39,9 @@ const piscine: EventLocation = {
   longitude: 3.167691,
 };
 const jardinPartage: EventLocation = {
-  label: 'Jardin partagé, Wasquehal',
-  latitude: 50.692314, // Rue Carpeaux, 59290 Wasquehal
-  longitude: 3.146282,
+  label: 'Jardin partagé du Molinel, Wasquehal',
+  latitude: 50.68591, // Rue du Molinel, 59290 Wasquehal
+  longitude: 3.115067,
 };
 const maisonAssociations: EventLocation = {
   label: 'Maison des associations, Croix',
