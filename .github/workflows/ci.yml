@@ -1,4 +1,4 @@
-# Contrôle à chaque PR et à chaque push : dépendances, lint, style, types, tests.
+# Contrôle à chaque PR et à chaque push sur main : dépendances, lint, style, types, tests.
 name: ci
 
 on:
