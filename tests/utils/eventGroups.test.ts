@@ -3,6 +3,7 @@ import type { EventWithStatus } from '@/data/types';
 import {
   buildListSections,
   dayMarkers,
+  eventsInWeek,
   selectVisible,
   splitByTime,
   weekDays,
@@ -103,4 +104,13 @@ test('dayMarkers : la participation prime sur l’événement', () => {
   expect(dayMarkers([a, b, c, mine])).toEqual({ '2026-10-24': 'participating', '2026-10-30': 'event' });
   expect(dayMarkers([mine, a])).toEqual({ '2026-10-24': 'participating' });
   expect(dayMarkers([])).toEqual({});
+});
+
+test('eventsInWeek : garde les événements du lundi au dimanche, dans l’ordre', () => {
+  const week = weekDays(new Date(2026, 9, 22, 15));
+  const sunday = make(new Date(2026, 9, 25, 21, 30).toISOString());
+  const monday = make(new Date(2026, 9, 19, 9, 0).toISOString());
+  const nextMonday = make(new Date(2026, 9, 26, 9, 0).toISOString());
+  const before = make(new Date(2026, 9, 18, 23, 0).toISOString());
+  expect(eventsInWeek([sunday, nextMonday, monday, before], week).map((e) => e.id)).toEqual([monday.id, sunday.id]);
 });

@@ -57,3 +57,9 @@ export function dayMarkers(events: EventWithStatus[]): Record<string, 'event' | 
   }
   return markers;
 }
+
+// Événements de la semaine affichée par le bandeau, du lundi au dimanche.
+export function eventsInWeek(events: EventWithStatus[], week: Date[]): EventWithStatus[] {
+  const days = new Set(week.map(toDayKey));
+  return events.filter((e) => days.has(toDayKey(new Date(e.startsAt)))).sort(byStart);
+}
