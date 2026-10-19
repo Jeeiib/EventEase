@@ -79,7 +79,7 @@ describe('seedIfEmpty', () => {
           title,
         )
       ).map((r) => r.name);
-    expect(await namesFor('Atelier réparation de vélos')).toEqual(['Karim Benali', 'Marie Lefèvre', 'Paul Martin']);
+    expect(await namesFor('Atelier réparation de vélos')).toEqual(['Julien Moreau', 'Marie Lefèvre', 'Paul Martin']);
     expect(await namesFor('Soirée jeux de société')).toEqual(['Paul Martin']);
     const expected = demoEvents.reduce((sum, e) => sum + e.participantEmails.length, 0);
     expect(await count('participations')).toBe(expected);

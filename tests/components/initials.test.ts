@@ -10,7 +10,7 @@ test('nom composé : première et dernière parties', () => {
 });
 
 test('un seul mot : une lettre', () => {
-  expect(initials('Karim')).toBe('K');
+  expect(initials('Lucas')).toBe('L');
 });
 
 test('initiale accentuée en majuscule', () => {
