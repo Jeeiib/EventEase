@@ -3,6 +3,7 @@ import { openDatabaseAsync } from 'expo-sqlite';
 
 export type SqlValue = string | number | null;
 
+/** Seule dépendance de la couche data envers SQLite : `expo-sqlite` en production, `node:sqlite` en test. */
 export interface Db {
   execAsync(sql: string): Promise<void>;
   runAsync(sql: string, ...params: SqlValue[]): Promise<{ lastInsertRowId: number; changes: number }>;
@@ -11,6 +12,7 @@ export interface Db {
   withTransactionAsync(task: () => Promise<void>): Promise<void>;
 }
 
+/** Ouvre `eventease.db` avec clés étrangères et journal WAL activés. */
 export async function openDatabase(): Promise<Db> {
   const database = await openDatabaseAsync('eventease.db');
   // Réglage par connexion : les clés étrangères ne sont pas persistées dans le fichier.

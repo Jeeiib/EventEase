@@ -10,6 +10,7 @@ type Props = {
   icon: Icon;
   title: string;
   text: string;
+  /** Action qui sort de l'état vide ; absente quand il n'y a rien à faire. */
   action?: { label: string; onPress: () => void; variant: 'primary' | 'secondary' };
 };
 

@@ -9,6 +9,10 @@ import { useDb } from '@/db/DbContext';
 
 type Loaded = { eventId: number; event: EventWithStatus | null };
 
+/**
+ * Fiche d'un événement, relue à chaque focus. `status` vaut `missing` si l'événement n'existe plus.
+ * `toggleParticipation` met la fiche à jour sans relecture ; `remove` lève si l'événement n'appartient pas à l'utilisateur.
+ */
 export function useEventDetail(eventId: number) {
   const db = useDb();
   const { user } = useAuth();

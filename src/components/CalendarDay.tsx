@@ -8,10 +8,10 @@ import { joinA11y } from '@/i18n/a11y';
 import { colors, font } from '@/theme/tokens';
 import { formatDayLong, fromDayKey } from '@/utils/dates';
 
-// Ce que l'écran glisse dans markedDates pour chaque jour.
+/** Ce que l'écran glisse dans markedDates pour chaque jour. */
 export type DayMarking = {
   selected?: boolean;
-  // Posé par l'écran : la bibliothèque donne l'état « today » au jour affiché à l'ouverture, pas à aujourd'hui.
+  /** Posé par l'écran : la bibliothèque donne l'état « today » au jour affiché à l'ouverture, pas à aujourd'hui. */
   today?: boolean;
   marker?: 'event' | 'participating';
   count?: number;
@@ -24,6 +24,7 @@ type Props = {
   onPress?: (date?: DateData) => void;
 };
 
+// Plafond de la mise à l'échelle du texte des numéros (Dynamic Type).
 const MAX_SCALE = 1.4;
 
 export const CalendarDay = memo(function CalendarDay({ date, marking, onPress }: Props) {

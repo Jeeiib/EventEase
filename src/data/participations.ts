@@ -2,7 +2,7 @@
 import type { Db } from '@/db/connection';
 
 export const participationsRepo = {
-  // Bascule dans une transaction pour que l'état et le compteur renvoyés restent cohérents.
+  /** Inscrit ou désinscrit `userId` et renvoie le nouvel état avec le compteur, lus dans la même transaction. */
   async toggle(
     db: Db,
     userId: number,

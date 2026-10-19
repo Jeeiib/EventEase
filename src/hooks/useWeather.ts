@@ -4,6 +4,7 @@ import type { EventLocation } from '@/data/types';
 import { fetchDailyForecast, type DailyForecast } from '@/services/weather';
 import { weatherAvailability } from '@/utils/weatherWindow';
 
+/** `none` : événement passé ou sans lieu ; `tooFar` : prévision pas encore ouverte ; `error` : à réessayer par `retry`. */
 export type WeatherState =
   | { status: 'none' }
   | { status: 'tooFar'; availableFrom: Date }
@@ -11,6 +12,7 @@ export type WeatherState =
   | { status: 'ready'; forecast: DailyForecast }
   | { status: 'error' };
 
+/** Météo du jour de l'événement ; `retry` relance la requête après une erreur. */
 export function useWeather(location: EventLocation | null, startsAt: string, now: Date) {
   const availability = location ? weatherAvailability(startsAt, now) : null;
   const dayKey = availability?.kind === 'available' ? availability.dayKey : null;

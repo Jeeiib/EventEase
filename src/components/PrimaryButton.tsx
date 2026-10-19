@@ -7,9 +7,9 @@ type Props = {
   onPress: () => void;
   loading?: boolean;
   variant?: 'primary' | 'secondary';
-  // Largeur du texte au lieu de la pleine largeur (états vides).
+  /** Largeur du texte au lieu de la pleine largeur (états vides). */
   compact?: boolean;
-  // Bouton à bascule (participer) : VoiceOver annonce « sélectionné ».
+  /** Bouton à bascule (participer) : VoiceOver annonce « sélectionné ». */
   selected?: boolean;
 };
 

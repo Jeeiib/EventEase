@@ -10,7 +10,9 @@ import { BottomSheet } from './BottomSheet';
 
 type Props = {
   visible: boolean;
+  /** Valeur du champ, ramenée sur la grille de 5 minutes. */
   initial: Date;
+  /** Date la plus ancienne choisissable. */
   minimumDate?: Date;
   onCancel: () => void;
   onConfirm: (date: Date) => void;
@@ -18,9 +20,8 @@ type Props = {
 
 export function DateTimeSheet({ visible, initial, minimumDate, onCancel, onConfirm }: Props): React.JSX.Element {
   const { t } = useTranslation();
-  // Brouillon local : rien n'est appliqué tant qu'on n'a pas touché OK. Le parent remonte la feuille
-  // (clé) à chaque ouverture, donc le brouillon repart toujours de la valeur du champ.
-  // La roue avance par 5 minutes : une heure d'origine hors grille (9h07) est ramenée sur la roue.
+  // Brouillon : rien n'est appliqué avant OK ; le parent remonte la feuille à chaque ouverture, il repart du champ.
+  // La roue avance par 5 minutes : une heure hors grille (9h07) est ramenée dessus.
   const [draft, setDraft] = useState(() => new Date(Math.round(initial.getTime() / STEP_MS) * STEP_MS));
 
   return (

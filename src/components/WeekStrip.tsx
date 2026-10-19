@@ -13,6 +13,7 @@ const MAX_SCALE = 1.6;
 type Props = {
   week: Date[];
   weekEvents: EventWithStatus[];
+  /** Marqueur par clé de jour, comme dans le calendrier. */
   markers: Record<string, 'event' | 'participating'>;
   now: Date;
   onPress: () => void;

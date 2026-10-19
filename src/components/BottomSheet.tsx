@@ -12,9 +12,9 @@ const CLOSE_MS = 220;
 
 type Props = {
   visible: boolean;
-  // Fermeture sans choix : voile touché, geste retour d'Android.
+  /** Fermeture sans choix : voile touché, geste retour d'Android. */
   onDismiss: () => void;
-  // Reçoit close(après) : l'animation se rejoue à l'envers avant que le parent démonte la feuille.
+  /** Reçoit close(après) : l'animation se rejoue à l'envers avant que le parent démonte la feuille. */
   children: (close: (after: () => void) => void) => ReactNode;
   style?: StyleProp<ViewStyle>;
 };
