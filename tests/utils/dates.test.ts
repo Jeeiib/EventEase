@@ -99,3 +99,7 @@ test('noms de mois et de jours, dimanche en premier', () => {
   expect(dayNamesShort()[0]).toBe('dim.');
   expect(dayNamesShort()[6]).toBe('sam.');
 });
+
+test('formatTime suit la langue de la locale demandée', () => {
+  expect(formatTime(new Date(2026, 9, 24, 9, 30), 'fr-BE')).toBe('9h30');
+});

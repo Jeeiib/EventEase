@@ -52,6 +52,14 @@ test('modifier un événement passé sans toucher la date est permis', () => {
   ).toEqual({ startsAt: 'past' });
 });
 
+test('date vide ou illisible', () => {
+  for (const startsAt of ['', 'pas une date']) {
+    expect(validateEventForm({ title: 't', description: 'd', startsAt }, { now, originalStartsAt: null })).toEqual({
+      startsAt: 'required',
+    });
+  }
+});
+
 test('date absente', () => {
   expect(validateEventForm({ title: 't', description: 'd', startsAt: null }, { now, originalStartsAt: null })).toEqual({
     startsAt: 'required',
