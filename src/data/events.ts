@@ -51,7 +51,7 @@ const locationParams = (input: EventInput): SqlValue[] => [
 
 export const eventsRepo = {
   async listAll(db: Db, viewerId: number): Promise<EventWithStatus[]> {
-    const rows = await db.getAllAsync<EventRow>(`${SELECT_WITH_STATUS} ORDER BY e.starts_at ASC`, viewerId);
+    const rows = await db.getAllAsync<EventRow>(`${SELECT_WITH_STATUS} ORDER BY e.starts_at ASC, e.id ASC`, viewerId);
     return rows.map(toEvent);
   },
 
