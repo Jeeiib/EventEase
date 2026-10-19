@@ -9,15 +9,24 @@ type Props = {
   variant?: 'primary' | 'secondary';
   // Largeur du texte au lieu de la pleine largeur (états vides).
   compact?: boolean;
+  // Bouton à bascule (participer) : VoiceOver annonce « sélectionné ».
+  selected?: boolean;
 };
 
-export function PrimaryButton({ label, onPress, loading = false, variant = 'primary', compact = false }: Props): React.JSX.Element {
+export function PrimaryButton({
+  label,
+  onPress,
+  loading = false,
+  variant = 'primary',
+  compact = false,
+  selected,
+}: Props): React.JSX.Element {
   const secondary = variant === 'secondary';
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={label}
-      accessibilityState={{ busy: loading }}
+      accessibilityState={{ busy: loading, selected }}
       // Pendant l'envoi, un second appui ne relance rien (pas de double inscription).
       onPress={loading ? undefined : onPress}
       style={({ pressed }) => [
