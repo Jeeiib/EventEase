@@ -7,9 +7,11 @@ type Props = {
   onPress: () => void;
   loading?: boolean;
   variant?: 'primary' | 'secondary';
+  // Largeur du texte au lieu de la pleine largeur (états vides).
+  compact?: boolean;
 };
 
-export function PrimaryButton({ label, onPress, loading = false, variant = 'primary' }: Props): React.JSX.Element {
+export function PrimaryButton({ label, onPress, loading = false, variant = 'primary', compact = false }: Props): React.JSX.Element {
   const secondary = variant === 'secondary';
   return (
     <Pressable
@@ -18,7 +20,12 @@ export function PrimaryButton({ label, onPress, loading = false, variant = 'prim
       accessibilityState={{ busy: loading }}
       // Pendant l'envoi, un second appui ne relance rien (pas de double inscription).
       onPress={loading ? undefined : onPress}
-      style={({ pressed }) => [styles.base, secondary ? styles.secondary : styles.primary, pressed && styles.pressed]}
+      style={({ pressed }) => [
+        styles.base,
+        secondary ? styles.secondary : styles.primary,
+        compact && styles.compact,
+        pressed && styles.pressed,
+      ]}
     >
       {loading ? (
         <ActivityIndicator color={secondary ? colors.text : colors.background} />
@@ -44,6 +51,7 @@ const styles = StyleSheet.create({
   },
   primary: { backgroundColor: colors.text },
   secondary: { backgroundColor: colors.background, borderWidth: 1.5, borderColor: colors.text },
+  compact: { alignSelf: 'flex-start', paddingHorizontal: 22 },
   pressed: { opacity: 0.75 },
   label: { fontFamily: font.semiBold, fontSize: font.size.body, lineHeight: 22, color: colors.background, textAlign: 'center' },
   secondaryLabel: { color: colors.text },

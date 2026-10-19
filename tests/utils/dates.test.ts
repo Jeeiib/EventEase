@@ -10,6 +10,7 @@ import {
   formatMonthHeader,
   formatMonthYear,
   formatTime,
+  formatWeekdayDay,
   formatWeekdayShort,
   fromDayKey,
   isUpcoming,
@@ -102,4 +103,8 @@ test('noms de mois et de jours, dimanche en premier', () => {
 
 test('formatTime suit la langue de la locale demandée', () => {
   expect(formatTime(new Date(2026, 9, 24, 9, 30), 'fr-BE')).toBe('9h30');
+});
+
+test('formatWeekdayDay : jour et numéro, sans majuscule', () => {
+  expect(formatWeekdayDay(new Date(2026, 9, 24, 10), 'fr-FR')).toBe('samedi 24');
 });

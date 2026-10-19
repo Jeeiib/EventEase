@@ -5,7 +5,7 @@ import { useAuth } from '@/auth/AuthContext';
 import { eventsRepo } from '@/data/events';
 import type { EventWithStatus } from '@/data/types';
 import { useDb } from '@/db/DbContext';
-import { buildListSections, dayMarkers, selectVisible, splitByTime, weekDays } from '@/utils/eventGroups';
+import { buildListSections, dayMarkers, eventsInWeek, selectVisible, splitByTime, weekDays } from '@/utils/eventGroups';
 
 export type EventListView = 'upcoming' | 'past';
 
@@ -46,8 +46,9 @@ export function useEventList() {
   );
   const markers = useMemo(() => dayMarkers(events), [events]);
   const week = useMemo(() => weekDays(now), [now]);
+  const weekEvents = useMemo(() => eventsInWeek(events, week), [events, week]);
   // Indépendant du filtre « mes participations » : sert à dire combien d'événements attendent l'utilisateur.
   const total = useMemo(() => splitByTime(events, now).upcoming.length, [events, now]);
 
-  return { view, setView, mineOnly, setMineOnly, sections, markers, week, total, refresh };
+  return { view, setView, mineOnly, setMineOnly, sections, markers, week, weekEvents, now, total, refresh };
 }
