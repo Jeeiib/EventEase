@@ -1,0 +1,40 @@
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+# Un seul build EAS par tag : on ne l'interrompt pas en cours de route
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - uses: expo/expo-github-action@v9
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      - run: npm ci
+      - name: Construire l'APK et le build simulateur iOS
+        run: eas build --platform all --profile preview --non-interactive --wait --json > builds.json
+      - name: Télécharger les deux artefacts
+        # On choisit par plateforme : l'ordre du tableau JSON n'est pas garanti
+        run: |
+          curl -fsSL -o EventEase-android.apk "$(jq -r '.[] | select(.platform == "ANDROID") | .artifacts.buildUrl' builds.json)"
+          curl -fsSL -o EventEase-ios-simulator.tar.gz "$(jq -r '.[] | select(.platform == "IOS") | .artifacts.buildUrl' builds.json)"
+      - uses: softprops/action-gh-release@v3
+        with:
+          files: |
+            EventEase-android.apk
+            EventEase-ios-simulator.tar.gz
