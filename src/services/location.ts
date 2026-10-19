@@ -2,7 +2,7 @@
 import * as Location from 'expo-location';
 import { Linking } from 'react-native';
 
-type Coords = { latitude: number; longitude: number };
+export type Coords = { latitude: number; longitude: number };
 
 export type PositionResult = { status: 'granted'; coords: Coords } | { status: 'denied'; canAskAgain: boolean };
 
