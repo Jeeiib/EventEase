@@ -24,7 +24,6 @@ import {
   monthNamesShort,
   toDayKey,
 } from '@/utils/dates';
-import { dayMarkers } from '@/utils/eventGroups';
 
 // Noms de mois et de jours fournis par Intl, posés une fois pour toute l'app.
 const locale = getAppLocale();
@@ -56,13 +55,12 @@ function shiftMonth(d: Date, delta: number): Date {
 export function CalendarScreen({ navigation }: MainTabScreenProps<'Calendar'>): React.JSX.Element {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
-  const { events, now } = useEventList();
+  const { events, markers, now } = useEventList();
   const todayKey = toDayKey(now);
   const [selectedKey, setSelectedKey] = useState(todayKey);
   const [month, setMonth] = useState(() => firstOfMonth(now));
 
   const markedDates = useMemo(() => {
-    const markers = dayMarkers(events);
     const counts: Record<string, number> = {};
     for (const e of events) {
       const key = toDayKey(new Date(e.startsAt));
@@ -80,7 +78,7 @@ export function CalendarScreen({ navigation }: MainTabScreenProps<'Calendar'>): 
       };
     }
     return marked;
-  }, [events, selectedKey, todayKey]);
+  }, [events, markers, selectedKey, todayKey]);
 
   const dayEvents = useMemo(
     () =>
