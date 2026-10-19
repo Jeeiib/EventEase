@@ -17,6 +17,7 @@ import {
   dayNames,
   dayNamesShort,
   formatDayLong,
+  defaultDayKeyForMonth,
   formatMonthYear,
   fromDayKey,
   isUpcoming,
@@ -59,6 +60,12 @@ export function CalendarScreen({ navigation }: MainTabScreenProps<'Calendar'>): 
   const todayKey = toDayKey(now);
   const [selectedKey, setSelectedKey] = useState(todayKey);
   const [month, setMonth] = useState(() => firstOfMonth(now));
+
+  // Le jour choisi suit le mois affiché : sinon la liste parlerait d'un jour qu'on ne voit plus.
+  const goToMonth = (target: Date) => {
+    setMonth(target);
+    setSelectedKey(defaultDayKeyForMonth(target, now));
+  };
 
   const markedDates = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -108,12 +115,12 @@ export function CalendarScreen({ navigation }: MainTabScreenProps<'Calendar'>): 
           <IconButton
             icon="chevron-left"
             accessibilityLabel={t('calendar.a11y.prevMonth', { month: monthName(previous) })}
-            onPress={() => setMonth(previous)}
+            onPress={() => goToMonth(previous)}
           />
           <IconButton
             icon="chevron-right"
             accessibilityLabel={t('calendar.a11y.nextMonth', { month: monthName(next) })}
-            onPress={() => setMonth(next)}
+            onPress={() => goToMonth(next)}
           />
         </View>
       </View>
@@ -128,7 +135,7 @@ export function CalendarScreen({ navigation }: MainTabScreenProps<'Calendar'>): 
         enableSwipeMonths
         disableMonthChange
         renderHeader={() => null}
-        onMonthChange={(d) => setMonth(new Date(d.year, d.month - 1, 1))}
+        onMonthChange={(d) => goToMonth(new Date(d.year, d.month - 1, 1))}
         dayComponent={CalendarDay}
         markedDates={markedDates}
         onDayPress={(d) => setSelectedKey(d.dateString)}
