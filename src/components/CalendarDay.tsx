@@ -24,7 +24,7 @@ type Props = {
   onPress?: (date?: DateData) => void;
 };
 
-// Plafond de la mise à l'échelle du texte des numéros (Dynamic Type).
+// Les cellules gardent 48 pt sur sept colonnes : au-delà, les grands textes feraient déborder les numéros de leur cercle.
 const MAX_SCALE = 1.4;
 
 export const CalendarDay = memo(function CalendarDay({ date, marking, onPress }: Props) {
