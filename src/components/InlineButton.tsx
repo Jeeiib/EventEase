@@ -5,7 +5,7 @@ import { colors, font, size } from '@/theme/tokens';
 
 type Props = {
   label: string;
-  icon: React.ComponentProps<typeof Feather>['name'];
+  icon?: React.ComponentProps<typeof Feather>['name'];
   onPress: () => void;
   hint?: string;
   busy?: boolean;
@@ -25,7 +25,7 @@ export function InlineButton({ label, icon, onPress, hint, busy = false }: Props
       {busy ? (
         <ActivityIndicator size="small" color={colors.text} />
       ) : (
-        <Feather name={icon} size={18} color={colors.text} />
+        icon && <Feather name={icon} size={18} color={colors.text} />
       )}
       <Text style={styles.label}>{label}</Text>
     </Pressable>

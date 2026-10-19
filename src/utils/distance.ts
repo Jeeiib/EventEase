@@ -21,5 +21,7 @@ function unit(value: number, unit: 'meter' | 'kilometer', maximumFractionDigits:
 export function formatDistance(meters: number, locale: string = getAppLocale()): string {
   const rounded = Math.round(meters / 10) * 10; // arrondi avant le seuil : 996 m s'affiche « 1 km », pas « 1000 m »
   if (rounded < 1000) return unit(rounded, 'meter', 0, locale);
-  return unit(meters / 1000, 'kilometer', meters < 10000 ? 1 : 0, locale);
+  // Hermes ignore maximumFractionDigits avec style « unit » : on arrondit nous-mêmes.
+  const km = meters < 10000 ? Math.round(meters / 100) / 10 : Math.round(meters / 1000);
+  return unit(km, 'kilometer', meters < 10000 ? 1 : 0, locale);
 }

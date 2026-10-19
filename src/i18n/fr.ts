@@ -150,7 +150,10 @@ export const fr = {
         loading: 'Calcul de la distance…',
         result: "À {{distance}} de toi, à vol d'oiseau",
         explain:
-          "Pour calculer la distance jusqu'au lieu, EventEase a besoin de ta position. Elle sert seulement à ce calcul et n'est jamais enregistrée. Ton iPhone va ensuite te demander l'autorisation.",
+          "Pour calculer la distance jusqu'au lieu, EventEase a besoin de ta position. Elle sert seulement à ce calcul et n'est jamais enregistrée.",
+        nextIos: "Ton iPhone va ensuite te demander l'autorisation.",
+        nextAndroid: "Ton téléphone va ensuite te demander l'autorisation.",
+        unavailable: 'Position introuvable pour le moment. Réessaie dans un instant.',
         continue: 'Continuer',
         notNow: 'Pas maintenant',
         denied:
@@ -161,6 +164,7 @@ export const fr = {
       },
     },
     weather: {
+      loading: 'Chargement de la météo…',
       range: 'De {{min}}° à {{max}}° ce jour-là',
       tooFar: {
         title: 'Météo pas encore disponible',
