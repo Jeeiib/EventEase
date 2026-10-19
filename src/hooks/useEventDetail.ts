@@ -50,6 +50,8 @@ export function useEventDetail(eventId: number) {
   const toggleParticipation = useCallback(async () => {
     if (userId === null) throw new Error('Aucun utilisateur connecté');
     const result = await participationsRepo.toggle(db, userId, eventId, new Date().toISOString());
+    // Invalide une relecture encore en vol : elle réécrirait l'ancien statut.
+    latest.current++;
     // Met la fiche à jour tout de suite, sans attendre une relecture complète.
     if (mounted.current) {
       setLoaded((prev) =>
