@@ -14,6 +14,7 @@ export const fr = {
       a11y: {
         showPassword: 'Afficher le mot de passe',
         hidePassword: 'Masquer le mot de passe',
+        fieldError: '{{label}}, erreur : {{error}}',
       },
       loading: 'Chargement…',
     },
@@ -196,7 +197,6 @@ export const fr = {
         dateRequired: 'Choisis une date et une heure.',
         datePast: 'Cette date est passée. Choisis une date à venir.',
       },
-      a11y: { fieldError: '{{label}}, erreur : {{error}}' },
       discard: {
         title: 'Tes modifications ne sont pas enregistrées.',
         confirm: 'Abandonner les modifications',
