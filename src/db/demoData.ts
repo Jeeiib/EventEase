@@ -8,7 +8,7 @@ export const demoUsers: { name: string; email: string }[] = [
   { name: 'Marie Lefèvre', email: 'marie.lefevre@exemple.fr' },
   { name: 'Paul Martin', email: 'paul.martin@exemple.fr' },
   { name: 'Sophie Dubois', email: 'sophie.dubois@exemple.fr' },
-  { name: 'Karim Benali', email: 'karim.benali@exemple.fr' },
+  { name: 'Julien Moreau', email: 'julien.moreau@exemple.fr' },
 ];
 
 // Coordonnées issues de la Géoplateforme (data.geopf.fr/geocodage) : adresse postale ou, pour un lieu-dit,
@@ -69,7 +69,7 @@ export const demoEvents: {
     minute: 0,
     authorEmail: 'marie.lefevre@exemple.fr',
     location: parcBarbieux,
-    participantEmails: ['marie.lefevre@exemple.fr', 'paul.martin@exemple.fr', 'karim.benali@exemple.fr'],
+    participantEmails: ['marie.lefevre@exemple.fr', 'paul.martin@exemple.fr', 'julien.moreau@exemple.fr'],
   },
   {
     title: 'Conférence : le zéro déchet au quotidien',
@@ -80,7 +80,7 @@ export const demoEvents: {
     minute: 0,
     authorEmail: 'paul.martin@exemple.fr',
     location: corderie,
-    participantEmails: ['sophie.dubois@exemple.fr', 'karim.benali@exemple.fr'],
+    participantEmails: ['sophie.dubois@exemple.fr', 'julien.moreau@exemple.fr'],
   },
   {
     title: 'Balade nature au lac du Héron',
@@ -102,7 +102,7 @@ export const demoEvents: {
     minute: 0,
     authorEmail: 'sophie.dubois@exemple.fr',
     location: grandPlaceArmentieres,
-    participantEmails: ['karim.benali@exemple.fr'],
+    participantEmails: ['julien.moreau@exemple.fr'],
   },
   {
     title: 'Atelier cuisine anti-gaspi',
@@ -111,7 +111,7 @@ export const demoEvents: {
     dayOffset: 16,
     hour: 18,
     minute: 30,
-    authorEmail: 'karim.benali@exemple.fr',
+    authorEmail: 'julien.moreau@exemple.fr',
     location: null,
     participantEmails: ['marie.lefevre@exemple.fr'],
   },
@@ -145,7 +145,7 @@ export const demoEvents: {
     minute: 0,
     authorEmail: 'sophie.dubois@exemple.fr',
     location: maisonAssociations,
-    participantEmails: ['paul.martin@exemple.fr', 'karim.benali@exemple.fr'],
+    participantEmails: ['paul.martin@exemple.fr', 'julien.moreau@exemple.fr'],
   },
   {
     title: 'Pique-nique de rentrée',
@@ -156,7 +156,7 @@ export const demoEvents: {
     minute: 0,
     authorEmail: 'paul.martin@exemple.fr',
     location: parcBarbieux,
-    participantEmails: ['marie.lefevre@exemple.fr', 'sophie.dubois@exemple.fr', 'karim.benali@exemple.fr'],
+    participantEmails: ['marie.lefevre@exemple.fr', 'sophie.dubois@exemple.fr', 'julien.moreau@exemple.fr'],
   },
   {
     title: 'Soirée jeux de société',
@@ -165,7 +165,7 @@ export const demoEvents: {
     dayOffset: -20,
     hour: 20,
     minute: 0,
-    authorEmail: 'karim.benali@exemple.fr',
+    authorEmail: 'julien.moreau@exemple.fr',
     location: null,
     participantEmails: ['paul.martin@exemple.fr'],
   },

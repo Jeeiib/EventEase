@@ -6,7 +6,7 @@ import { usersRepo } from '@/data/users';
 import { eventsRepo } from '@/data/events';
 
 const NOW = '2026-10-19T09:00:00.000Z';
-const input = { name: 'Alice', email: 'alice@example.com', passwordHash: 'h', salt: 's', now: NOW };
+const input = { name: 'Camille', email: 'camille@exemple.fr', passwordHash: 'h', salt: 's', now: NOW };
 const eventInput = { title: 'T', description: 'D', startsAt: '2026-11-01T10:00:00.000Z', location: null };
 
 let db: Db;
@@ -18,13 +18,13 @@ beforeEach(async () => {
 describe('usersRepo', () => {
   it('create puis findByEmail renvoie le même id, avec hash et sel', async () => {
     const user = await usersRepo.create(db, input);
-    expect(user).toEqual({ id: expect.any(Number), name: 'Alice', email: 'alice@example.com', createdAt: NOW });
-    const found = await usersRepo.findByEmail(db, 'alice@example.com');
+    expect(user).toEqual({ id: expect.any(Number), name: 'Camille', email: 'camille@exemple.fr', createdAt: NOW });
+    const found = await usersRepo.findByEmail(db, 'camille@exemple.fr');
     expect(found).toEqual({ ...user, passwordHash: 'h', salt: 's' });
   });
 
   it('findByEmail et findById renvoient null si inconnu', async () => {
-    expect(await usersRepo.findByEmail(db, 'x@example.com')).toBeNull();
+    expect(await usersRepo.findByEmail(db, 'x@exemple.fr')).toBeNull();
     expect(await usersRepo.findById(db, 42)).toBeNull();
   });
 

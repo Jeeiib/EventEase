@@ -9,20 +9,20 @@ import { participationsRepo } from '@/data/participations';
 const NOW = '2026-10-19T09:00:00.000Z';
 let db: Db;
 let eventId: number;
-let alice: number;
-let bob: number;
+let camille: number;
+let hugo: number;
 
 const newUser = async (name: string) =>
-  (await usersRepo.create(db, { name, email: `${name}@example.com`, passwordHash: 'h', salt: 's', now: NOW })).id;
+  (await usersRepo.create(db, { name, email: `${name}@exemple.fr`, passwordHash: 'h', salt: 's', now: NOW })).id;
 
 beforeEach(async () => {
   db = createTestDb();
   await migrate(db);
-  alice = await newUser('alice');
-  bob = await newUser('bob');
+  camille = await newUser('camille');
+  hugo = await newUser('hugo');
   eventId = await eventsRepo.create(
     db,
-    alice,
+    camille,
     { title: 'T', description: 'D', startsAt: '2026-11-01T10:00:00.000Z', location: null },
     NOW,
   );
@@ -30,20 +30,20 @@ beforeEach(async () => {
 
 describe('participationsRepo', () => {
   it('toggle inscrit puis désinscrit', async () => {
-    expect(await participationsRepo.toggle(db, alice, eventId, NOW)).toEqual({ isParticipating: true, participantCount: 1 });
-    expect(await participationsRepo.toggle(db, alice, eventId, NOW)).toEqual({ isParticipating: false, participantCount: 0 });
+    expect(await participationsRepo.toggle(db, camille, eventId, NOW)).toEqual({ isParticipating: true, participantCount: 1 });
+    expect(await participationsRepo.toggle(db, camille, eventId, NOW)).toEqual({ isParticipating: false, participantCount: 0 });
   });
 
   it('compte deux participants', async () => {
-    await participationsRepo.toggle(db, alice, eventId, NOW);
-    expect(await participationsRepo.toggle(db, bob, eventId, NOW)).toEqual({ isParticipating: true, participantCount: 2 });
+    await participationsRepo.toggle(db, camille, eventId, NOW);
+    expect(await participationsRepo.toggle(db, hugo, eventId, NOW)).toEqual({ isParticipating: true, participantCount: 2 });
   });
 
   it('countByUser suit les bascules', async () => {
-    expect(await participationsRepo.countByUser(db, alice)).toBe(0);
-    await participationsRepo.toggle(db, alice, eventId, NOW);
-    expect(await participationsRepo.countByUser(db, alice)).toBe(1);
-    await participationsRepo.toggle(db, alice, eventId, NOW);
-    expect(await participationsRepo.countByUser(db, alice)).toBe(0);
+    expect(await participationsRepo.countByUser(db, camille)).toBe(0);
+    await participationsRepo.toggle(db, camille, eventId, NOW);
+    expect(await participationsRepo.countByUser(db, camille)).toBe(1);
+    await participationsRepo.toggle(db, camille, eventId, NOW);
+    expect(await participationsRepo.countByUser(db, camille)).toBe(0);
   });
 });
