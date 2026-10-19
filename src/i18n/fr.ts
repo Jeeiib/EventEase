@@ -106,7 +106,7 @@ export const fr = {
       },
     },
     event: {
-      a11y: { back: 'Retour aux événements' },
+      a11y: { back: 'Retour aux événements', backToList: 'Retour à la liste' },
       edit: 'Modifier',
       youOrganize: 'Tu organises cet événement',
       participating: 'Tu participes',
@@ -239,6 +239,26 @@ export const fr = {
       participations: 'Participations',
       signOut: 'Se déconnecter',
       version: 'EventEase, version {{version}}',
+      list: {
+        back: 'Retour au profil',
+        count_one: '{{count}} événement',
+        count_other: '{{count}} événements',
+        withUpcoming: '{{total}}, dont {{upcoming}} à venir',
+        none: "Aucun pour l'instant",
+        upcoming: 'À venir',
+        past: 'Passés',
+        row: { meta: '{{weekday}}, {{rest}}' },
+        emptyCreated: {
+          title: 'Aucun événement créé',
+          text: 'Propose un atelier, une sortie ou une réunion : il apparaîtra ici, à venir puis passé.',
+          action: 'Créer un événement',
+        },
+        emptyParticipations: {
+          title: 'Aucune participation',
+          text: 'Ouvre un événement et touche « Je participe » pour le retrouver ici.',
+          action: 'Voir les événements',
+        },
+      },
       reset: {
         title: 'Réinitialiser les données ?',
         message:
