@@ -239,18 +239,24 @@ export const fr = {
       participations: 'Participations',
       signOut: 'Se déconnecter',
       version: 'EventEase, version {{version}}',
+      a11y: {
+        created_one: '{{count}} événement créé',
+        created_other: '{{count}} événements créés',
+        participations_one: '{{count}} participation',
+        participations_other: '{{count}} participations',
+        openList: 'Ouvre la liste',
+      },
       list: {
         back: 'Retour au profil',
         count_one: '{{count}} événement',
         count_other: '{{count}} événements',
         withUpcoming: '{{total}}, dont {{upcoming}} à venir',
-        none: "Aucun pour l'instant",
         upcoming: 'À venir',
         past: 'Passés',
         row: { meta: '{{weekday}}, {{rest}}' },
         emptyCreated: {
           title: 'Aucun événement créé',
-          text: 'Propose un atelier, une sortie ou une réunion : il apparaîtra ici, à venir puis passé.',
+          text: 'Propose un atelier, une sortie ou une réunion : tes événements apparaîtront ici.',
           action: 'Créer un événement',
         },
         emptyParticipations: {

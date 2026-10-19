@@ -60,18 +60,14 @@ export function ProfileEventsScreen({ navigation, route }: Props): React.JSX.Ele
 
   const count = t('profile.list.count', { count: total });
   const summary =
-    total === 0
-      ? t('profile.list.none')
-      : upcoming.length > 0
-        ? t('profile.list.withUpcoming', { total: count, upcoming: upcoming.length })
-        : count;
+    upcoming.length > 0 ? t('profile.list.withUpcoming', { total: count, upcoming: upcoming.length }) : count;
 
   const header = (
     <View style={styles.titles}>
       <Text style={text.h1} accessibilityRole="header">
         {kind === 'created' ? t('profile.eventsCreated') : t('profile.participations')}
       </Text>
-      {loaded && <Text style={styles.summary}>{summary}</Text>}
+      {loaded && total > 0 && <Text style={styles.summary}>{summary}</Text>}
     </View>
   );
 
