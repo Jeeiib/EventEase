@@ -13,6 +13,15 @@ export function splitByTime(events: EventWithStatus[], now: Date) {
   return { upcoming, past };
 }
 
+// Ce que compte chaque ligne du profil : les événements créés, ou ceux où l'on participe.
+export function selectProfileEvents(
+  events: EventWithStatus[],
+  kind: 'created' | 'participations',
+  userId: number,
+): EventWithStatus[] {
+  return events.filter((e) => (kind === 'created' ? e.authorId === userId : e.isParticipating));
+}
+
 export function selectVisible(
   events: EventWithStatus[],
   filter: { tab: 'upcoming' | 'past'; onlyMine: boolean },
