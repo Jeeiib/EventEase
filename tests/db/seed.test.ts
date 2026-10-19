@@ -41,8 +41,8 @@ describe('seedIfEmpty', () => {
   it('place les événements aux bons jours et heures locales', async () => {
     await seedIfEmpty(db, now, hash, randomSalt);
     const events = await eventsRepo.listAll(db, 0);
-    const velos = events.find((e) => e.title === 'Atelier réparation de vélos');
-    const start = new Date(velos?.startsAt ?? '');
+    const jeux = events.find((e) => e.title === 'Jeux flamands au musée de plein air');
+    const start = new Date(jeux?.startsAt ?? '');
     expect(toDayKey(start)).toBe(toDayKey(addDays(now, 5)));
     expect(formatTime(start)).toBe('10h00');
   });
@@ -50,8 +50,8 @@ describe('seedIfEmpty', () => {
   it("garde 9h30 locale pour J+12, après le changement d'heure du 25 octobre", async () => {
     await seedIfEmpty(db, now, hash, randomSalt);
     const events = await eventsRepo.listAll(db, 0);
-    const heron = events.find((e) => e.title === 'Balade nature au lac du Héron');
-    const start = new Date(heron?.startsAt ?? '');
+    const balade = events.find((e) => e.title === 'Balade photo dans le Vieux-Lille');
+    const start = new Date(balade?.startsAt ?? '');
     expect(toDayKey(start)).toBe(toDayKey(addDays(now, 12)));
     expect(formatTime(start)).toBe('9h30');
   });
@@ -79,8 +79,12 @@ describe('seedIfEmpty', () => {
           title,
         )
       ).map((r) => r.name);
-    expect(await namesFor('Atelier réparation de vélos')).toEqual(['Julien Moreau', 'Marie Lefèvre', 'Paul Martin']);
-    expect(await namesFor('Soirée jeux de société')).toEqual(['Paul Martin']);
+    expect(await namesFor('Jeux flamands au musée de plein air')).toEqual([
+      'Julien Moreau',
+      'Marie Lefèvre',
+      'Paul Martin',
+    ]);
+    expect(await namesFor('Veillée des géants et légendes du Nord')).toEqual(['Paul Martin']);
     const expected = demoEvents.reduce((sum, e) => sum + e.participantEmails.length, 0);
     expect(await count('participations')).toBe(expected);
   });
