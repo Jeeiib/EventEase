@@ -8,6 +8,7 @@ import type { TextInput } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ASSOCIATION_AREA } from '@/config';
 import type { EventLocation } from '@/data/types';
+import { joinA11y } from '@/i18n/a11y';
 import { searchAddress, type AddressHit } from '@/services/geocoding';
 import { colors, font, size } from '@/theme/tokens';
 import { text } from '@/theme/typography';
@@ -125,7 +126,7 @@ export function PlaceField({ value, chosen, onChangeText, onChoose, onClear, err
             <Pressable
               key={hit.label}
               accessibilityRole="button"
-              accessibilityLabel={`${hit.name}, ${hit.place}`}
+              accessibilityLabel={joinA11y([hit.name, hit.place])}
               onPress={() => choose(hit)}
               style={({ pressed }) => [styles.hit, i === hits.length - 1 && styles.lastHit, pressed && styles.pressed]}
             >
