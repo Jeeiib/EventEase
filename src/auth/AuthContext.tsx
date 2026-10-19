@@ -1,7 +1,7 @@
 // Session de l'utilisateur : restaurée au démarrage depuis settings, exposée par un contexte.
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import type { Db } from '@/db/connection';
+import { useDb } from '@/db/DbContext';
 import type { User } from '@/data/types';
 import { settingsRepo } from '@/data/settings';
 import { usersRepo } from '@/data/users';
@@ -17,7 +17,8 @@ type AuthValue = {
 
 const AuthContext = createContext<AuthValue | null>(null);
 
-export function AuthProvider({ db, children }: { db: Db; children: ReactNode }): React.JSX.Element {
+export function AuthProvider({ children }: { children: ReactNode }): React.JSX.Element {
+  const db = useDb();
   const [user, setUser] = useState<User | null>(null);
   const [loaded, setLoaded] = useState(false);
 
