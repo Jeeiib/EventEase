@@ -63,16 +63,18 @@ export const fr = {
       participated: 'Tu as participé',
       deletedBanner: '« {{title}} » a été supprimé.',
       weekStrip: {
-        // Le libellé est le résumé seul ; l'invitation à ouvrir le calendrier est dans `hint`.
-        label: 'Cette semaine, du {{from}} au {{to}} : {{summary}}',
+        // Le libellé VoiceOver est la période + le résumé ; l'invitation à ouvrir le calendrier est dans `hint`.
+        period: 'Cette semaine, du {{from}} au {{to}}',
         none: 'aucun événement',
         event_one: 'un événement {{day}}',
         event_other: '{{count}} événements',
-        youParticipate: ', tu participes',
+        youParticipate: 'tu participes',
         hint: 'Ouvre le calendrier',
       },
       row: {
-        label: '{{title}}, {{day}} à {{time}}{{place}}{{status}}',
+        when: '{{day}} à {{time}}',
+        participating: 'tu participes',
+        participated: 'tu as participé',
       },
       empty: {
         upcoming: {
@@ -211,14 +213,13 @@ export const fr = {
       a11y: {
         prevMonth: 'Mois précédent, {{month}}',
         nextMonth: 'Mois suivant, {{month}}',
-        day: '{{day}}{{today}}{{selected}}{{events}}',
-        todayFragment: ", aujourd'hui",
-        selectedFragment: ', sélectionné',
-        noEvent: ', aucun événement',
-        oneEvent: ', un événement',
-        events: ', {{count}} événements',
-        participated: ', tu as participé',
-        participating: ', tu participes',
+        today: "aujourd'hui",
+        selected: 'sélectionné',
+        noEvent: 'aucun événement',
+        events_one: 'un événement',
+        events_other: '{{count}} événements',
+        participated: 'tu as participé',
+        participating: 'tu participes',
       },
       legend: {
         event: 'Un événement ce jour-là',
