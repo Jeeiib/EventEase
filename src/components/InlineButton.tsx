@@ -7,14 +7,16 @@ type Props = {
   label: string;
   icon: React.ComponentProps<typeof Feather>['name'];
   onPress: () => void;
+  hint?: string;
   busy?: boolean;
 };
 
-export function InlineButton({ label, icon, onPress, busy = false }: Props): React.JSX.Element {
+export function InlineButton({ label, icon, onPress, hint, busy = false }: Props): React.JSX.Element {
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={label}
+      accessibilityHint={hint}
       accessibilityState={{ busy, disabled: busy }}
       disabled={busy}
       onPress={onPress}

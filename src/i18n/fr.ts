@@ -138,6 +138,7 @@ export const fr = {
           "« {{title}} » disparaîtra pour tous les membres, avec ses {{count}} participations. C'est définitif.",
         confirm: 'Supprimer',
       },
+      directions: { action: 'Itinéraire', hint: "Ouvre l'app de cartes" },
       calendar: {
         add: 'Ajouter à mon calendrier',
         added: 'Ajouté à ton calendrier',
