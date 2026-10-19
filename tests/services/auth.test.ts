@@ -48,6 +48,17 @@ describe('register et login', () => {
     expect(res.ok && res.user.email).toBe('marie@exemple.fr');
   });
 
+  it('ne renvoie jamais le hash ni le sel', async () => {
+    const reg = await register(db, input, { digest: fakeDigest, now });
+    const res = await login(db, { email: input.email, password: input.password }, { digest: fakeDigest });
+    for (const result of [reg, res]) {
+      expect(result.ok).toBe(true);
+      if (!result.ok) continue;
+      expect(result.user).not.toHaveProperty('passwordHash');
+      expect(result.user).not.toHaveProperty('salt');
+    }
+  });
+
   it("refuse deux inscriptions avec le même e-mail, même écrit autrement", async () => {
     await register(db, input, { digest: fakeDigest, now });
     const again = await register(db, { ...input, email: ' MARIE@Exemple.fr ' }, { digest: fakeDigest, now });
