@@ -20,14 +20,16 @@ export type DistanceState =
 let sessionCoords: Coords | null = null;
 
 // Le message de refus apparaît sous le bouton : VoiceOver ne le lirait pas sans annonce.
-function announceDenied() {
-  AccessibilityInfo.announceForAccessibility(t('event.distance.denied'));
+function announce(key: 'event.distance.denied' | 'event.distance.unavailable') {
+  AccessibilityInfo.announceForAccessibility(t(key));
 }
 
 export function useDistance(location: EventLocation | null) {
   const [state, setState] = useState<DistanceState>({ status: 'idle' });
   // Une réponse du GPS qui arrive après la fermeture de la fiche ne doit plus rien écrire.
   const alive = useRef(true);
+  // Un second toucher pendant la lecture de la permission ne relance pas tout.
+  const pending = useRef(false);
   useEffect(() => {
     alive.current = true;
     return () => {
@@ -47,22 +49,29 @@ export function useDistance(location: EventLocation | null) {
       if (result.status === 'granted') show(result.coords);
       else if (alive.current) {
         setState({ status: 'denied' });
-        announceDenied();
+        announce('event.distance.denied');
       }
     } catch {
       // Une position approximative déjà affichée vaut mieux qu'un message d'erreur.
-      if (alive.current && !sessionCoords) setState({ status: 'error' });
+      if (alive.current && !sessionCoords) {
+        setState({ status: 'error' });
+        announce('event.distance.unavailable');
+      }
     }
   }, [location]);
 
   const request = useCallback(async () => {
-    const permission = await getLocationPermission();
+    if (pending.current) return;
+    pending.current = true;
+    const permission = await getLocationPermission().finally(() => {
+      pending.current = false;
+    });
     if (!alive.current) return;
     if (permission === 'granted') void locate();
     else if (permission === 'undetermined') setState({ status: 'explaining' });
     else {
       setState({ status: 'denied' });
-      announceDenied();
+      announce('event.distance.denied');
     }
   }, [locate]);
 

@@ -24,7 +24,7 @@ export function BottomSheet({ visible, onDismiss, children, style }: Props): Rea
   const { height } = useWindowDimensions();
   const [progress] = useState(() => new Animated.Value(0));
   const [reduceMotion, setReduceMotion] = useState(false);
-  // Verrou contre un second toucher pendant la fermeture. Le parent remonte la feuille à chaque ouverture.
+  // Verrou contre un second toucher pendant la fermeture, levé à chaque nouvelle ouverture.
   const [closing, setClosing] = useState(false);
 
   useEffect(() => {
@@ -32,6 +32,7 @@ export function BottomSheet({ visible, onDismiss, children, style }: Props): Rea
     let cancelled = false;
     AccessibilityInfo.isReduceMotionEnabled().then((reduce) => {
       if (cancelled) return;
+      setClosing(false);
       setReduceMotion(reduce);
       Animated.timing(progress, {
         toValue: 1,
@@ -68,6 +69,7 @@ export function BottomSheet({ visible, onDismiss, children, style }: Props): Rea
       <Animated.View
         style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, 14) }, style, motion]}
         accessibilityViewIsModal
+        onAccessibilityEscape={() => close(onDismiss)}
       >
         {children(close)}
       </Animated.View>
