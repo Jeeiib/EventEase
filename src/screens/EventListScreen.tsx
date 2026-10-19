@@ -1,4 +1,5 @@
 // Liste des événements : À venir ou Passés, filtre « Mes participations », semaine en cours en tête.
+import type { TFunction } from 'i18next';
 import { useCallback, useMemo } from 'react';
 import { SectionList, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -37,7 +38,16 @@ export function EventListScreen({ navigation, route }: MainTabScreenProps<'Event
   );
 
   const create = useCallback(() => navigation.navigate('EventForm', {}), [navigation]);
+  const openCalendar = useCallback(() => navigation.navigate('Calendar'), [navigation]);
+  const openEvent = useCallback((eventId: number) => navigation.navigate('EventDetail', { eventId }), [navigation]);
   const hideDeleted = useCallback(() => navigation.setParams({ deletedTitle: undefined }), [navigation]);
+  const past = view === 'past';
+  const renderItem = useCallback(
+    ({ item }: { item: Row }) => (
+      <EventRow event={item.event} firstOfDay={item.firstOfDay} past={past} now={now} onOpen={openEvent} />
+    ),
+    [past, now, openEvent],
+  );
 
   const empty = emptyContent(view, mineOnly, total, t, create, () => setMineOnly(false));
 
@@ -63,7 +73,7 @@ export function EventListScreen({ navigation, route }: MainTabScreenProps<'Event
         <FilterChip label={t('list.mine')} selected={mineOnly} onPress={() => setMineOnly(!mineOnly)} />
       </View>
 
-      {deletedTitle && <DeletedBanner message={t('list.deletedBanner', { title: deletedTitle })} onHide={hideDeleted} />}
+      {!!deletedTitle && <DeletedBanner message={t('list.deletedBanner', { title: deletedTitle })} onHide={hideDeleted} />}
 
       {view === 'upcoming' && (
         <WeekStrip
@@ -71,7 +81,7 @@ export function EventListScreen({ navigation, route }: MainTabScreenProps<'Event
           weekEvents={weekEvents}
           markers={markers}
           now={now}
-          onPress={() => navigation.navigate('Calendar')}
+          onPress={openCalendar}
         />
       )}
 
@@ -82,15 +92,7 @@ export function EventListScreen({ navigation, route }: MainTabScreenProps<'Event
           sections={listSections}
           keyExtractor={(row) => String(row.event.id)}
           renderSectionHeader={({ section }) => <MonthHeader label={section.title} />}
-          renderItem={({ item }) => (
-            <EventRow
-              event={item.event}
-              firstOfDay={item.firstOfDay}
-              past={view === 'past'}
-              now={now}
-              onPress={() => navigation.navigate('EventDetail', { eventId: item.event.id })}
-            />
-          )}
+          renderItem={renderItem}
           stickySectionHeadersEnabled={false}
           contentContainerStyle={styles.list}
         />
@@ -99,13 +101,11 @@ export function EventListScreen({ navigation, route }: MainTabScreenProps<'Event
   );
 }
 
-type T = ReturnType<typeof useTranslation>['t'];
-
 function emptyContent(
   view: EventListView,
   mineOnly: boolean,
   total: number,
-  t: T,
+  t: TFunction,
   create: () => void,
   clearFilter: () => void,
 ): React.ComponentProps<typeof EmptyState> {

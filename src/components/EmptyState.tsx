@@ -1,5 +1,5 @@
 // État vide d'une liste : une icône, ce qui se passe, et l'action qui en sort.
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 import { colors, font } from '@/theme/tokens';
 import { PrimaryButton } from './PrimaryButton';
@@ -40,7 +40,8 @@ function EmptyIcon({ icon }: { icon: Icon }) {
 
 export function EmptyState({ icon, title, text, action }: Props): React.JSX.Element {
   return (
-    <View style={styles.empty}>
+    // Défilant : aux grandes tailles de texte, l'état vide peut dépasser l'écran.
+    <ScrollView style={styles.scroll} contentContainerStyle={styles.empty}>
       <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
         <EmptyIcon icon={icon} />
       </View>
@@ -53,13 +54,14 @@ export function EmptyState({ icon, title, text, action }: Props): React.JSX.Elem
           <PrimaryButton label={action.label} onPress={action.onPress} variant={action.variant} compact />
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scroll: { flex: 1 },
   empty: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
     gap: 14,
