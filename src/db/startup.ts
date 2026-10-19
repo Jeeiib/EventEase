@@ -13,6 +13,10 @@ export function prepareDatabase(): Promise<Db> {
     await migrate(db);
     await seedIfEmpty(db, new Date(), (password, salt) => hashPassword(password, salt, sha256), makeSalt);
     return db;
-  })();
+  })().catch((error: unknown) => {
+    // Un échec n'est pas mémorisé : « Réessayer » relance une vraie préparation.
+    pending = null;
+    throw error;
+  });
   return pending;
 }

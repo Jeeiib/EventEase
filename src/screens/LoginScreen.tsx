@@ -18,20 +18,39 @@ export function LoginScreen({ navigation }: AuthScreenProps<'Login'>): React.JSX
   const { signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [failed, setFailed] = useState(false);
+  const [failure, setFailure] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const passwordRef = useRef<TextInput>(null);
+  // La touche « Aller » du clavier ne passe pas par le bouton : on garde l'envoi en cours ici.
+  const inFlight = useRef(false);
+
+  function edit(setter: (value: string) => void) {
+    return (value: string) => {
+      setter(value);
+      setFailure(null);
+    };
+  }
 
   async function submit() {
+    if (inFlight.current) return;
+    inFlight.current = true;
     // Le clavier masquerait le bandeau ou le bouton en chargement.
     Keyboard.dismiss();
     setSending(true);
-    const error = await signIn(email, password);
-    // En cas de succès, la navigation bascule d'elle-même sur les onglets.
-    if (error) {
+    let message: string | null = null;
+    try {
+      const error = await signIn(email, password);
+      // En cas de succès, la navigation bascule d'elle-même sur les onglets.
+      if (error) message = t('auth.login.invalidCredentials');
+    } catch {
+      message = t('common.unexpectedError');
+    } finally {
+      inFlight.current = false;
+    }
+    if (message) {
       setSending(false);
-      setFailed(true);
-      AccessibilityInfo.announceForAccessibility(t('auth.login.invalidCredentials'));
+      setFailure(message);
+      AccessibilityInfo.announceForAccessibility(message);
     }
   }
 
@@ -57,7 +76,7 @@ export function LoginScreen({ navigation }: AuthScreenProps<'Login'>): React.JSX
           label={t('auth.login.email')}
           placeholder={t('auth.login.emailPlaceholder')}
           value={email}
-          onChangeText={setEmail}
+          onChangeText={edit(setEmail)}
           keyboardType="email-address"
           autoCapitalize="none"
           autoCorrect={false}
@@ -72,7 +91,7 @@ export function LoginScreen({ navigation }: AuthScreenProps<'Login'>): React.JSX
           label={t('auth.login.password')}
           placeholder={t('auth.login.passwordPlaceholder')}
           value={password}
-          onChangeText={setPassword}
+          onChangeText={edit(setPassword)}
           autoComplete="current-password"
           textContentType="password"
           returnKeyType="go"
@@ -80,13 +99,13 @@ export function LoginScreen({ navigation }: AuthScreenProps<'Login'>): React.JSX
         />
       </View>
 
-      {failed && (
+      {failure && (
         <View style={styles.banner}>
-          <ErrorBanner message={t('auth.login.invalidCredentials')} />
+          <ErrorBanner message={failure} />
         </View>
       )}
 
-      <View style={failed ? styles.submitAfterBanner : styles.submit}>
+      <View style={failure ? styles.submitAfterBanner : styles.submit}>
         <PrimaryButton label={t('auth.login.submit')} onPress={submit} loading={sending} />
       </View>
     </AuthLayout>

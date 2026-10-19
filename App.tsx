@@ -10,6 +10,7 @@ import type { Db } from '@/db/connection';
 import { DbProvider } from '@/db/DbContext';
 import { prepareDatabase } from '@/db/startup';
 import { RootNavigator } from '@/navigation/RootNavigator';
+import { StartupErrorScreen } from '@/screens/StartupErrorScreen';
 import { useAppFonts } from '@/theme/fonts';
 import { colors } from '@/theme/tokens';
 
@@ -23,12 +24,38 @@ const theme = {
 export default function App(): React.JSX.Element | null {
   const fontsReady = useAppFonts();
   const [db, setDb] = useState<Db | null>(null);
+  const [failed, setFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
-    void prepareDatabase().then(setDb);
-  }, []);
+    let cancelled = false;
+    prepareDatabase().then(
+      (ready) => {
+        if (!cancelled) setDb(ready);
+      },
+      () => {
+        if (cancelled) return;
+        setFailed(true);
+        void SplashScreen.hideAsync();
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [attempt]);
 
-  if (!fontsReady || !db) return null;
+  if (!fontsReady) return null;
+  if (failed) {
+    return (
+      <StartupErrorScreen
+        onRetry={() => {
+          setFailed(false);
+          setAttempt((n) => n + 1);
+        }}
+      />
+    );
+  }
+  if (!db) return null;
 
   return (
     <SafeAreaProvider>

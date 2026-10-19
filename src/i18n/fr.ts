@@ -17,6 +17,8 @@ export const fr = {
         fieldError: '{{label}}, erreur : {{error}}',
       },
       loading: 'Chargement…',
+      unexpectedError: 'Une erreur inattendue est survenue. Réessaie dans un instant.',
+      startupError: "EventEase n'a pas pu ouvrir ses données. Réessaie ; si ça recommence, ferme puis rouvre l'app.",
     },
     time: {
       hm: '{{h}}h{{m}}',
