@@ -6,7 +6,8 @@ export const text = StyleSheet.create({
   h1: {
     fontFamily: font.semiBold,
     fontSize: font.size.h1,
-    lineHeight: 36,
+    // Assez haut pour les accents des capitales (« Événements ») : 36 les coupait.
+    lineHeight: 42,
     letterSpacing: font.letterSpacing.h1,
     color: colors.text,
   },

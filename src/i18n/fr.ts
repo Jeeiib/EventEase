@@ -69,6 +69,7 @@ export const fr = {
       weekStrip: {
         // Le libellé VoiceOver est la période + le résumé ; l'invitation à ouvrir le calendrier est dans `hint`.
         period: 'Cette semaine, du {{from}} au {{to}}',
+        label: '{{period}} : {{summary}}',
         none: 'aucun événement',
         event_one: 'un événement {{day}}',
         event_other: '{{count}} événements',
@@ -77,6 +78,7 @@ export const fr = {
       },
       row: {
         when: '{{day}} à {{time}}',
+        meta: '{{time}}, {{place}}',
         participating: 'tu participes',
         participated: 'tu as participé',
       },
