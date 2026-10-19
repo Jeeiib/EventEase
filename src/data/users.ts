@@ -22,7 +22,7 @@ export const usersRepo = {
     return { id: lastInsertRowId, name: input.name, email: input.email, createdAt: input.now };
   },
 
-  /** Compte avec son condensat et son sel, pour la connexion seulement ; `email` doit être normalisé. */
+  /** Compte avec son condensat et son sel, ou `null` ; `email` doit être normalisé, la comparaison est exacte. */
   async findByEmail(db: Db, email: string): Promise<(User & { passwordHash: string; salt: string }) | null> {
     const row = await db.getFirstAsync<UserRow>('SELECT * FROM users WHERE email = ?', email);
     return row ? { ...toUser(row), passwordHash: row.password_hash, salt: row.salt } : null;
