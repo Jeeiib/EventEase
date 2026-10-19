@@ -186,6 +186,7 @@ export const fr = {
       descriptionPlaceholder: "Ce qu'on y fait, ce qu'il faut apporter.",
       dateTime: 'Date et heure',
       choose: 'Choisir',
+      pickerSummary: '{{day}} à {{time}}',
       location: 'Lieu',
       locationPlaceholder: 'Adresse ou nom du lieu',
       locationHint: 'Avec un lieu, la fiche affichera la météo du jour et la distance.',

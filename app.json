@@ -39,7 +39,8 @@
           "imageWidth": 160
         }
       ],
-      "expo-sqlite"
+      "expo-sqlite",
+      "@react-native-community/datetimepicker"
     ],
     "scheme": "eventease"
   }
