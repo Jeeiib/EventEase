@@ -9,9 +9,10 @@ import { useAuth } from '@/auth/AuthContext';
 import { DateField } from '@/components/DateField';
 import { DateTimeSheet } from '@/components/DateTimeSheet';
 import { ModalHeader } from '@/components/ModalHeader';
+import { PlaceField } from '@/components/PlaceField';
 import { TextField } from '@/components/TextField';
 import { eventsRepo } from '@/data/events';
-import type { EventWithStatus } from '@/data/types';
+import type { EventLocation, EventWithStatus } from '@/data/types';
 import { useDb } from '@/db/DbContext';
 import type { RootStackParamList } from '@/navigation/types';
 import { colors, space } from '@/theme/tokens';
@@ -22,7 +23,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'EventForm'>;
 type Values = { title: string; description: string; startsAt: string | null; place: string };
 type Field = keyof EventFormErrors;
 
-const FIELD_ORDER: Field[] = ['title', 'description', 'startsAt'];
+const FIELD_ORDER: Field[] = ['title', 'description', 'startsAt', 'place'];
 const STEP_MS = 5 * 60 * 1000;
 
 // Le sélecteur avance par 5 minutes : on part du prochain créneau rond.
@@ -77,6 +78,8 @@ function EventForm({ original, navigation }: { original: EventWithStatus | null;
     place: original?.location?.label ?? '',
   }));
   const [values, setValues] = useState<Values>(initial);
+  // Le lieu choisi parmi les suggestions, avec sa position ; le texte seul ne suffit pas.
+  const [location, setLocation] = useState<EventLocation | null>(original?.location ?? null);
   const [errors, setErrors] = useState<EventFormErrors>({});
   const [submitted, setSubmitted] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -85,13 +88,15 @@ function EventForm({ original, navigation }: { original: EventWithStatus | null;
   const saving = useRef(false);
   const titleRef = useRef<TextInput>(null);
   const descriptionRef = useRef<TextInput>(null);
+  const placeRef = useRef<TextInput>(null);
   const dateRef = useRef<View>(null);
 
   const isDirty =
     values.title !== initial.title ||
     values.description !== initial.description ||
     values.startsAt !== initial.startsAt ||
-    values.place !== initial.place;
+    values.place !== initial.place ||
+    location?.label !== original?.location?.label;
 
   // Annuler ou glisser la feuille avec des modifications : on demande avant de tout perdre.
   usePreventRemove(isDirty && !saved, ({ data }) => {
@@ -113,25 +118,32 @@ function EventForm({ original, navigation }: { original: EventWithStatus | null;
       const node = findNodeHandle(dateRef.current);
       if (node) AccessibilityInfo.setAccessibilityFocus(node);
     } else {
-      (focusRequest.field === 'title' ? titleRef : descriptionRef).current?.focus();
+      const refs = { title: titleRef, description: descriptionRef, place: placeRef };
+      refs[focusRequest.field].current?.focus();
     }
   }, [focusRequest]);
 
-  function check(next: Values): EventFormErrors {
-    return validateEventForm(next, { now: new Date(), originalStartsAt: original?.startsAt ?? null });
+  function check(next: Values, place: EventLocation | null): EventFormErrors {
+    return validateEventForm(
+      { ...next, placeResolved: place !== null && place.label === next.place },
+      { now: new Date(), originalStartsAt: original?.startsAt ?? null },
+    );
   }
 
-  function change(patch: Partial<Values>) {
+  function change(patch: Partial<Values>, place: EventLocation | null = location) {
     const next = { ...values, ...patch };
+    // Retaper le lieu après un choix : l'ancienne position ne correspond plus au texte.
+    const kept = place && place.label === next.place ? place : null;
     setValues(next);
+    setLocation(kept);
     // Après une première tentative, les erreurs suivent la saisie au lieu d'attendre le prochain envoi.
-    if (submitted) setErrors(check(next));
+    if (submitted) setErrors(check(next, kept));
   }
 
   async function submit() {
     if (saving.current || saved || !user) return;
     setSubmitted(true);
-    const found = check(values);
+    const found = check(values, location);
     setErrors(found);
     const first = FIELD_ORDER.find((field) => found[field]);
     if (first) {
@@ -143,8 +155,7 @@ function EventForm({ original, navigation }: { original: EventWithStatus | null;
       title: values.title.trim(),
       description: values.description.trim(),
       startsAt: values.startsAt as string,
-      // Le lieu n'est géocodé qu'avec la recherche d'adresse : en attendant, on garde celui de l'événement.
-      location: original?.location ?? null,
+      location: values.place.trim() ? location : null,
     };
     const now = new Date().toISOString();
     try {
@@ -191,6 +202,7 @@ function EventForm({ original, navigation }: { original: EventWithStatus | null;
     if (!code) return null;
     if (field === 'title') return t('form.errors.titleRequired');
     if (field === 'description') return t('form.errors.descriptionRequired');
+    if (field === 'place') return t('form.errors.placeUnresolved');
     return code === 'past' ? t('form.errors.datePast') : t('form.errors.dateRequired');
   };
 
@@ -237,14 +249,14 @@ function EventForm({ original, navigation }: { original: EventWithStatus | null;
           error={errorText('startsAt')}
           onPress={openPicker}
         />
-        <TextField
-          label={t('form.location')}
-          optional={t('common.optional')}
-          placeholder={t('form.locationPlaceholder')}
-          hint={t('form.locationHint')}
+        <PlaceField
+          ref={placeRef}
           value={values.place}
+          chosen={location}
+          error={errorText('place')}
           onChangeText={(place) => change({ place })}
-          returnKeyType="done"
+          onChoose={(place) => change({ place: place.label }, place)}
+          onClear={() => change({ place: '' }, null)}
         />
       </ScrollView>
 
