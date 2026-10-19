@@ -7,6 +7,7 @@ import type { EventLocation } from '@/data/types';
 import { getLocationPermission, getPositionForDistance, type Coords } from '@/services/location';
 import { distanceMeters } from '@/utils/distance';
 
+/** `explaining` : explication avant la demande de permission ; `denied` : refus (message annoncé à VoiceOver) ; `error` : GPS muet sans position connue. */
 export type DistanceState =
   | { status: 'idle' }
   | { status: 'explaining' }
@@ -22,6 +23,10 @@ function announce(key: 'event.distance.denied' | 'event.distance.unavailable') {
   AccessibilityInfo.announceForAccessibility(t(key));
 }
 
+/**
+ * Distance jusqu'au lieu, à la demande : `request` vérifie la permission, `confirm` lance la lecture après l'explication.
+ * La position n'est gardée qu'en mémoire pour la session ; elle suffit ensuite à afficher la distance d'office.
+ */
 export function useDistance(location: EventLocation | null) {
   const [state, setState] = useState<DistanceState>({ status: 'idle' });
   // Une réponse du GPS qui arrive après la fermeture de la fiche ne doit plus rien écrire.

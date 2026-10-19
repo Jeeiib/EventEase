@@ -1,4 +1,4 @@
-// https://docs.expo.dev/guides/using-eslint/
+// Règles ESLint : configuration Expo, plus l'interdiction des textes visibles en dur dans l'interface.
 const { defineConfig } = require('eslint/config');
 const expoConfig = require('eslint-config-expo/flat');
 const i18next = require('eslint-plugin-i18next');

@@ -18,9 +18,10 @@ function withFirst(text: string, d: Date, locale: string): string {
     : text;
 }
 
-// Pas des heures proposées pour un événement : 5 minutes.
+/** Pas des heures proposées pour un événement : 5 minutes. */
 export const STEP_MS = 5 * 60 * 1000;
 
+/** Clé « AAAA-MM-JJ » du jour local de `d` ; clé de regroupement et de comparaison entre jours. */
 export function toDayKey(d: Date): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
@@ -31,12 +32,13 @@ export function defaultDayKeyForMonth(month: Date, now: Date): string {
   return toDayKey(sameMonth ? now : new Date(month.getFullYear(), month.getMonth(), 1));
 }
 
+/** Minuit local du jour désigné par la clé (et non minuit UTC). */
 export function fromDayKey(key: string): Date {
   const [y = 0, m = 1, day = 1] = key.split('-').map(Number);
   return new Date(y, m - 1, day);
 }
 
-// Arithmétique sur le calendrier local : ajouter 24 h fausserait les jours de changement d'heure.
+/** Ajoute `n` jours calendaires en gardant l'heure ; ajouter 24 h fausserait les jours de changement d'heure. */
 export function addDays(d: Date, n: number): Date {
   return new Date(
     d.getFullYear(),
@@ -49,6 +51,7 @@ export function addDays(d: Date, n: number): Date {
   );
 }
 
+/** Minuit du lundi de la semaine de `d` (la semaine commence le lundi). */
 export function startOfWeek(d: Date): Date {
   const sinceMonday = (d.getDay() + 6) % 7;
   return new Date(d.getFullYear(), d.getMonth(), d.getDate() - sinceMonday);
@@ -58,6 +61,7 @@ export function isUpcoming(startsAtIso: string, now: Date): boolean {
   return new Date(startsAtIso) > now;
 }
 
+/** Heure au format « 9h30 », sur 24 h, via le gabarit i18n `time.hm`. */
 export function formatTime(d: Date, locale: string = getAppLocale()): string {
   const parts = new Intl.DateTimeFormat(locale, { hour: 'numeric', minute: '2-digit', hourCycle: 'h23' }).formatToParts(
     d,
@@ -71,16 +75,17 @@ export function formatWeekdayShort(d: Date, locale: string = getAppLocale()): st
   return new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(d);
 }
 
-// « oct. » : mois abrégé, sous le numéro du jour quand la liste n'a pas d'en-têtes de mois.
+/** « oct. » : mois abrégé, sous le numéro du jour quand la liste n'a pas d'en-têtes de mois. */
 export function formatMonthShort(d: Date, locale: string = getAppLocale()): string {
   return new Intl.DateTimeFormat(locale, { month: 'short' }).format(d);
 }
 
-// « samedi 24 » : jour de la semaine et numéro, pour une phrase.
+/** « samedi 24 » : jour de la semaine et numéro, pour une phrase (« samedi 1er » le premier du mois). */
 export function formatWeekdayDay(d: Date, locale: string = getAppLocale()): string {
   return withFirst(new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric' }).format(d), d, locale);
 }
 
+/** « Samedi 31 octobre » ; l'année s'ajoute si elle diffère de celle de `now`. */
 export function formatDayLong(d: Date, now: Date, locale: string = getAppLocale()): string {
   const withYear = d.getFullYear() !== now.getFullYear();
   const text = new Intl.DateTimeFormat(locale, {
@@ -92,10 +97,12 @@ export function formatDayLong(d: Date, now: Date, locale: string = getAppLocale(
   return capitalize(withFirst(text, d, locale), locale);
 }
 
+/** « Samedi 31 octobre, 9h30 » : jour long et heure. */
 export function formatDayWithTime(d: Date, now: Date, locale: string = getAppLocale()): string {
   return t('time.dayAt', { day: formatDayLong(d, now, locale), time: formatTime(d, locale), lng: languageOf(locale) });
 }
 
+/** Mois seul (« Octobre ») ; l'année s'ajoute si elle diffère de celle de `now`. */
 export function formatMonthHeader(d: Date, now: Date, locale: string = getAppLocale()): string {
   const withYear = d.getFullYear() !== now.getFullYear();
   const text = new Intl.DateTimeFormat(locale, { month: 'long', ...(withYear && { year: 'numeric' }) }).format(d);
@@ -106,6 +113,7 @@ export function formatMonthYear(d: Date, locale: string = getAppLocale()): strin
   return capitalize(new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(d), locale);
 }
 
+/** « 31 octobre » ; l'année s'ajoute si elle diffère de celle de `now`. */
 export function formatDateOnly(d: Date, now: Date, locale: string = getAppLocale()): string {
   const withYear = d.getFullYear() !== now.getFullYear();
   const text = new Intl.DateTimeFormat(locale, {
@@ -127,6 +135,7 @@ function weekdayLabels(weekday: 'long' | 'short', locale: string): string[] {
   return Array.from({ length: 7 }, (_, i) => fmt.format(new Date(2026, 9, 18 + i)));
 }
 
+/** Libellés pour react-native-calendars : douze mois, ou sept jours en commençant par le dimanche (attendu par la bibliothèque). */
 export const monthNames = (locale: string = getAppLocale()) => monthLabels('long', locale);
 export const monthNamesShort = (locale: string = getAppLocale()) => monthLabels('short', locale);
 export const dayNames = (locale: string = getAppLocale()) => weekdayLabels('long', locale);

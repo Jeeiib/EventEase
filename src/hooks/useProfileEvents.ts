@@ -7,6 +7,7 @@ import type { EventWithStatus } from '@/data/types';
 import { useDb } from '@/db/DbContext';
 import { selectProfileEvents, splitByTime } from '@/utils/eventGroups';
 
+/** Événements créés par l'utilisateur ou ceux où il participe, à venir puis passés ; `loaded` passe à `true` après la première lecture. */
 export function useProfileEvents(kind: 'created' | 'participations') {
   const db = useDb();
   const { user } = useAuth();

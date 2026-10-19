@@ -115,7 +115,8 @@ export function ProfileScreen({ navigation }: MainTabScreenProps<'Profile'>): Re
 
       <View style={styles.spacer} />
 
-      {/* Appui long caché pour remettre la démo à zéro avant l'oral : pour VoiceOver, c'est du texte. */}
+      {/* Appui long caché pour remettre la démo à zéro : pour VoiceOver, c'est du texte. */}
+      {/* 800 ms au lieu des 500 par défaut : on ne doit pas effacer la démo par accident. */}
       <Pressable onLongPress={confirmReset} delayLongPress={800} accessibilityRole="text">
         <Text style={styles.version}>{t('profile.version', { version })}</Text>
       </Pressable>

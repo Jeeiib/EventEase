@@ -6,6 +6,7 @@ import { eventsRepo } from '@/data/events';
 import { settingsRepo } from '@/data/settings';
 import { addDays } from '@/utils/dates';
 
+/** Condensat du mot de passe ; injecté pour ne pas dépendre du module natif en test. */
 export type Hasher = (password: string, salt: string) => Promise<string>;
 
 // Sans transaction propre : l'appelant en ouvre une, SQLite n'accepte pas deux BEGIN imbriqués.
@@ -52,7 +53,7 @@ async function insertDemoData(db: Db, now: Date, hash: Hasher, randomSalt: () =>
   await settingsRepo.set(db, 'seeded_at', nowIso);
 }
 
-// Le drapeau seeded_at évite de réinsérer la démo après qu'un utilisateur a supprimé ses données.
+/** Insère la démo au premier lancement seulement ; renvoie `true` si elle a été insérée. Le drapeau `seeded_at` évite de la réinsérer après une suppression de données par l'utilisateur. */
 export async function seedIfEmpty(db: Db, now: Date, hash: Hasher, randomSalt: () => string): Promise<boolean> {
   let inserted = false;
   await db.withTransactionAsync(async () => {
@@ -63,6 +64,7 @@ export async function seedIfEmpty(db: Db, now: Date, hash: Hasher, randomSalt: (
   return inserted;
 }
 
+/** Efface toutes les données, session comprise, et réinsère la démo. */
 export async function resetDemoData(db: Db, now: Date, hash: Hasher, randomSalt: () => string): Promise<void> {
   await db.withTransactionAsync(async () => {
     // Enfants d'abord ; settings aussi, ce qui efface la session en cours.

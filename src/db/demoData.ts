@@ -1,7 +1,7 @@
 // Contenu du jeu de démonstration : des données, pas du texte d'interface (donc hors i18n).
 import type { EventLocation } from '@/data/types';
 
-// Même mot de passe pour les quatre comptes, documenté dans le README.
+/** Mot de passe commun aux quatre comptes de démonstration (voir le README). */
 export const DEMO_PASSWORD = 'demo2026';
 
 export const demoUsers: { name: string; email: string }[] = [
@@ -49,7 +49,7 @@ const maisonAssociations: EventLocation = {
   longitude: 3.15266,
 };
 
-// dayOffset : jours depuis le premier lancement ; hour et minute : heure locale.
+/** `dayOffset` : jours depuis le premier lancement ; `hour` et `minute` : heure locale. */
 export const demoEvents: {
   title: string;
   description: string;

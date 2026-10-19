@@ -1,4 +1,5 @@
 // Recherche d'adresses et de lieux nommés via la Géoplateforme (API publique de l'IGN, sans clé).
+/** Un résultat de recherche : `label` est le texte complet, `name` et `place` ses deux moitiés (nom, puis code postal et ville). */
 export type AddressHit = {
   label: string;
   name: string;
@@ -10,8 +11,11 @@ export type AddressHit = {
 export type AddressResult = { ok: true; hits: AddressHit[] } | { ok: false; error: 'network' | 'unavailable' };
 
 export type SearchOptions = {
+  /** Point autour duquel la recherche est favorisée (le lieu de l'association, par exemple). */
   near?: { latitude: number; longitude: number };
+  /** Remplace `fetch` ; sert aux tests. */
   fetchFn?: typeof fetch;
+  /** Permet d'abandonner une recherche devenue inutile (nouvelle frappe). */
   signal?: AbortSignal;
 };
 
@@ -23,6 +27,12 @@ function firstText(value: unknown): string | undefined {
   return typeof v === 'string' && v.trim() !== '' ? v : undefined;
 }
 
+/**
+ * Cherche des adresses et des lieux nommés (lacs, parcs) à partir de la saisie.
+ * Renvoie une liste vide, sans appel réseau, sous trois caractères. Ne lève jamais :
+ * échec réseau, abandon par `signal` ou réponse inexploitable donnent `{ ok: false }`.
+ * Les doublons sont retirés et chaque résultat a une position.
+ */
 export async function searchAddress(query: string, options: SearchOptions = {}): Promise<AddressResult> {
   const { near, fetchFn = fetch, signal } = options;
   const q = query.trim();
