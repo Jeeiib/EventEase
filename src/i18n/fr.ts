@@ -138,6 +138,12 @@ export const fr = {
           "« {{title}} » disparaîtra pour tous les membres, avec ses {{count}} participations. C'est définitif.",
         confirm: 'Supprimer',
       },
+      calendar: {
+        add: 'Ajouter à mon calendrier',
+        added: 'Ajouté à ton calendrier',
+        denied: "EventEase n'a pas accès à ton calendrier. Pour y ajouter l'événement, autorise-le dans les Réglages.",
+        openSettings: 'Ouvrir les réglages',
+      },
       distance: {
         action: 'Voir à quelle distance',
         loading: 'Calcul de la distance…',
