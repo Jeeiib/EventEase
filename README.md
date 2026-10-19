@@ -38,7 +38,7 @@ Sur un réseau qui isole les appareils entre eux (Wi-Fi public, d'école ou d'en
 <p align="center">
   <img src="docs/captures/liste.png" width="200" alt="Liste des événements à venir, avec le bandeau de la semaine" />
   <img src="docs/captures/fiche.png" width="200" alt="Fiche d'un événement avec la météo, le lieu et le bouton de participation" />
-  <img src="docs/captures/formulaire.png" width="200" alt="Formulaire de modification d'un événement, lieu choisi" />
+  <img src="docs/captures/formulaire.png" width="200" alt="Formulaire de modification d’un événement, lieu choisi" />
   <img src="docs/captures/calendrier.png" width="200" alt="Calendrier mensuel avec les jours qui ont des événements" />
   <img src="docs/captures/profil.png" width="200" alt="Profil avec le nombre d'événements créés et de participations" />
 </p>
