@@ -22,7 +22,9 @@ export function SegmentedTabs<T extends string>({ options, value, onChange }: Pr
             onPress={() => onChange(option.value)}
             style={[styles.tab, selected && styles.tabSelected]}
           >
-            <Text style={[styles.label, selected && styles.labelSelected]}>{option.label}</Text>
+            <Text style={[styles.label, selected && styles.labelSelected]} maxFontSizeMultiplier={1.6}>
+              {option.label}
+            </Text>
           </Pressable>
         );
       })}
