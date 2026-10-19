@@ -106,7 +106,7 @@ export const fr = {
       },
     },
     event: {
-      a11y: { back: 'Retour aux événements', backToList: 'Retour à la liste' },
+      a11y: { back: 'Retour aux événements', backToList: 'Retour à la liste', backToCalendar: 'Retour au calendrier' },
       edit: 'Modifier',
       youOrganize: 'Tu organises cet événement',
       participating: 'Tu participes',
