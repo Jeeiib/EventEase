@@ -13,6 +13,8 @@ import {
   formatTime,
   formatWeekdayDay,
   formatWeekdayShort,
+  formatWeekdayDayShort,
+  formatDayMonthShort,
   fromDayKey,
   isUpcoming,
   monthNames,
@@ -60,6 +62,11 @@ test('formatTime', () => {
   expect(formatTime(new Date(2026, 9, 24, 9, 30))).toBe('9h30');
   expect(formatTime(new Date(2026, 9, 24, 19, 0))).toBe('19h00');
   expect(formatTime(new Date(2026, 9, 24, 0, 5))).toBe('0h05');
+});
+
+test('dates compactes sur une ligne', () => {
+  expect(formatWeekdayDayShort(new Date(2026, 9, 24))).toBe('sam. 24');
+  expect(formatDayMonthShort(new Date(2026, 9, 24))).toBe('24 oct.');
 });
 
 test('formatWeekdayShort', () => {

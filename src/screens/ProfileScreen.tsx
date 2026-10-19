@@ -16,7 +16,7 @@ import { useDb } from '@/db/DbContext';
 import { resetDemo } from '@/db/startup';
 import { joinA11y } from '@/i18n/a11y';
 import { colors, font, space } from '@/theme/tokens';
-import { text } from '@/theme/typography';
+import { LARGE_TITLE_MAX_SCALE, text } from '@/theme/typography';
 
 type Counts = { created: number; participations: number };
 
@@ -75,7 +75,7 @@ export function ProfileScreen({ navigation }: MainTabScreenProps<'Profile'>): Re
       style={styles.screen}
       contentContainerStyle={[styles.content, { paddingTop: insets.top + 8, paddingBottom: 16 }]}
     >
-      <Text style={text.h1} accessibilityRole="header">
+      <Text style={text.h1} accessibilityRole="header" maxFontSizeMultiplier={LARGE_TITLE_MAX_SCALE}>
         {t('profile.title')}
       </Text>
 

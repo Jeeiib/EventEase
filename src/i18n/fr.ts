@@ -79,6 +79,8 @@ export const fr = {
         meta: '{{time}}, {{place}}',
         participating: 'tu participes',
         participated: 'tu as participé',
+        hint: 'Ouvre la fiche de l’événement',
+        withExcerpt: '{{summary}}. {{excerpt}}',
       },
       empty: {
         upcoming: {
