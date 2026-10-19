@@ -9,7 +9,12 @@ import { participationsRepo } from '@/data/participations';
 
 const NOW = '2026-10-19T09:00:00.000Z';
 const LATER = '2026-10-19T10:00:00.000Z';
-const base: EventInput = { title: 'Concert', description: 'Salle comble', startsAt: '2026-11-01T18:00:00.000Z', location: null };
+const base: EventInput = {
+  title: 'Concert',
+  description: 'Salle comble',
+  startsAt: '2026-11-01T18:00:00.000Z',
+  location: null,
+};
 let db: Db;
 let camille: number;
 let hugo: number;
@@ -28,8 +33,15 @@ describe('eventsRepo', () => {
   it('getById renvoie location null sans lieu, avec auteur et statut vierge', async () => {
     const id = await eventsRepo.create(db, camille, base, NOW);
     expect(await eventsRepo.getById(db, id, camille)).toEqual({
-      id, ...base, location: null, authorId: camille, authorName: 'Camille',
-      createdAt: NOW, updatedAt: NOW, participantCount: 0, isParticipating: false,
+      id,
+      ...base,
+      location: null,
+      authorId: camille,
+      authorName: 'Camille',
+      createdAt: NOW,
+      updatedAt: NOW,
+      participantCount: 0,
+      isParticipating: false,
     });
   });
 
@@ -64,21 +76,35 @@ describe('eventsRepo', () => {
     await participationsRepo.toggle(db, lucie, first, NOW);
     const asHugo = await eventsRepo.listAll(db, hugo);
     const asCamille = await eventsRepo.listAll(db, camille);
-    expect(asHugo.map((e) => [e.id, e.participantCount, e.isParticipating])).toEqual([[first, 2, true], [second, 0, false]]);
-    expect(asCamille.map((e) => [e.id, e.participantCount, e.isParticipating])).toEqual([[first, 2, false], [second, 0, false]]);
+    expect(asHugo.map((e) => [e.id, e.participantCount, e.isParticipating])).toEqual([
+      [first, 2, true],
+      [second, 0, false],
+    ]);
+    expect(asCamille.map((e) => [e.id, e.participantCount, e.isParticipating])).toEqual([
+      [first, 2, false],
+      [second, 0, false],
+    ]);
   });
 
-  it('update par l\'auteur change le contenu et updatedAt', async () => {
+  it("update par l'auteur change le contenu et updatedAt", async () => {
     const id = await eventsRepo.create(db, camille, base, NOW);
     const location = { label: 'Opéra', latitude: 45.76, longitude: 4.83 };
     expect(await eventsRepo.update(db, id, camille, { ...base, title: 'Nouveau', location }, LATER)).toBe(true);
     expect(await eventsRepo.getById(db, id, camille)).toMatchObject({
-      title: 'Nouveau', location, createdAt: NOW, updatedAt: LATER,
+      title: 'Nouveau',
+      location,
+      createdAt: NOW,
+      updatedAt: LATER,
     });
   });
 
-  it('update efface le lieu quand l\'input n\'en a plus', async () => {
-    const id = await eventsRepo.create(db, camille, { ...base, location: { label: 'X', latitude: 1, longitude: 2 } }, NOW);
+  it("update efface le lieu quand l'input n'en a plus", async () => {
+    const id = await eventsRepo.create(
+      db,
+      camille,
+      { ...base, location: { label: 'X', latitude: 1, longitude: 2 } },
+      NOW,
+    );
     await eventsRepo.update(db, id, camille, base, LATER);
     expect((await eventsRepo.getById(db, id, camille))?.location).toBeNull();
   });
@@ -95,13 +121,16 @@ describe('eventsRepo', () => {
     expect(await eventsRepo.getById(db, id, camille)).not.toBeNull();
   });
 
-  it('remove par l\'auteur supprime l\'événement et ses participations', async () => {
+  it("remove par l'auteur supprime l'événement et ses participations", async () => {
     const id = await eventsRepo.create(db, camille, base, NOW);
     await participationsRepo.toggle(db, hugo, id, NOW);
     expect(await participationsRepo.countByUser(db, hugo)).toBe(1);
     expect(await eventsRepo.remove(db, id, camille)).toBe(true);
     expect(await eventsRepo.getById(db, id, camille)).toBeNull();
-    const row = await db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM participations WHERE event_id = ?', id);
+    const row = await db.getFirstAsync<{ n: number }>(
+      'SELECT COUNT(*) AS n FROM participations WHERE event_id = ?',
+      id,
+    );
     expect(row?.n).toBe(0);
     expect(await participationsRepo.countByUser(db, hugo)).toBe(0);
   });

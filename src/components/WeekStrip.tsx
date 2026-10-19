@@ -46,7 +46,13 @@ export const WeekStrip = memo(function WeekStrip({ week, weekEvents, markers, no
                   {day.getDate()}
                 </Text>
               </View>
-              <View style={[styles.dot, marker === 'event' && styles.dotEvent, marker === 'participating' && styles.dotMine]} />
+              <View
+                style={[
+                  styles.dot,
+                  marker === 'event' && styles.dotEvent,
+                  marker === 'participating' && styles.dotMine,
+                ]}
+              />
             </View>
           );
         })}

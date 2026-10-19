@@ -30,13 +30,22 @@ beforeEach(async () => {
 
 describe('participationsRepo', () => {
   it('toggle inscrit puis désinscrit', async () => {
-    expect(await participationsRepo.toggle(db, camille, eventId, NOW)).toEqual({ isParticipating: true, participantCount: 1 });
-    expect(await participationsRepo.toggle(db, camille, eventId, NOW)).toEqual({ isParticipating: false, participantCount: 0 });
+    expect(await participationsRepo.toggle(db, camille, eventId, NOW)).toEqual({
+      isParticipating: true,
+      participantCount: 1,
+    });
+    expect(await participationsRepo.toggle(db, camille, eventId, NOW)).toEqual({
+      isParticipating: false,
+      participantCount: 0,
+    });
   });
 
   it('compte deux participants', async () => {
     await participationsRepo.toggle(db, camille, eventId, NOW);
-    expect(await participationsRepo.toggle(db, hugo, eventId, NOW)).toEqual({ isParticipating: true, participantCount: 2 });
+    expect(await participationsRepo.toggle(db, hugo, eventId, NOW)).toEqual({
+      isParticipating: true,
+      participantCount: 2,
+    });
   });
 
   it('countByUser suit les bascules', async () => {

@@ -13,7 +13,9 @@ const languageOf = (locale: string) => locale.split('-')[0];
 
 // En français, le premier du mois s'écrit « 1er » ; Intl donne « 1 ».
 function withFirst(text: string, d: Date, locale: string): string {
-  return d.getDate() === 1 && languageOf(locale) === 'fr' ? text.replace(/(^|\s)1(?=\s|$)/, (_, before: string) => `${before}1er`) : text;
+  return d.getDate() === 1 && languageOf(locale) === 'fr'
+    ? text.replace(/(^|\s)1(?=\s|$)/, (_, before: string) => `${before}1er`)
+    : text;
 }
 
 export function toDayKey(d: Date): string {
@@ -27,7 +29,15 @@ export function fromDayKey(key: string): Date {
 
 // Arithmétique sur le calendrier local : ajouter 24 h fausserait les jours de changement d'heure.
 export function addDays(d: Date, n: number): Date {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n, d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds());
+  return new Date(
+    d.getFullYear(),
+    d.getMonth(),
+    d.getDate() + n,
+    d.getHours(),
+    d.getMinutes(),
+    d.getSeconds(),
+    d.getMilliseconds(),
+  );
 }
 
 export function startOfWeek(d: Date): Date {
@@ -40,7 +50,9 @@ export function isUpcoming(startsAtIso: string, now: Date): boolean {
 }
 
 export function formatTime(d: Date, locale: string = getAppLocale()): string {
-  const parts = new Intl.DateTimeFormat(locale, { hour: 'numeric', minute: '2-digit', hourCycle: 'h23' }).formatToParts(d);
+  const parts = new Intl.DateTimeFormat(locale, { hour: 'numeric', minute: '2-digit', hourCycle: 'h23' }).formatToParts(
+    d,
+  );
   const hour = parts.find((p) => p.type === 'hour')?.value ?? '0';
   const minute = parts.find((p) => p.type === 'minute')?.value ?? '00';
   return t('time.hm', { h: Number(hour), m: minute, lng: languageOf(locale) });
@@ -87,7 +99,11 @@ export function formatMonthYear(d: Date, locale: string = getAppLocale()): strin
 
 export function formatDateOnly(d: Date, now: Date, locale: string = getAppLocale()): string {
   const withYear = d.getFullYear() !== now.getFullYear();
-  const text = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', ...(withYear && { year: 'numeric' }) }).format(d);
+  const text = new Intl.DateTimeFormat(locale, {
+    day: 'numeric',
+    month: 'long',
+    ...(withYear && { year: 'numeric' }),
+  }).format(d);
   return withFirst(text, d, locale);
 }
 

@@ -1,11 +1,5 @@
 // Les validateurs renvoient des codes, jamais des phrases.
-import {
-  normalizeEmail,
-  validateEmail,
-  validateEventForm,
-  validateName,
-  validatePassword,
-} from '@/utils/validation';
+import { normalizeEmail, validateEmail, validateEventForm, validateName, validatePassword } from '@/utils/validation';
 
 const now = new Date('2026-10-19T12:00:00.000Z');
 const past = '2026-10-17T08:00:00.000Z';
@@ -39,16 +33,25 @@ test('validateEventForm', () => {
     title: 'required',
     startsAt: 'past',
   });
-  expect(validateEventForm({ title: 't', description: ' ', startsAt: future }, { now, originalStartsAt: null })).toEqual({
+  expect(
+    validateEventForm({ title: 't', description: ' ', startsAt: future }, { now, originalStartsAt: null }),
+  ).toEqual({
     description: 'required',
   });
-  expect(validateEventForm({ title: 't', description: 'd', startsAt: future }, { now, originalStartsAt: null })).toEqual({});
+  expect(
+    validateEventForm({ title: 't', description: 'd', startsAt: future }, { now, originalStartsAt: null }),
+  ).toEqual({});
 });
 
 test('modifier un événement passé sans toucher la date est permis', () => {
-  expect(validateEventForm({ title: 't', description: 'd', startsAt: past }, { now, originalStartsAt: past })).toEqual({});
+  expect(validateEventForm({ title: 't', description: 'd', startsAt: past }, { now, originalStartsAt: past })).toEqual(
+    {},
+  );
   expect(
-    validateEventForm({ title: 't', description: 'd', startsAt: past }, { now, originalStartsAt: '2026-10-16T08:00:00.000Z' }),
+    validateEventForm(
+      { title: 't', description: 'd', startsAt: past },
+      { now, originalStartsAt: '2026-10-16T08:00:00.000Z' },
+    ),
   ).toEqual({ startsAt: 'past' });
 });
 
@@ -69,7 +72,9 @@ test('date absente', () => {
 test('un lieu tapé sans suggestion choisie est refusé, un lieu vide ou choisi passe', () => {
   const base = { title: 't', description: 'd', startsAt: future };
   const ctx = { now, originalStartsAt: null };
-  expect(validateEventForm({ ...base, place: 'salle des fêtes', placeResolved: false }, ctx)).toEqual({ place: 'unresolved' });
+  expect(validateEventForm({ ...base, place: 'salle des fêtes', placeResolved: false }, ctx)).toEqual({
+    place: 'unresolved',
+  });
   expect(validateEventForm({ ...base, place: '  ', placeResolved: false }, ctx)).toEqual({});
   expect(validateEventForm({ ...base, place: 'Parc Barbieux, Roubaix', placeResolved: true }, ctx)).toEqual({});
 });

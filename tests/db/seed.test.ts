@@ -15,8 +15,7 @@ let salts = 0;
 const randomSalt = () => `salt${salts++}`;
 let db: Db;
 
-const count = async (table: string) =>
-  (await db.getFirstAsync<{ n: number }>(`SELECT COUNT(*) AS n FROM ${table}`))?.n;
+const count = async (table: string) => (await db.getFirstAsync<{ n: number }>(`SELECT COUNT(*) AS n FROM ${table}`))?.n;
 
 beforeEach(async () => {
   db = createTestDb();
@@ -48,7 +47,7 @@ describe('seedIfEmpty', () => {
     expect(formatTime(start)).toBe('10h00');
   });
 
-  it('garde 9h30 locale pour J+12, après le changement d\'heure du 25 octobre', async () => {
+  it("garde 9h30 locale pour J+12, après le changement d'heure du 25 octobre", async () => {
     await seedIfEmpty(db, now, hash, randomSalt);
     const events = await eventsRepo.listAll(db, 0);
     const heron = events.find((e) => e.title === 'Balade nature au lac du Héron');
@@ -64,7 +63,8 @@ describe('seedIfEmpty', () => {
     const events = await eventsRepo.listAll(db, marie?.id ?? 0);
     const limit = addDays(now, 15);
     const soon = events.filter(
-      (e) => e.authorId === marie?.id && e.location !== null && new Date(e.startsAt) > now && new Date(e.startsAt) < limit,
+      (e) =>
+        e.authorId === marie?.id && e.location !== null && new Date(e.startsAt) > now && new Date(e.startsAt) < limit,
     );
     expect(soon).toHaveLength(2);
   });
@@ -87,7 +87,13 @@ describe('seedIfEmpty', () => {
 
   it('ne fait rien au second appel et conserve un compte créé entre-temps', async () => {
     await seedIfEmpty(db, now, hash, randomSalt);
-    await usersRepo.create(db, { name: 'Zoé', email: 'zoe@exemple.fr', passwordHash: 'h', salt: 's', now: now.toISOString() });
+    await usersRepo.create(db, {
+      name: 'Zoé',
+      email: 'zoe@exemple.fr',
+      passwordHash: 'h',
+      salt: 's',
+      now: now.toISOString(),
+    });
     expect(await seedIfEmpty(db, now, hash, randomSalt)).toBe(false);
     expect(await count('users')).toBe(5);
     expect(await count('events')).toBe(10);
@@ -98,10 +104,26 @@ describe('resetDemoData', () => {
   it('efface un compte ajouté et la session, puis réinsère la démo', async () => {
     await seedIfEmpty(db, now, hash, randomSalt);
     const seededParticipations = await count('participations');
-    const zoe = await usersRepo.create(db, { name: 'Zoé', email: 'zoe@exemple.fr', passwordHash: 'h', salt: 's', now: now.toISOString() });
-    await eventsRepo.create(db, zoe.id, { title: 'Perso', description: '', startsAt: now.toISOString(), location: null }, now.toISOString());
+    const zoe = await usersRepo.create(db, {
+      name: 'Zoé',
+      email: 'zoe@exemple.fr',
+      passwordHash: 'h',
+      salt: 's',
+      now: now.toISOString(),
+    });
+    await eventsRepo.create(
+      db,
+      zoe.id,
+      { title: 'Perso', description: '', startsAt: now.toISOString(), location: null },
+      now.toISOString(),
+    );
     const firstEvent = await db.getFirstAsync<{ id: number }>('SELECT id FROM events ORDER BY id LIMIT 1');
-    await db.runAsync('INSERT INTO participations (user_id, event_id, created_at) VALUES (?, ?, ?)', zoe.id, firstEvent?.id ?? 0, now.toISOString());
+    await db.runAsync(
+      'INSERT INTO participations (user_id, event_id, created_at) VALUES (?, ?, ?)',
+      zoe.id,
+      firstEvent?.id ?? 0,
+      now.toISOString(),
+    );
     expect(await count('participations')).toBe((seededParticipations ?? 0) + 1);
     await settingsRepo.set(db, 'session_user_id', String(zoe.id));
     await resetDemoData(db, now, hash, randomSalt);
