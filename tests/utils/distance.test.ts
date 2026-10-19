@@ -17,6 +17,8 @@ test('distanceMeters (haversine)', () => {
 test('formatDistance', () => {
   expect(formatDistance(650)).toBe('650\u202fm');
   expect(formatDistance(654)).toBe('650\u202fm');
+  expect(formatDistance(996)).toBe('1\u202fkm');
+  expect(formatDistance(1000)).toBe('1\u202fkm');
   expect(formatDistance(3140)).toBe('3,1\u202fkm');
   expect(formatDistance(21400)).toBe('21\u202fkm');
 });

@@ -55,11 +55,14 @@ test('selectVisible : onglet et filtre « mes événements »', () => {
   expect(selectVisible(all, { tab: 'past', onlyMine: true }, now).map((e) => e.id)).toEqual([minePast.id]);
 });
 
-test('buildListSections : 4 événements dont deux le même jour, un seul mois', () => {
-  const sections = buildListSections([a, b, c]);
+const e = make('2026-10-27T09:00:00.000Z');
+
+// L'entrée doit déjà être triée : buildListSections conserve l'ordre reçu.
+test('buildListSections : 4 événements dont deux le même jour, un seul mois, 3 jours', () => {
+  const sections = buildListSections([a, b, e, c]);
   expect(sections).toHaveLength(1);
   expect(sections[0]?.monthKey).toBe('2026-10');
-  expect(sections[0]?.days.map((day) => day.dayKey)).toEqual(['2026-10-24', '2026-10-30']);
+  expect(sections[0]?.days.map((day) => day.dayKey)).toEqual(['2026-10-24', '2026-10-27', '2026-10-30']);
   expect(sections[0]?.days[0]?.events.map((e) => e.id)).toEqual([a.id, b.id]);
 });
 

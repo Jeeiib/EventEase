@@ -33,7 +33,7 @@ export function validateEventForm(
   const errors: EventFormErrors = {};
   if (values.title.trim() === '') errors.title = 'required';
   if (values.description.trim() === '') errors.description = 'required';
-  if (values.startsAt === null) {
+  if (values.startsAt === null || Number.isNaN(Date.parse(values.startsAt))) {
     errors.startsAt = 'required';
   } else if (new Date(values.startsAt) <= ctx.now && values.startsAt !== ctx.originalStartsAt) {
     // Un événement passé reste modifiable tant qu'on ne touche pas à sa date.

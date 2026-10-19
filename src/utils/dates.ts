@@ -8,6 +8,9 @@ function capitalize(text: string, locale: string): string {
   return text.charAt(0).toLocaleUpperCase(locale) + text.slice(1);
 }
 
+// La langue des libellés suit la locale demandée, pas la langue globale d'i18next.
+const languageOf = (locale: string) => locale.split('-')[0];
+
 export function toDayKey(d: Date): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
@@ -35,7 +38,7 @@ export function formatTime(d: Date, locale: string = getAppLocale()): string {
   const parts = new Intl.DateTimeFormat(locale, { hour: 'numeric', minute: '2-digit', hourCycle: 'h23' }).formatToParts(d);
   const hour = parts.find((p) => p.type === 'hour')?.value ?? '0';
   const minute = parts.find((p) => p.type === 'minute')?.value ?? '00';
-  return t('time.hm', { h: Number(hour), m: minute });
+  return t('time.hm', { h: Number(hour), m: minute, lng: languageOf(locale) });
 }
 
 export function formatWeekdayShort(d: Date, locale: string = getAppLocale()): string {
@@ -54,7 +57,7 @@ export function formatDayLong(d: Date, now: Date, locale: string = getAppLocale(
 }
 
 export function formatDayWithTime(d: Date, now: Date, locale: string = getAppLocale()): string {
-  return `${formatDayLong(d, now, locale)}, ${formatTime(d, locale)}`;
+  return t('time.dayAt', { day: formatDayLong(d, now, locale), time: formatTime(d, locale), lng: languageOf(locale) });
 }
 
 export function formatMonthHeader(d: Date, now: Date, locale: string = getAppLocale()): string {
