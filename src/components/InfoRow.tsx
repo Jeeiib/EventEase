@@ -17,7 +17,10 @@ type Props = {
 export function InfoRow({ icon, title, subtitle, last = false, children }: Props): React.JSX.Element {
   return (
     <View style={[styles.row, last && styles.last]}>
-      <Feather name={icon} size={20} color={colors.text} style={styles.icon} />
+      {/* L'icône est une police : sans ça, VoiceOver s'arrête sur un glyphe muet. */}
+      <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={styles.icon}>
+        <Feather name={icon} size={20} color={colors.text} />
+      </View>
       <View style={styles.texts}>
         <View accessible accessibilityLabel={joinA11y([title, subtitle])}>
           <Text style={styles.title}>{title}</Text>
