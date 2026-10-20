@@ -8,17 +8,23 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { DangerLink } from '@/components/DangerLink';
 import { InfoRow } from '@/components/InfoRow';
 import { InlineButton } from '@/components/InlineButton';
+import { PermissionSheet } from '@/components/PermissionSheet';
 import { ParticipationButton } from '@/components/ParticipationButton';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { StatusTag } from '@/components/StatusTag';
 import { TextLink } from '@/components/TextLink';
+import { WeatherRow } from '@/components/WeatherRow';
+import { useDistance } from '@/hooks/useDistance';
 import { useEventDetail } from '@/hooks/useEventDetail';
+import { useWeather } from '@/hooks/useWeather';
 import type { RootStackParamList } from '@/navigation/types';
 import { addToDeviceCalendar } from '@/services/deviceCalendar';
+import { openLocationSettings } from '@/services/location';
 import { openInMaps } from '@/services/maps';
 import { colors, font, space } from '@/theme/tokens';
 import { text } from '@/theme/typography';
 import { formatDayLong, formatTime, isUpcoming } from '@/utils/dates';
+import { formatDistance } from '@/utils/distance';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'EventDetail'>;
 
@@ -110,9 +116,14 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
     ]);
   }, [event, remove, navigation, t]);
 
+  const now = new Date();
+  const { weather, retry: retryWeather } = useWeather(event?.location ?? null, event?.startsAt ?? '', now);
+  const { distance, request: requestDistance, confirm: confirmDistance, dismiss: dismissDistance } = useDistance(
+    event?.location ?? null,
+  );
+
   if (!event) return null;
 
-  const now = new Date();
   const start = new Date(event.startsAt);
   const past = !isUpcoming(event.startsAt, now);
   const location = event.location;
@@ -167,7 +178,15 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
           )}
         </InfoRow>
         {location && place && (
-          <InfoRow icon="map-pin" title={place.name} subtitle={place.city}>
+          <InfoRow
+            icon="map-pin"
+            title={distance.status === 'ready' ? location.label : place.name}
+            subtitle={
+              distance.status === 'ready'
+                ? t('event.distance.result', { distance: formatDistance(distance.meters) })
+                : place.city
+            }
+          >
             <View style={styles.inlineButtons}>
               <InlineButton
                 label={t('event.directions.action')}
@@ -175,9 +194,34 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
                 icon="corner-up-right"
                 onPress={() => openInMaps(location).catch(() => Alert.alert(t('common.unexpectedError')))}
               />
+              {distance.status !== 'ready' && distance.status !== 'error' && (
+                <InlineButton
+                  label={distance.status === 'locating' ? t('event.distance.loading') : t('event.distance.action')}
+                  icon="navigation"
+                  busy={distance.status === 'locating'}
+                  onPress={() => void requestDistance()}
+                />
+              )}
             </View>
+            {distance.status === 'denied' && (
+              <View style={styles.notice}>
+                <Text style={styles.noticeText}>{t('event.distance.denied')}</Text>
+                <InlineButton
+                  label={t('event.distance.openSettings')}
+                  icon="settings"
+                  onPress={() => void openLocationSettings()}
+                />
+              </View>
+            )}
+            {distance.status === 'error' && (
+              <View style={styles.notice}>
+                <Text style={styles.noticeText}>{t('event.distance.unavailable')}</Text>
+                <InlineButton label={t('common.retry')} onPress={() => void requestDistance()} />
+              </View>
+            )}
           </InfoRow>
         )}
+        <WeatherRow weather={weather} now={now} onRetry={retryWeather} />
         <InfoRow
           icon="users"
           title={participants}
@@ -194,6 +238,10 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
         )}
       </ScrollView>
 
+      {distance.status === 'explaining' && (
+        <PermissionSheet onContinue={() => void confirmDistance()} onNotNow={dismissDistance} />
+      )}
+
       {/* Barre basse fixe : l'action principale reste à portée de pouce, quelle que soit la longueur de la fiche. */}
       <View style={[styles.bar, { paddingBottom: Math.max(insets.bottom, 14) }]}>
         {past && !event.isParticipating && <Text style={styles.help}>{t('event.wereYouThere')}</Text>}
@@ -204,6 +252,8 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
 }
 
 const styles = StyleSheet.create({
+  notice: { marginTop: 10, alignItems: 'flex-start' },
+  noticeText: { fontFamily: font.regular, fontSize: font.size.meta, lineHeight: 20, color: colors.text },
   inlineButtons: { flexDirection: 'row', flexWrap: 'wrap', columnGap: 8 },
   calendarDenied: { marginTop: 10, gap: 4, alignItems: 'flex-start' },
   calendarDeniedText: { fontFamily: font.regular, fontSize: font.size.meta, lineHeight: 19, color: colors.text },
