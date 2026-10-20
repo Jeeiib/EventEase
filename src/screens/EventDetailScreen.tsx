@@ -69,6 +69,8 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
         location: event.location?.label ?? null,
       });
       setCalendar(result === 'denied' ? 'denied' : 'idle');
+      // Le focus reste sur le bouton : sans annonce, VoiceOver ne verrait pas le message apparu dessous.
+      if (result === 'denied') AccessibilityInfo.announceForAccessibility(t('event.calendar.denied'));
       if (result === 'saved') {
         void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         AccessibilityInfo.announceForAccessibility(t('event.calendar.added'));
