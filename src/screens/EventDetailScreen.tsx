@@ -194,7 +194,7 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
                 icon="corner-up-right"
                 onPress={() => openInMaps(location).catch(() => Alert.alert(t('common.unexpectedError')))}
               />
-              {(distance.status === 'idle' || distance.status === 'explaining' || distance.status === 'locating') && (
+              {distance.status !== 'ready' && distance.status !== 'error' && (
                 <InlineButton
                   label={distance.status === 'locating' ? t('event.distance.loading') : t('event.distance.action')}
                   icon="navigation"
