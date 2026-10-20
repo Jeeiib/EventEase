@@ -5,11 +5,9 @@ import { useAuth } from '@/auth/AuthContext';
 import { eventsRepo } from '@/data/events';
 import type { EventWithStatus } from '@/data/types';
 import { useDb } from '@/db/DbContext';
-import { splitByTime } from '@/utils/eventGroups';
+import { selectProfileEvents, splitByTime } from '@/utils/eventGroups';
 
-export type ProfileEventsKind = 'created' | 'participations';
-
-export function useProfileEvents(kind: ProfileEventsKind) {
+export function useProfileEvents(kind: 'created' | 'participations') {
   const db = useDb();
   const { user } = useAuth();
   const userId = user?.id ?? null;
@@ -25,8 +23,7 @@ export function useProfileEvents(kind: ProfileEventsKind) {
         .then((all) => {
           if (ticket !== latest.current) return;
           // Même lecture que la liste principale : les compteurs du profil et ces lignes ne peuvent pas diverger.
-          const events = all.filter((e) => (kind === 'created' ? e.authorId === userId : e.isParticipating));
-          setSnapshot({ events, now: new Date() });
+          setSnapshot({ events: selectProfileEvents(all, kind, userId), now: new Date() });
         })
         .catch(() => {});
       return () => {
