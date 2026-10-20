@@ -7,6 +7,11 @@ import { colors, font } from '@/theme/tokens';
 
 type Props = {
   icon: React.ComponentProps<typeof Feather>['name'];
+  // Icône hors de Feather (météo « éclaircies »), à la place de `icon`.
+  iconElement?: ReactNode;
+  // Information pas encore disponible : titre en gris.
+  muted?: boolean;
+  busy?: boolean;
   title: string;
   subtitle?: string;
   last?: boolean;
@@ -14,16 +19,25 @@ type Props = {
   children?: ReactNode;
 };
 
-export function InfoRow({ icon, title, subtitle, last = false, children }: Props): React.JSX.Element {
+export function InfoRow({
+  icon,
+  iconElement,
+  title,
+  subtitle,
+  muted = false,
+  busy = false,
+  last = false,
+  children,
+}: Props): React.JSX.Element {
   return (
     <View style={[styles.row, last && styles.last]}>
       {/* L'icône est une police : sans ça, VoiceOver s'arrête sur un glyphe muet. */}
       <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={styles.icon}>
-        <Feather name={icon} size={20} color={colors.text} />
+        {iconElement ?? <Feather name={icon} size={20} color={colors.text} />}
       </View>
       <View style={styles.texts}>
-        <View accessible accessibilityLabel={joinA11y([title, subtitle])}>
-          <Text style={styles.title}>{title}</Text>
+        <View accessible accessibilityLabel={joinA11y([title, subtitle])} accessibilityState={{ busy }}>
+          <Text style={[styles.title, muted && styles.muted]}>{title}</Text>
           {!!subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
         </View>
         {children}
@@ -44,6 +58,7 @@ const styles = StyleSheet.create({
   last: { borderBottomWidth: 1, borderBottomColor: colors.line },
   icon: { marginTop: 1 },
   texts: { flex: 1 },
+  muted: { color: colors.muted },
   title: { fontFamily: font.medium, fontSize: font.size.row, lineHeight: 20, color: colors.text },
   subtitle: { fontFamily: font.regular, fontSize: font.size.meta, lineHeight: 20, color: colors.muted, marginTop: 2 },
 });
