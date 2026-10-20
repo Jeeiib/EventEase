@@ -3,7 +3,7 @@ import { Feather } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
 import { EventListScreen } from '@/screens/EventListScreen';
-import { PlaceholderScreen } from '@/screens/PlaceholderScreen';
+import { CalendarScreen } from '@/screens/CalendarScreen';
 import { ProfileScreen } from '@/screens/ProfileScreen';
 import { colors, font } from '@/theme/tokens';
 import type { MainTabParamList } from './types';
@@ -37,7 +37,7 @@ export function MainTabs(): React.JSX.Element {
       />
       <Tab.Screen
         name="Calendar"
-        component={PlaceholderScreen}
+        component={CalendarScreen}
         options={{
           title: t('common.tabs.calendar'),
           tabBarAccessibilityLabel: t('common.tabs.calendar'),
