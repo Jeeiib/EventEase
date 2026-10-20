@@ -93,6 +93,7 @@ export function ProfileScreen({ navigation }: MainTabScreenProps<'Profile'>): Re
           icon="calendar"
           color={colors.text}
           label={t('profile.eventsCreated')}
+          a11yLabel={counts ? t('profile.a11y.created', { count: counts.created }) : t('profile.eventsCreated')}
           value={counts?.created}
           onPress={() => navigation.navigate('ProfileEvents', { kind: 'created' })}
         />
@@ -100,6 +101,9 @@ export function ProfileScreen({ navigation }: MainTabScreenProps<'Profile'>): Re
           icon="check-circle"
           color={colors.success}
           label={t('profile.participations')}
+          a11yLabel={
+            counts ? t('profile.a11y.participations', { count: counts.participations }) : t('profile.participations')
+          }
           value={counts?.participations}
           onPress={() => navigation.navigate('ProfileEvents', { kind: 'participations' })}
           last
@@ -124,18 +128,21 @@ type StatProps = {
   icon: React.ComponentProps<typeof Feather>['name'];
   color: string;
   label: string;
+  a11yLabel: string;
   value: number | undefined;
   onPress: () => void;
   last?: boolean;
 };
 
 // Ligne de réglages iOS : toute la ligne ouvre la liste, le chevron le signale.
-function StatRow({ icon, color, label, value, onPress, last = false }: StatProps) {
+function StatRow({ icon, color, label, a11yLabel, value, onPress, last = false }: StatProps) {
+  const { t } = useTranslation();
   const shown = value === undefined ? '' : String(value);
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={joinA11y([label, shown])}
+      accessibilityLabel={a11yLabel}
+      accessibilityHint={t('profile.a11y.openList')}
       onPress={onPress}
       style={({ pressed }) => [styles.row, last && styles.rowLast, pressed && styles.pressed]}
     >
