@@ -132,14 +132,21 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
     ? t('event.participantsWithYou', { count: event.participantCount })
     : t('event.participants', { count: event.participantCount });
 
-  // Le retour dit où il mène : la fiche s'ouvre aussi depuis les listes du profil.
-  const routes = navigation.getState().routes;
-  const fromProfile = routes[routes.length - 2]?.name === 'ProfileEvents';
+  // Le retour dit où il mène : la fiche s'ouvre depuis la liste, le calendrier ou les listes du profil.
+  const previous = navigation.getState().routes.at(-2);
+  // Sous les onglets, c'est l'onglet affiché qui dit d'où l'on vient.
+  const from = previous?.name === 'Main' ? previous.state?.routes[previous.state.index ?? 0]?.name : previous?.name;
+  const backLabel =
+    from === 'ProfileEvents'
+      ? t('event.a11y.backToList')
+      : from === 'Calendar'
+        ? t('event.a11y.backToCalendar')
+        : t('event.a11y.back');
 
   return (
     <View style={styles.screen}>
       <ScreenHeader
-        backLabel={fromProfile ? t('event.a11y.backToList') : t('event.a11y.back')}
+        backLabel={backLabel}
         onBack={navigation.goBack}
         action={
           isAuthor
