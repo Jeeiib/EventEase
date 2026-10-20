@@ -6,6 +6,7 @@ export type EventFormErrors = {
   title?: 'required';
   description?: 'required';
   startsAt?: 'required' | 'past';
+  place?: 'unresolved';
 };
 
 export function validateName(v: string): 'required' | null {
@@ -27,7 +28,7 @@ export function normalizeEmail(v: string): string {
 }
 
 export function validateEventForm(
-  values: { title: string; description: string; startsAt: string | null },
+  values: { title: string; description: string; startsAt: string | null; place?: string; placeResolved?: boolean },
   ctx: { now: Date; originalStartsAt: string | null },
 ): EventFormErrors {
   const errors: EventFormErrors = {};
@@ -39,5 +40,7 @@ export function validateEventForm(
     // Un événement passé reste modifiable tant qu'on ne touche pas à sa date.
     errors.startsAt = 'past';
   }
+  // Un lieu tapé sans suggestion choisie n'a pas de position : ni météo ni distance possibles.
+  if (values.place?.trim() && !values.placeResolved) errors.place = 'unresolved';
   return errors;
 }

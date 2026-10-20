@@ -65,3 +65,11 @@ test('date absente', () => {
     startsAt: 'required',
   });
 });
+
+test('un lieu tapé sans suggestion choisie est refusé, un lieu vide ou choisi passe', () => {
+  const base = { title: 't', description: 'd', startsAt: future };
+  const ctx = { now, originalStartsAt: null };
+  expect(validateEventForm({ ...base, place: 'salle des fêtes', placeResolved: false }, ctx)).toEqual({ place: 'unresolved' });
+  expect(validateEventForm({ ...base, place: '  ', placeResolved: false }, ctx)).toEqual({});
+  expect(validateEventForm({ ...base, place: 'Parc Barbieux, Roubaix', placeResolved: true }, ctx)).toEqual({});
+});
