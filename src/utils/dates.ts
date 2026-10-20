@@ -13,7 +13,7 @@ const languageOf = (locale: string) => locale.split('-')[0];
 
 // En français, le premier du mois s'écrit « 1er » ; Intl donne « 1 ».
 function withFirst(text: string, d: Date, locale: string): string {
-  return d.getDate() === 1 && languageOf(locale) === 'fr' ? text.replace(/(^|\s)1(?=\s)/, '$11er') : text;
+  return d.getDate() === 1 && languageOf(locale) === 'fr' ? text.replace(/(^|\s)1(?=\s|$)/, (_, before: string) => `${before}1er`) : text;
 }
 
 export function toDayKey(d: Date): string {
