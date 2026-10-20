@@ -15,6 +15,7 @@ import { TextLink } from '@/components/TextLink';
 import { useEventDetail } from '@/hooks/useEventDetail';
 import type { RootStackParamList } from '@/navigation/types';
 import { addToDeviceCalendar } from '@/services/deviceCalendar';
+import { openInMaps } from '@/services/maps';
 import { colors, font, space } from '@/theme/tokens';
 import { text } from '@/theme/typography';
 import { formatDayLong, formatTime, isUpcoming } from '@/utils/dates';
@@ -114,7 +115,8 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
   const now = new Date();
   const start = new Date(event.startsAt);
   const past = !isUpcoming(event.startsAt, now);
-  const place = event.location ? splitPlace(event.location.label) : null;
+  const location = event.location;
+  const place = location ? splitPlace(location.label) : null;
   const participants = event.isParticipating
     ? t('event.participantsWithYou', { count: event.participantCount })
     : t('event.participants', { count: event.participantCount });
@@ -164,7 +166,18 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
             </View>
           )}
         </InfoRow>
-        {place && <InfoRow icon="map-pin" title={place.name} subtitle={place.city} />}
+        {location && place && (
+          <InfoRow icon="map-pin" title={place.name} subtitle={place.city}>
+            <View style={styles.inlineButtons}>
+              <InlineButton
+                label={t('event.directions.action')}
+                hint={t('event.directions.hint')}
+                icon="corner-up-right"
+                onPress={() => openInMaps(location).catch(() => Alert.alert(t('common.unexpectedError')))}
+              />
+            </View>
+          </InfoRow>
+        )}
         <InfoRow
           icon="users"
           title={participants}
@@ -191,6 +204,7 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
 }
 
 const styles = StyleSheet.create({
+  inlineButtons: { flexDirection: 'row', flexWrap: 'wrap', columnGap: 8 },
   calendarDenied: { marginTop: 10, gap: 4, alignItems: 'flex-start' },
   calendarDeniedText: { fontFamily: font.regular, fontSize: font.size.meta, lineHeight: 19, color: colors.text },
   screen: { flex: 1, backgroundColor: colors.background },
