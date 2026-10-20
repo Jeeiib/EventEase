@@ -19,6 +19,7 @@ export type RootStackParamList = {
   Main: NavigatorScreenParams<MainTabParamList>;
   EventDetail: { eventId: number };
   EventForm: { eventId?: number };
+  ProfileEvents: { kind: 'created' | 'participations' };
 };
 
 export type AuthScreenProps<T extends keyof AuthStackParamList> = NativeStackScreenProps<AuthStackParamList, T>;

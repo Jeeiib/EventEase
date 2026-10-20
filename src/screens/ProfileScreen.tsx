@@ -4,6 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import { useCallback, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import type { MainTabScreenProps } from '@/navigation/types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/auth/AuthContext';
@@ -20,7 +21,7 @@ import { text } from '@/theme/typography';
 
 type Counts = { created: number; participations: number };
 
-export function ProfileScreen(): React.JSX.Element | null {
+export function ProfileScreen({ navigation }: MainTabScreenProps<'Profile'>): React.JSX.Element | null {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const db = useDb();
@@ -88,12 +89,23 @@ export function ProfileScreen(): React.JSX.Element | null {
       </View>
 
       <View style={styles.stats}>
-        <StatRow icon="calendar" color={colors.text} label={t('profile.eventsCreated')} value={counts?.created} />
+        <StatRow
+          icon="calendar"
+          color={colors.text}
+          label={t('profile.eventsCreated')}
+          a11yLabel={counts ? t('profile.a11y.created', { count: counts.created }) : t('profile.eventsCreated')}
+          value={counts?.created}
+          onPress={() => navigation.navigate('ProfileEvents', { kind: 'created' })}
+        />
         <StatRow
           icon="check-circle"
           color={colors.success}
           label={t('profile.participations')}
+          a11yLabel={
+            counts ? t('profile.a11y.participations', { count: counts.participations }) : t('profile.participations')
+          }
           value={counts?.participations}
+          onPress={() => navigation.navigate('ProfileEvents', { kind: 'participations' })}
           last
         />
       </View>
@@ -116,18 +128,29 @@ type StatProps = {
   icon: React.ComponentProps<typeof Feather>['name'];
   color: string;
   label: string;
+  a11yLabel: string;
   value: number | undefined;
+  onPress: () => void;
   last?: boolean;
 };
 
-function StatRow({ icon, color, label, value, last = false }: StatProps) {
+// Ligne de réglages iOS : toute la ligne ouvre la liste, le chevron le signale.
+function StatRow({ icon, color, label, a11yLabel, value, onPress, last = false }: StatProps) {
+  const { t } = useTranslation();
   const shown = value === undefined ? '' : String(value);
   return (
-    <View style={[styles.row, last && styles.rowLast]} accessible accessibilityLabel={joinA11y([label, shown])}>
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={a11yLabel}
+      accessibilityHint={t('profile.a11y.openList')}
+      onPress={onPress}
+      style={({ pressed }) => [styles.row, last && styles.rowLast, pressed && styles.pressed]}
+    >
       <Feather name={icon} size={20} color={color} />
       <Text style={styles.rowLabel}>{label}</Text>
       <Text style={styles.rowValue}>{shown}</Text>
-    </View>
+      <Feather name="chevron-right" size={18} color={colors.muted} style={styles.chevron} />
+    </Pressable>
   );
 }
 
@@ -150,6 +173,8 @@ const styles = StyleSheet.create({
   rowLast: { borderBottomWidth: 1, borderBottomColor: colors.line },
   rowLabel: { flex: 1, fontFamily: font.medium, fontSize: font.size.row, color: colors.text },
   rowValue: { fontFamily: font.semiBold, fontSize: font.size.row, color: colors.text },
+  chevron: { marginLeft: -6 },
+  pressed: { opacity: 0.6 },
   signOut: { marginTop: 28 },
   spacer: { flex: 1, minHeight: 24 },
   version: {
