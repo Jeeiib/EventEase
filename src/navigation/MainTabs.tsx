@@ -2,6 +2,7 @@
 import { Feather } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
+import { EventListScreen } from '@/screens/EventListScreen';
 import { PlaceholderScreen } from '@/screens/PlaceholderScreen';
 import { colors, font } from '@/theme/tokens';
 import type { MainTabParamList } from './types';
@@ -30,7 +31,7 @@ export function MainTabs(): React.JSX.Element {
     >
       <Tab.Screen
         name="Events"
-        component={PlaceholderScreen}
+        component={EventListScreen}
         options={{ title: t('common.tabs.events'), tabBarAccessibilityLabel: t('common.tabs.events'), tabBarIcon: tabIcon('list') }}
       />
       <Tab.Screen
