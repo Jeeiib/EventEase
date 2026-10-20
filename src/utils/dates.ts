@@ -11,6 +11,11 @@ function capitalize(text: string, locale: string): string {
 // La langue des libellés suit la locale demandée, pas la langue globale d'i18next.
 const languageOf = (locale: string) => locale.split('-')[0];
 
+// En français, le premier du mois s'écrit « 1er » ; Intl donne « 1 ».
+function withFirst(text: string, d: Date, locale: string): string {
+  return d.getDate() === 1 && languageOf(locale) === 'fr' ? text.replace(/(^|\s)1(?=\s|$)/, (_, before: string) => `${before}1er`) : text;
+}
+
 export function toDayKey(d: Date): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
@@ -52,7 +57,7 @@ export function formatMonthShort(d: Date, locale: string = getAppLocale()): stri
 
 // « samedi 24 » : jour de la semaine et numéro, pour une phrase.
 export function formatWeekdayDay(d: Date, locale: string = getAppLocale()): string {
-  return new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric' }).format(d);
+  return withFirst(new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric' }).format(d), d, locale);
 }
 
 export function formatDayLong(d: Date, now: Date, locale: string = getAppLocale()): string {
@@ -63,7 +68,7 @@ export function formatDayLong(d: Date, now: Date, locale: string = getAppLocale(
     month: 'long',
     ...(withYear && { year: 'numeric' }),
   }).format(d);
-  return capitalize(text, locale);
+  return capitalize(withFirst(text, d, locale), locale);
 }
 
 export function formatDayWithTime(d: Date, now: Date, locale: string = getAppLocale()): string {
@@ -82,7 +87,8 @@ export function formatMonthYear(d: Date, locale: string = getAppLocale()): strin
 
 export function formatDateOnly(d: Date, now: Date, locale: string = getAppLocale()): string {
   const withYear = d.getFullYear() !== now.getFullYear();
-  return new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', ...(withYear && { year: 'numeric' }) }).format(d);
+  const text = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', ...(withYear && { year: 'numeric' }) }).format(d);
+  return withFirst(text, d, locale);
 }
 
 function monthLabels(month: 'long' | 'short', locale: string): string[] {

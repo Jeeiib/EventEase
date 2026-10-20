@@ -108,3 +108,10 @@ test('formatTime suit la langue de la locale demandée', () => {
 test('formatWeekdayDay : jour et numéro, sans majuscule', () => {
   expect(formatWeekdayDay(new Date(2026, 9, 24, 10), 'fr-FR')).toBe('samedi 24');
 });
+
+test('le premier du mois s’écrit « 1er »', () => {
+  expect(formatDayLong(new Date(2026, 9, 1), now)).toBe('Jeudi 1er octobre');
+  expect(formatDateOnly(new Date(2026, 10, 1), now)).toBe('1er novembre');
+  expect(formatDayLong(new Date(2026, 9, 11), now)).toBe('Dimanche 11 octobre');
+  expect(formatWeekdayDay(new Date(2026, 10, 1), 'fr-FR')).toBe('dimanche 1er');
+});

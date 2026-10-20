@@ -51,7 +51,7 @@ export function ProfileEventsScreen({ navigation, route }: Props): React.JSX.Ele
           past={item.past}
           now={now}
           onOpen={openEvent}
-          withMonth
+          column="month"
           showStatus={false}
         />
       ),
