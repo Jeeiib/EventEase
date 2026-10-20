@@ -92,10 +92,14 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
     ? t('event.participantsWithYou', { count: event.participantCount })
     : t('event.participants', { count: event.participantCount });
 
+  // Le retour dit où il mène : la fiche s'ouvre aussi depuis les listes du profil.
+  const routes = navigation.getState().routes;
+  const fromProfile = routes[routes.length - 2]?.name === 'ProfileEvents';
+
   return (
     <View style={styles.screen}>
       <ScreenHeader
-        backLabel={t('event.a11y.back')}
+        backLabel={fromProfile ? t('event.a11y.backToList') : t('event.a11y.back')}
         onBack={navigation.goBack}
         action={
           isAuthor

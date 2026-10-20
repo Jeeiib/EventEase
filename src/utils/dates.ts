@@ -45,6 +45,11 @@ export function formatWeekdayShort(d: Date, locale: string = getAppLocale()): st
   return new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(d);
 }
 
+// « oct. » : mois abrégé, sous le numéro du jour quand la liste n'a pas d'en-têtes de mois.
+export function formatMonthShort(d: Date, locale: string = getAppLocale()): string {
+  return new Intl.DateTimeFormat(locale, { month: 'short' }).format(d);
+}
+
 // « samedi 24 » : jour de la semaine et numéro, pour une phrase.
 export function formatWeekdayDay(d: Date, locale: string = getAppLocale()): string {
   return new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric' }).format(d);

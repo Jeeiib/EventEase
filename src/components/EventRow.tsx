@@ -7,7 +7,7 @@ import type { EventWithStatus } from '@/data/types';
 import { getAppLocale } from '@/i18n';
 import { joinA11y } from '@/i18n/a11y';
 import { colors, font, size } from '@/theme/tokens';
-import { formatDayLong, formatTime, formatWeekdayShort } from '@/utils/dates';
+import { formatDayLong, formatMonthShort, formatTime, formatWeekdayShort } from '@/utils/dates';
 
 type Props = {
   event: EventWithStatus;
@@ -17,18 +17,32 @@ type Props = {
   now: Date;
   // Reçoit l'identifiant : la liste passe une seule fonction stable à toutes ses lignes.
   onOpen: (eventId: number) => void;
+  // Liste sans en-têtes de mois (profil) : le mois passe sous le numéro, le jour de la semaine dans la ligne.
+  withMonth?: boolean;
+  showStatus?: boolean;
 };
 
-export const EventRow = memo(function EventRow({ event, firstOfDay, past, now, onOpen }: Props) {
+export const EventRow = memo(function EventRow({
+  event,
+  firstOfDay,
+  past,
+  now,
+  onOpen,
+  withMonth = false,
+  showStatus = true,
+}: Props) {
   const { t } = useTranslation();
   const start = new Date(event.startsAt);
   const time = formatTime(start);
-  const status = event.isParticipating ? (past ? t('list.participated') : t('list.participating')) : null;
+  const status = showStatus && event.isParticipating ? (past ? t('list.participated') : t('list.participating')) : null;
+  const timeAndPlace = event.location ? t('list.row.meta', { time, place: event.location.label }) : time;
+  // Dans le profil, les événements passés côtoient les autres : on les estompe.
+  const dim = withMonth && past;
   const label = joinA11y([
     event.title,
     t('list.row.when', { day: formatDayLong(start, now).toLocaleLowerCase(getAppLocale()), time }),
     event.location?.label,
-    event.isParticipating && (past ? t('list.row.participated') : t('list.row.participating')),
+    showStatus && event.isParticipating && (past ? t('list.row.participated') : t('list.row.participating')),
   ]);
 
   return (
@@ -41,8 +55,8 @@ export const EventRow = memo(function EventRow({ event, firstOfDay, past, now, o
       <View style={styles.date} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
         {firstOfDay && (
           <>
-            <Text style={styles.dayNumber}>{start.getDate()}</Text>
-            <Text style={styles.weekday}>{formatWeekdayShort(start)}</Text>
+            <Text style={[styles.dayNumber, dim && styles.dim]}>{start.getDate()}</Text>
+            <Text style={styles.weekday}>{withMonth ? formatMonthShort(start) : formatWeekdayShort(start)}</Text>
           </>
         )}
       </View>
@@ -53,9 +67,11 @@ export const EventRow = memo(function EventRow({ event, firstOfDay, past, now, o
             <Text style={styles.statusText}>{status}</Text>
           </View>
         )}
-        <Text style={styles.title}>{event.title}</Text>
+        <Text style={[styles.title, dim && styles.dim]}>{event.title}</Text>
         <Text style={styles.meta}>
-          {event.location ? t('list.row.meta', { time, place: event.location.label }) : time}
+          {withMonth
+            ? t('profile.list.row.meta', { weekday: formatWeekdayShort(start), rest: timeAndPlace })
+            : timeAndPlace}
         </Text>
       </View>
     </Pressable>
@@ -87,4 +103,5 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   meta: { fontFamily: font.regular, fontSize: font.size.meta, lineHeight: 19, color: colors.muted },
+  dim: { color: colors.muted },
 });
