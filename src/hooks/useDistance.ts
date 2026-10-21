@@ -63,9 +63,18 @@ export function useDistance(location: EventLocation | null) {
   const request = useCallback(async () => {
     if (pending.current) return;
     pending.current = true;
-    const permission = await getLocationPermission().finally(() => {
+    let permission: Awaited<ReturnType<typeof getLocationPermission>>;
+    try {
+      permission = await getLocationPermission();
+    } catch {
+      if (alive.current) {
+        setState({ status: 'error' });
+        announce('event.distance.unavailable');
+      }
+      return;
+    } finally {
       pending.current = false;
-    });
+    }
     if (!alive.current) return;
     if (permission === 'granted') void locate();
     else if (permission === 'undetermined') setState({ status: 'explaining' });
