@@ -12,7 +12,7 @@ import { useEventList } from '@/hooks/useEventList';
 import { getAppLocale } from '@/i18n';
 import type { MainTabScreenProps } from '@/navigation/types';
 import { colors, font, space } from '@/theme/tokens';
-import { text } from '@/theme/typography';
+import { LARGE_TITLE_MAX_SCALE, text } from '@/theme/typography';
 import {
   dayNames,
   dayNamesShort,
@@ -102,7 +102,7 @@ export function CalendarScreen({ navigation }: MainTabScreenProps<'Calendar'>): 
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={[styles.content, { paddingTop: insets.top + 8 }]}>
-      <Text style={text.h1} accessibilityRole="header">
+      <Text style={text.h1} accessibilityRole="header" maxFontSizeMultiplier={LARGE_TITLE_MAX_SCALE}>
         {t('calendar.title')}
       </Text>
 

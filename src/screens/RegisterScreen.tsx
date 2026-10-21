@@ -10,7 +10,7 @@ import { PasswordField } from '@/components/PasswordField';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { TextField } from '@/components/TextField';
 import type { AuthScreenProps } from '@/navigation/types';
-import { text } from '@/theme/typography';
+import { LARGE_TITLE_MAX_SCALE, text } from '@/theme/typography';
 import { validateEmail, validateName, validatePassword } from '@/utils/validation';
 
 type Field = 'name' | 'email' | 'password';
@@ -102,7 +102,7 @@ export function RegisterScreen({ navigation }: AuthScreenProps<'Register'>): Rea
       footerAction={t('auth.register.signIn')}
       onFooterPress={navigation.goBack}
     >
-      <Text style={[text.h1, styles.title]} accessibilityRole="header">
+      <Text style={[text.h1, styles.title]} accessibilityRole="header" maxFontSizeMultiplier={LARGE_TITLE_MAX_SCALE}>
         {t('auth.register.title')}
       </Text>
       <Text style={[text.subtitle, styles.subtitle]}>{t('auth.register.subtitle')}</Text>

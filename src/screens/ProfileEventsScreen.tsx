@@ -11,7 +11,7 @@ import type { EventWithStatus } from '@/data/types';
 import { useProfileEvents } from '@/hooks/useProfileEvents';
 import type { RootStackParamList } from '@/navigation/types';
 import { colors, font, space } from '@/theme/tokens';
-import { text } from '@/theme/typography';
+import { LARGE_TITLE_MAX_SCALE, text } from '@/theme/typography';
 import { toDayKey } from '@/utils/dates';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ProfileEvents'>;
@@ -64,7 +64,7 @@ export function ProfileEventsScreen({ navigation, route }: Props): React.JSX.Ele
 
   const header = (
     <View style={styles.titles}>
-      <Text style={text.h1} accessibilityRole="header">
+      <Text style={text.h1} accessibilityRole="header" maxFontSizeMultiplier={LARGE_TITLE_MAX_SCALE}>
         {kind === 'created' ? t('profile.eventsCreated') : t('profile.participations')}
       </Text>
       {loaded && total > 0 && <Text style={styles.summary}>{summary}</Text>}
