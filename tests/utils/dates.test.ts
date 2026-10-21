@@ -2,6 +2,7 @@
 import '@/i18n';
 import {
   addDays,
+  defaultDayKeyForMonth,
   dayNames,
   dayNamesShort,
   formatDateOnly,
@@ -114,4 +115,10 @@ test('le premier du mois s’écrit « 1er »', () => {
   expect(formatDateOnly(new Date(2026, 10, 1), now)).toBe('1er novembre');
   expect(formatDayLong(new Date(2026, 9, 11), now)).toBe('Dimanche 11 octobre');
   expect(formatWeekdayDay(new Date(2026, 10, 1), 'fr-FR')).toBe('dimanche 1er');
+});
+
+test('changer de mois sélectionne aujourd’hui s’il y figure, sinon le 1er', () => {
+  expect(defaultDayKeyForMonth(new Date(2026, 9, 1), now)).toBe('2026-10-19');
+  expect(defaultDayKeyForMonth(new Date(2026, 10, 1), now)).toBe('2026-11-01');
+  expect(defaultDayKeyForMonth(new Date(2026, 8, 1), now)).toBe('2026-09-01');
 });
