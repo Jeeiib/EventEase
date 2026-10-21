@@ -22,7 +22,7 @@ import { addToDeviceCalendar } from '@/services/deviceCalendar';
 import { openLocationSettings } from '@/services/location';
 import { openInMaps } from '@/services/maps';
 import { colors, font, space } from '@/theme/tokens';
-import { text } from '@/theme/typography';
+import { LARGE_TITLE_MAX_SCALE, text } from '@/theme/typography';
 import { formatDayLong, formatTime, isUpcoming } from '@/utils/dates';
 import { formatDistance } from '@/utils/distance';
 
@@ -177,7 +177,7 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
           {past && <StatusTag label={t('event.ended')} icon="clock" tone="muted" />}
         </View>
 
-        <Text style={[text.h1, styles.title]} accessibilityRole="header">
+        <Text style={[text.h1, styles.title]} accessibilityRole="header" maxFontSizeMultiplier={LARGE_TITLE_MAX_SCALE}>
           {event.title}
         </Text>
 

@@ -16,7 +16,7 @@ import type { EventWithStatus } from '@/data/types';
 import { useEventList, type EventListView } from '@/hooks/useEventList';
 import type { MainTabScreenProps } from '@/navigation/types';
 import { colors, space } from '@/theme/tokens';
-import { text } from '@/theme/typography';
+import { LARGE_TITLE_MAX_SCALE, text } from '@/theme/typography';
 import { formatMonthHeader, fromDayKey } from '@/utils/dates';
 
 type Row = { event: EventWithStatus; firstOfDay: boolean };
@@ -54,7 +54,7 @@ export function EventListScreen({ navigation, route }: MainTabScreenProps<'Event
   return (
     <View style={[styles.screen, { paddingTop: insets.top + 8 }]}>
       <View style={styles.header}>
-        <Text style={text.h1} accessibilityRole="header">
+        <Text style={text.h1} accessibilityRole="header" maxFontSizeMultiplier={LARGE_TITLE_MAX_SCALE}>
           {t('list.title')}
         </Text>
         <RoundButton icon="plus" accessibilityLabel={t('list.a11y.create')} onPress={create} />

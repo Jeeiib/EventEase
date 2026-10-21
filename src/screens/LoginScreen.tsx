@@ -11,7 +11,7 @@ import { PrimaryButton } from '@/components/PrimaryButton';
 import { TextField } from '@/components/TextField';
 import type { AuthScreenProps } from '@/navigation/types';
 import { colors, font, space } from '@/theme/tokens';
-import { text } from '@/theme/typography';
+import { LARGE_TITLE_MAX_SCALE, text } from '@/theme/typography';
 
 export function LoginScreen({ navigation }: AuthScreenProps<'Login'>): React.JSX.Element {
   const { t } = useTranslation();
@@ -66,7 +66,7 @@ export function LoginScreen({ navigation }: AuthScreenProps<'Login'>): React.JSX
       footerAction={t('auth.login.createAccount')}
       onFooterPress={() => navigation.navigate('Register')}
     >
-      <Text style={[text.h1, styles.title]} accessibilityRole="header">
+      <Text style={[text.h1, styles.title]} accessibilityRole="header" maxFontSizeMultiplier={LARGE_TITLE_MAX_SCALE}>
         {t('auth.login.title')}
       </Text>
       <Text style={[text.subtitle, styles.subtitle]}>{t('auth.login.subtitle')}</Text>
