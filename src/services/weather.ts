@@ -10,9 +10,10 @@ export type DailyForecast = {
 
 export type ForecastResult = { ok: true; forecast: DailyForecast } | { ok: false; error: 'network' | 'unavailable' };
 
+// La météo est un plus : après 8 s on abandonne plutôt que de laisser la fiche attendre.
 const TIMEOUT_MS = 8000;
 
-// Codes WMO ; un code inconnu reste neutre plutôt que d'afficher une météo fausse.
+/** Regroupe les codes météo WMO en neuf familles ; un code inconnu reste neutre (`overcast`) plutôt que d'afficher une météo fausse. */
 export function weatherCodeToKind(code: number): WeatherKind {
   if (code === 0) return 'clear';
   if (code === 1 || code === 2) return 'partlyCloudy';
@@ -26,6 +27,10 @@ export function weatherCodeToKind(code: number): WeatherKind {
   return 'overcast';
 }
 
+/**
+ * Prévision d'un seul jour (`dayKey`, « AAAA-MM-JJ », heure de Paris) à l'endroit `loc`.
+ * Ne lève jamais : `unavailable` si l'API répond mal, `network` si le réseau coupe ou si 8 s s'écoulent.
+ */
 export async function fetchDailyForecast(
   loc: { latitude: number; longitude: number },
   dayKey: string,
