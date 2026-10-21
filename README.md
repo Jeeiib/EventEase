@@ -1,8 +1,37 @@
+<p align="center"><img src="docs/logo.png" alt="Logo EventEase" width="96"></p>
+
 # EventEase
 
 [![CI](https://github.com/Jeeiib/EventEase/actions/workflows/ci.yml/badge.svg)](https://github.com/Jeeiib/EventEase/actions/workflows/ci.yml)
+![Expo SDK 57](https://img.shields.io/badge/Expo%20SDK-57-000020?logo=expo&logoColor=white)
 
 EventEase est une application mobile qui permet aux membres et aux bénévoles d'une association de consulter ses événements, d'en créer, de les modifier et d'indiquer ceux auxquels ils participent, avec toutes les données stockées sur le téléphone.
+
+- [Démarrage rapide](#démarrage-rapide)
+- [Captures](#captures)
+- [Fonctionnalités](#fonctionnalités)
+- [Comptes de démonstration](#comptes-de-démonstration)
+- [Scripts](#scripts)
+- [Stack](#stack)
+- [Architecture](#architecture)
+- [Qualité](#qualité)
+- [Release](#release)
+- [Limites connues](#limites-connues)
+- [Crédits](#crédits)
+- [Auteur](#auteur)
+
+## Démarrage rapide
+
+Prérequis : Node 24 et l'application Expo Go 57 sur le téléphone.
+
+```bash
+npm ci
+npx expo start
+```
+
+Scanner ensuite le QR code affiché dans le terminal avec Expo Go, puis se connecter avec un [compte de démonstration](#comptes-de-démonstration).
+
+Sur un réseau qui isole les appareils entre eux (Wi-Fi public, d'école ou d'entreprise), le téléphone ne joint pas l'ordinateur : lancer alors `npx expo start --tunnel`.
 
 ## Captures
 
@@ -37,20 +66,7 @@ EventEase est une application mobile qui permet aux membres et aux bénévoles d
 - Itinéraire : le lieu s'ouvre dans l'application de cartes du téléphone.
 - Suggestions d'adresse pendant la saisie du lieu.
 
-## Lancer l'application
-
-Prérequis : Node 24 et l'application Expo Go 57 sur le téléphone.
-
-```bash
-npm ci
-npx expo start
-```
-
-Scanner ensuite le QR code affiché dans le terminal avec Expo Go.
-
-Sur un réseau qui isole les appareils entre eux (Wi-Fi public, d'école ou d'entreprise), le téléphone ne joint pas l'ordinateur : lancer alors `npx expo start --tunnel`.
-
-### Comptes de démonstration
+## Comptes de démonstration
 
 Au premier lancement, l'application crée quatre comptes et des événements passés et à venir, dont les dates sont calculées à partir du jour de ce lancement. Le mot de passe est le même pour tous : `demo2026`.
 
