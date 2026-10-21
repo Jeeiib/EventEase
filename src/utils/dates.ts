@@ -75,6 +75,16 @@ export function formatWeekdayShort(d: Date, locale: string = getAppLocale()): st
   return new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(d);
 }
 
+/** « sam. 24 » : date compacte sur une ligne, quand la colonne date passe au-dessus du texte. */
+export function formatWeekdayDayShort(d: Date, locale: string = getAppLocale()): string {
+  return new Intl.DateTimeFormat(locale, { weekday: 'short', day: 'numeric' }).format(d);
+}
+
+/** « 24 oct. » : même usage, pour les listes sans en-têtes de mois. */
+export function formatDayMonthShort(d: Date, locale: string = getAppLocale()): string {
+  return new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short' }).format(d);
+}
+
 /** « oct. » : mois abrégé, sous le numéro du jour quand la liste n'a pas d'en-têtes de mois. */
 export function formatMonthShort(d: Date, locale: string = getAppLocale()): string {
   return new Intl.DateTimeFormat(locale, { month: 'short' }).format(d);
