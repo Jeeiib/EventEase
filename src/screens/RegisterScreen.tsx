@@ -91,7 +91,11 @@ export function RegisterScreen({ navigation }: AuthScreenProps<'Register'>): Rea
     <AuthLayout
       top={
         <View style={styles.back}>
-          <IconButton icon="chevron-left" accessibilityLabel={t('auth.register.a11y.back')} onPress={navigation.goBack} />
+          <IconButton
+            icon="chevron-left"
+            accessibilityLabel={t('auth.register.a11y.back')}
+            onPress={navigation.goBack}
+          />
         </View>
       }
       footerText={t('auth.register.hasAccount')}

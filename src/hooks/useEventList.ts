@@ -17,7 +17,10 @@ export function useEventList() {
   const [view, setView] = useState<EventListView>('upcoming');
   const [mineOnly, setMineOnly] = useState(false);
   // « maintenant » est figé à chaque lecture : le rendu reste pur et cohérent avec les données.
-  const [snapshot, setSnapshot] = useState<{ events: EventWithStatus[]; now: Date }>(() => ({ events: [], now: new Date() }));
+  const [snapshot, setSnapshot] = useState<{ events: EventWithStatus[]; now: Date }>(() => ({
+    events: [],
+    now: new Date(),
+  }));
 
   // Seule la dernière lecture lancée a le droit d'écrire l'état.
   const latest = useRef(0);

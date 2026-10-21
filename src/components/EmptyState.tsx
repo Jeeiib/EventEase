@@ -15,7 +15,16 @@ type Props = {
 
 function EmptyIcon({ icon }: { icon: Icon }) {
   return (
-    <Svg width={40} height={40} viewBox="0 0 24 24" fill="none" stroke={colors.text} strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round">
+    <Svg
+      width={40}
+      height={40}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={colors.text}
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       {icon === 'calendarAdd' && (
         <>
           <Rect x={3} y={5} width={18} height={16} rx={2} />
@@ -72,7 +81,13 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: colors.line,
   },
-  title: { fontFamily: font.semiBold, fontSize: font.size.h2, letterSpacing: -0.44, lineHeight: 28, color: colors.text },
+  title: {
+    fontFamily: font.semiBold,
+    fontSize: font.size.h2,
+    letterSpacing: -0.44,
+    lineHeight: 28,
+    color: colors.text,
+  },
   text: { fontFamily: font.regular, fontSize: font.size.body, lineHeight: 24, color: colors.muted },
   action: { marginTop: 6 },
 });

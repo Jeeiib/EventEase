@@ -118,9 +118,12 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
 
   const now = new Date();
   const { weather, retry: retryWeather } = useWeather(event?.location ?? null, event?.startsAt ?? '', now);
-  const { distance, request: requestDistance, confirm: confirmDistance, dismiss: dismissDistance } = useDistance(
-    event?.location ?? null,
-  );
+  const {
+    distance,
+    request: requestDistance,
+    confirm: confirmDistance,
+    dismiss: dismissDistance,
+  } = useDistance(event?.location ?? null);
 
   if (!event) return null;
 
@@ -150,7 +153,11 @@ export function EventDetailScreen({ navigation, route }: Props): React.JSX.Eleme
         onBack={navigation.goBack}
         action={
           isAuthor
-            ? { label: t('event.edit'), icon: 'edit-2', onPress: () => navigation.navigate('EventForm', { eventId: event.id }) }
+            ? {
+                label: t('event.edit'),
+                icon: 'edit-2',
+                onPress: () => navigation.navigate('EventForm', { eventId: event.id }),
+              }
             : undefined
         }
       />
@@ -268,7 +275,13 @@ const styles = StyleSheet.create({
   body: { paddingTop: 8, paddingHorizontal: space.screen, paddingBottom: 24 },
   tags: { flexDirection: 'row', flexWrap: 'wrap', columnGap: 14, rowGap: 6 },
   title: { marginTop: 10, marginBottom: 20 },
-  description: { marginTop: 18, fontFamily: font.regular, fontSize: font.size.body, lineHeight: 25, color: colors.text },
+  description: {
+    marginTop: 18,
+    fontFamily: font.regular,
+    fontSize: font.size.body,
+    lineHeight: 25,
+    color: colors.text,
+  },
   delete: { marginTop: 10 },
   bar: {
     paddingTop: 14,

@@ -17,7 +17,8 @@ export function weekPeriodLabel(week: Date[], now: Date, t: TFunction): string {
 
 export function weekSummaryLabel(events: EventWithStatus[], t: TFunction): string {
   const day = events.length === 1 ? formatWeekdayDay(new Date(events[0].startsAt)) : '';
-  const count = events.length === 0 ? t('list.weekStrip.none') : t('list.weekStrip.event', { count: events.length, day });
+  const count =
+    events.length === 0 ? t('list.weekStrip.none') : t('list.weekStrip.event', { count: events.length, day });
   return joinA11y([count, events.some((e) => e.isParticipating) && t('list.weekStrip.youParticipate')]);
 }
 
