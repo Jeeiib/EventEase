@@ -36,9 +36,9 @@ Sur un réseau qui isole les appareils entre eux (Wi-Fi public, d'école ou d'en
 ## Captures
 
 <p align="center">
-  <img src="docs/captures/liste.png" width="200" alt="Liste des événements à venir avec le filtre Mes participations" />
+  <img src="docs/captures/liste.png" width="200" alt="Liste des événements à venir, avec le bandeau de la semaine" />
   <img src="docs/captures/fiche.png" width="200" alt="Fiche d'un événement avec la météo, le lieu et le bouton de participation" />
-  <img src="docs/captures/formulaire.png" width="200" alt="Formulaire de création d'un événement" />
+  <img src="docs/captures/formulaire.png" width="200" alt="Formulaire de modification d'un événement, lieu choisi" />
   <img src="docs/captures/calendrier.png" width="200" alt="Calendrier mensuel avec les jours qui ont des événements" />
   <img src="docs/captures/profil.png" width="200" alt="Profil avec le nombre d'événements créés et de participations" />
 </p>
@@ -50,7 +50,7 @@ Sur un réseau qui isole les appareils entre eux (Wi-Fi public, d'école ou d'en
 - Inscription et connexion en local, sans serveur : le mot de passe est salé puis haché, la session est conservée entre deux lancements.
 - Liste des événements avec titre, extrait de la description, date et lieu, en deux vues (« À venir » et « Passés ») et un filtre « Mes participations ».
 - Création, modification et suppression d'un événement. Seul l'auteur peut le modifier ou le supprimer, et la suppression demande une confirmation.
-- Participation : un bouton à bascule sur chaque fiche, un marqueur sur la carte et le nombre de participants.
+- Participation : un bouton à bascule sur chaque fiche, un badge « Tu participes » dans la liste et le nombre de participants.
 - Persistance locale dans une base SQLite, avec un schéma versionné.
 
 ### Bonus
