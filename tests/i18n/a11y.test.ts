@@ -10,8 +10,15 @@ test('joinA11y joint par une virgule et ignore les valeurs vides', () => {
 
 test('une ligne de liste se reconstitue en phrase complète', () => {
   const when = t('list.row.when', { day: 'samedi 24 octobre', time: t('time.hm', { h: 10, m: '00' }) });
-  expect(joinA11y(['Atelier réparation de vélos', when, 'Parc Barbieux, Roubaix', t('list.row.participating')])).toBe(
-    'Atelier réparation de vélos, samedi 24 octobre à 10h00, Parc Barbieux, Roubaix, tu participes',
+  expect(
+    joinA11y([
+      'Jeux flamands au musée de plein air',
+      when,
+      "Musée de plein air, Villeneuve-d'Ascq",
+      t('list.row.participating'),
+    ]),
+  ).toBe(
+    "Jeux flamands au musée de plein air, samedi 24 octobre à 10h00, Musée de plein air, Villeneuve-d'Ascq, tu participes",
   );
 });
 

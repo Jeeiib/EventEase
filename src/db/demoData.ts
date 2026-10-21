@@ -13,40 +13,45 @@ export const demoUsers: { name: string; email: string }[] = [
 
 // Coordonnées issues de la Géoplateforme (data.geopf.fr/geocodage) : adresse postale ou, pour un lieu-dit,
 // point d'intérêt (index poi) ; la source est indiquée en commentaire à côté de chaque coordonnée.
+const museePleinAir: EventLocation = {
+  label: "Musée de plein air, Villeneuve-d'Ascq",
+  latitude: 50.624631, // point d'intérêt « Musée de Plein Air » (Géoplateforme, index poi)
+  longitude: 3.181843,
+};
+const maisonFolie: EventLocation = {
+  label: 'Maison Folie Wazemmes, Lille',
+  latitude: 50.624937, // 70 rue des Sarrazins, 59000 Lille
+  longitude: 3.04819,
+};
+const placeAuxOignons: EventLocation = {
+  label: 'Place aux Oignons, Lille',
+  latitude: 50.640972, // Place aux Oignons, 59800 Lille
+  longitude: 3.061464,
+};
+const villaCavrois: EventLocation = {
+  label: 'Villa Cavrois, Croix',
+  latitude: 50.668653, // point d'intérêt « Villa Cavrois » (Géoplateforme, index poi)
+  longitude: 3.153416,
+};
+const lam: EventLocation = {
+  label: "LaM, Villeneuve-d'Ascq",
+  latitude: 50.6374, // point d'intérêt « Lille Métropole Musée d'Art Moderne… » (Géoplateforme, index poi)
+  longitude: 3.150513,
+};
+const citadelle: EventLocation = {
+  label: 'Citadelle de Lille',
+  latitude: 50.641191, // point d'intérêt « Citadelle » (Géoplateforme, index poi)
+  longitude: 3.043524,
+};
+const hospiceHavre: EventLocation = {
+  label: "Hospice d'Havré, Tourcoing",
+  latitude: 50.720777, // 100 rue de Tournai, 59200 Tourcoing
+  longitude: 3.163423,
+};
 const parcBarbieux: EventLocation = {
   label: 'Parc Barbieux, Roubaix',
   latitude: 50.677569, // point d'intérêt « Parc Barbieux » (Géoplateforme, index poi)
   longitude: 3.1616,
-};
-const corderie: EventLocation = {
-  label: 'Médiathèque La Corderie, Marcq-en-Barœul',
-  latitude: 50.669125, // Rue de la Rianderie, 59700 Marcq-en-Barœul
-  longitude: 3.097512,
-};
-const lacHeron: EventLocation = {
-  label: "Lac du Héron, Villeneuve-d'Ascq",
-  latitude: 50.635536, // point d'intérêt « Lac du Héron » (Géoplateforme, index poi)
-  longitude: 3.171167,
-};
-const grandPlaceArmentieres: EventLocation = {
-  label: 'Grand Place, Armentières',
-  latitude: 50.686549, // Place du Général de Gaulle, 59280 Armentières
-  longitude: 2.881634,
-};
-const piscine: EventLocation = {
-  label: "23 rue de l'Espérance, Roubaix",
-  latitude: 50.693067, // 23 rue de l'Espérance, 59100 Roubaix
-  longitude: 3.167691,
-};
-const jardinPartage: EventLocation = {
-  label: 'Jardin partagé du Molinel, Wasquehal',
-  latitude: 50.68591, // Rue du Molinel, 59290 Wasquehal
-  longitude: 3.115067,
-};
-const maisonAssociations: EventLocation = {
-  label: 'Maison des associations, Croix',
-  latitude: 50.678528, // Avenue Roger Salengro, 59170 Croix
-  longitude: 3.15266,
 };
 
 /** `dayOffset` : jours depuis le premier lancement ; `hour` et `minute` : heure locale. */
@@ -61,53 +66,53 @@ export const demoEvents: {
   participantEmails: string[];
 }[] = [
   {
-    title: 'Atelier réparation de vélos',
+    title: 'Jeux flamands au musée de plein air',
     description:
-      'On apprend à régler ses freins, changer une chambre à air et entretenir sa chaîne. Venez avec votre vélo, on fournit les outils et le café.',
+      'Bourle, toupie, billard Nicolas et jeu de la grenouille : on découvre les jeux d’estaminet du Nord avec un animateur du musée. Rendez-vous devant l’accueil, entrée offerte aux membres.',
     dayOffset: 5,
     hour: 10,
     minute: 0,
     authorEmail: 'marie.lefevre@exemple.fr',
-    location: parcBarbieux,
+    location: museePleinAir,
     participantEmails: ['marie.lefevre@exemple.fr', 'paul.martin@exemple.fr', 'julien.moreau@exemple.fr'],
   },
   {
-    title: 'Conférence : le zéro déchet au quotidien',
+    title: 'Soirée quiz : ch’ti ou pas ch’ti ?',
     description:
-      'Une soirée pour réduire ses déchets sans y passer ses week-ends : courses en vrac, produits ménagers maison et retours d’expérience des membres.',
+      'Six manches sur le patois, la cuisine et l’histoire du Nord, par équipes de quatre. L’équipe perdante apporte les gaufres à la prochaine soirée.',
     dayOffset: 8,
     hour: 19,
     minute: 0,
     authorEmail: 'paul.martin@exemple.fr',
-    location: corderie,
+    location: maisonFolie,
     participantEmails: ['sophie.dubois@exemple.fr', 'julien.moreau@exemple.fr'],
   },
   {
-    title: 'Balade nature au lac du Héron',
+    title: 'Balade photo dans le Vieux-Lille',
     description:
-      'Tour du lac à pied, environ 6 km. On observe les oiseaux avec un guide de la LPO. Prévoir des chaussures qui ne craignent pas la boue.',
+      'Deux heures dans les rues pavées, de la place aux Oignons à la cathédrale de la Treille, avec un photographe du club pour apprendre à cadrer. Un téléphone suffit.',
     dayOffset: 12,
     hour: 9,
     minute: 30,
     authorEmail: 'marie.lefevre@exemple.fr',
-    location: lacHeron,
+    location: placeAuxOignons,
     participantEmails: ['paul.martin@exemple.fr', 'sophie.dubois@exemple.fr'],
   },
   {
-    title: 'Atelier couture : réparer ses vêtements',
+    title: 'Visite guidée de la Villa Cavrois',
     description:
-      'On reprend un ourlet, on recoud un bouton et on pose une pièce sur un genou usé. Apportez un vêtement à réparer, les machines et le fil sont sur place.',
+      'La villa de Robert Mallet-Stevens, restaurée de la cave aux terrasses. Visite d’une heure et demie limitée à vingt personnes : inscris-toi pour qu’on réserve ta place.',
     dayOffset: 12,
     hour: 14,
     minute: 0,
     authorEmail: 'sophie.dubois@exemple.fr',
-    location: grandPlaceArmentieres,
+    location: villaCavrois,
     participantEmails: ['julien.moreau@exemple.fr'],
   },
   {
-    title: 'Atelier cuisine anti-gaspi',
+    title: 'Atelier carbonade flamande',
     description:
-      'On cuisine ensemble les invendus du marché de Wasquehal : soupe, cake salé et compote. Chacun repart avec une part et les recettes.',
+      'On cuisine ensemble une carbonade au pain d’épices et à la bière brune, puis on la partage. Le lieu sera communiqué aux inscrits.',
     dayOffset: 16,
     hour: 18,
     minute: 30,
@@ -116,42 +121,42 @@ export const demoEvents: {
     participantEmails: ['marie.lefevre@exemple.fr'],
   },
   {
-    title: 'Visite du musée La Piscine',
+    title: 'L’art brut au LaM',
     description:
-      'Visite guidée de l’exposition d’automne. Entrée gratuite pour les adhérents, rendez-vous devant l’accueil.',
+      'Une médiatrice nous fait découvrir la collection d’art brut du musée, l’une des plus riches d’Europe. Retour possible à pied par le parc.',
     dayOffset: 25,
     hour: 14,
     minute: 0,
     authorEmail: 'marie.lefevre@exemple.fr',
-    location: piscine,
+    location: lam,
     participantEmails: ['marie.lefevre@exemple.fr', 'sophie.dubois@exemple.fr'],
   },
   {
-    title: 'Atelier compost au jardin partagé',
+    title: 'Sortie vélo le long de la Deûle',
     description:
-      'On a monté le deuxième bac à compost et appris à équilibrer matières vertes et brunes. Merci aux sept courageux sous la pluie.',
+      'Une vingtaine de kilomètres à plat, de la Citadelle jusqu’à Wambrechies, avec une pause au port fluvial. Casque obligatoire, rythme tranquille.',
     dayOffset: -2,
     hour: 10,
     minute: 0,
     authorEmail: 'marie.lefevre@exemple.fr',
-    location: jardinPartage,
+    location: citadelle,
     participantEmails: ['marie.lefevre@exemple.fr', 'paul.martin@exemple.fr', 'sophie.dubois@exemple.fr'],
   },
   {
-    title: 'Conférence : réparer plutôt que jeter',
+    title: 'Ciné-débat : Bienvenue chez les Ch’tis',
     description:
-      'Un réparateur du Repair Café de Croix explique comment diagnostiquer une panne simple sur un petit appareil, et quand il vaut mieux renoncer.',
+      'Le film sur grand écran, puis un débat sur les clichés qu’on entend encore sur le Nord. Frites offertes à l’entracte.',
     dayOffset: -7,
     hour: 19,
     minute: 0,
     authorEmail: 'sophie.dubois@exemple.fr',
-    location: maisonAssociations,
+    location: hospiceHavre,
     participantEmails: ['paul.martin@exemple.fr', 'julien.moreau@exemple.fr'],
   },
   {
-    title: 'Pique-nique de rentrée',
+    title: 'Tournoi de pétanque de rentrée',
     description:
-      'Chacun apporte un plat à partager et une nappe. Un moment pour se retrouver après l’été, présenter les projets de la saison et accueillir les nouveaux venus.',
+      'Doublettes tirées au sort et apéro offert par l’association. Pas besoin d’avoir ses boules, on en prête.',
     dayOffset: -15,
     hour: 12,
     minute: 0,
@@ -160,9 +165,9 @@ export const demoEvents: {
     participantEmails: ['marie.lefevre@exemple.fr', 'sophie.dubois@exemple.fr', 'julien.moreau@exemple.fr'],
   },
   {
-    title: 'Soirée jeux de société',
+    title: 'Veillée des géants et légendes du Nord',
     description:
-      'Une vingtaine de jeux de société, des classiques aux nouveautés, pour tous les niveaux. Les règles sont expliquées sur place, on prévoit de quoi grignoter.',
+      'Gayant, Lydéric et Phinaert : Julien raconte les légendes qui ont donné naissance aux géants de nos carnavals. Chicorée et spéculoos fournis, lieu communiqué aux inscrits.',
     dayOffset: -20,
     hour: 20,
     minute: 0,
