@@ -17,6 +17,7 @@ import { TextLink } from './TextLink';
 
 const MIN_LENGTH = 3;
 const PAUSE_MS = 350;
+// Quatre suggestions tiennent au-dessus du clavier ; le service en demande cinq pour qu'il en reste quatre après dédoublonnage.
 const MAX_SHOWN = 4;
 
 // La liste précédente ne reste affichée que si l'on affine la même recherche.

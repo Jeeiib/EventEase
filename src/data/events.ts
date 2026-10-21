@@ -49,6 +49,7 @@ const locationParams = (input: EventInput): SqlValue[] => [
   input.location?.longitude ?? null,
 ];
 
+/** Accès à la table events. `viewerId` sert à calculer `isParticipating` ; les dates sont en ISO 8601 UTC. */
 export const eventsRepo = {
   async listAll(db: Db, viewerId: number): Promise<EventWithStatus[]> {
     const rows = await db.getAllAsync<EventRow>(`${SELECT_WITH_STATUS} ORDER BY e.starts_at ASC, e.id ASC`, viewerId);
@@ -75,7 +76,7 @@ export const eventsRepo = {
     return lastInsertRowId;
   },
 
-  // Le filtre sur author_id applique en SQL la règle « seul l'auteur modifie ».
+  /** Modifie l'événement de `id` si `actorId` en est l'auteur ; renvoie `false` sinon (règle « seul l'auteur modifie » appliquée en SQL). */
   async update(db: Db, id: number, actorId: number, input: EventInput, now: string): Promise<boolean> {
     const { changes } = await db.runAsync(
       `UPDATE events SET title = ?, description = ?, starts_at = ?, location_label = ?, latitude = ?, longitude = ?,
@@ -91,7 +92,7 @@ export const eventsRepo = {
     return changes > 0;
   },
 
-  // Les participations partent avec l'événement (ON DELETE CASCADE).
+  /** Supprime l'événement si `actorId` en est l'auteur ; renvoie `false` sinon. Les participations partent avec lui (ON DELETE CASCADE). */
   async remove(db: Db, id: number, actorId: number): Promise<boolean> {
     const { changes } = await db.runAsync('DELETE FROM events WHERE id = ? AND author_id = ?', id, actorId);
     return changes > 0;

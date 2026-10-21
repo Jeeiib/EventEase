@@ -10,13 +10,13 @@ import { FieldLabel, FieldMessage } from './FieldError';
 
 export type TextFieldProps = Omit<TextInputProps, 'style' | 'accessibilityLabel' | 'accessibilityHint'> & {
   label: string;
-  // Mention affichée après le libellé, ex. « (facultatif) ».
+  /** Mention affichée après le libellé, ex. « (facultatif) ». */
   optional?: string;
   hint?: string;
   error?: string | null;
-  // Élément à droite dans le cadre du champ (bouton Afficher du mot de passe).
+  /** Élément à droite dans le cadre du champ (bouton Afficher du mot de passe). */
   accessory?: ReactNode;
-  // Zone de texte sur plusieurs lignes (description).
+  /** Zone de texte sur plusieurs lignes (description). */
   tall?: boolean;
   ref?: Ref<TextInput>;
 };

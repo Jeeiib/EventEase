@@ -21,7 +21,7 @@ export function FieldMessage({ error, hint }: { error?: string | null; hint?: st
   );
 }
 
-// Libellé visible au-dessus d'un champ, avec la mention « (facultatif) » en gris ; VoiceOver le lit via le champ.
+/** Libellé visible au-dessus d'un champ, avec la mention « (facultatif) » en gris ; VoiceOver le lit via le champ. */
 export function FieldLabel({ label, optional }: { label: string; optional?: string }): React.JSX.Element {
   return (
     <Text

@@ -1,9 +1,9 @@
 // Ajout d'un événement au calendrier du téléphone, par la feuille native « Nouvel événement ».
-// Dans le SDK 57, l'import par défaut d'expo-calendar est la nouvelle API, désactivée dans Expo Go :
-// l'API « legacy » reste celle qui fonctionne partout.
+// SDK 57 : l'import par défaut est la nouvelle API, absente d'Expo Go ; la version « legacy » marche partout.
 import * as Calendar from 'expo-calendar/legacy';
 import { Platform } from 'react-native';
 
+/** `saved` : enregistré (iOS seulement) ; `closed` : feuille fermée, enregistrement incertain ; `denied` : accès refusé (iOS 16). */
 export type DeviceCalendarResult = 'saved' | 'closed' | 'denied';
 
 // Sans durée connue, une heure, comme la valeur par défaut d'iOS ; la feuille permet de la changer.
@@ -15,6 +15,7 @@ function needsPermission(): boolean {
   return Platform.OS === 'ios' && parseInt(String(Platform.Version), 10) < 17;
 }
 
+/** Ouvre la feuille native « Nouvel événement », préremplie ; l'événement dure une heure par défaut, modifiable dans la feuille. */
 export async function addToDeviceCalendar(event: {
   title: string;
   startsAt: string;
