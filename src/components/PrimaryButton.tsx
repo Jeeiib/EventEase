@@ -62,6 +62,12 @@ const styles = StyleSheet.create({
   secondary: { backgroundColor: colors.background, borderWidth: 1.5, borderColor: colors.text },
   compact: { alignSelf: 'flex-start', paddingHorizontal: 22 },
   pressed: { opacity: 0.75 },
-  label: { fontFamily: font.semiBold, fontSize: font.size.body, lineHeight: 22, color: colors.background, textAlign: 'center' },
+  label: {
+    fontFamily: font.semiBold,
+    fontSize: font.size.body,
+    lineHeight: 22,
+    color: colors.background,
+    textAlign: 'center',
+  },
   secondaryLabel: { color: colors.text },
 });

@@ -64,7 +64,8 @@ export function useEventDetail(eventId: number) {
   const remove = useCallback(async () => {
     if (userId === null) throw new Error('Aucun utilisateur connecté');
     const removed = await eventsRepo.remove(db, eventId, userId);
-    if (!removed) throw new Error("Suppression refusée : l'événement n'existe plus ou n'appartient pas à l'utilisateur");
+    if (!removed)
+      throw new Error("Suppression refusée : l'événement n'existe plus ou n'appartient pas à l'utilisateur");
   }, [db, userId, eventId]);
 
   return { event, status, isAuthor, toggleParticipation, remove, refresh };

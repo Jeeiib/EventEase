@@ -156,8 +156,7 @@ export const fr = {
         unavailable: 'Position introuvable pour le moment. Réessaie dans un instant.',
         continue: 'Continuer',
         notNow: 'Pas maintenant',
-        denied:
-          "Ta position n'est pas autorisée pour EventEase. Pour voir la distance, active-la dans les Réglages.",
+        denied: "Ta position n'est pas autorisée pour EventEase. Pour voir la distance, active-la dans les Réglages.",
         openSettings: 'Ouvrir les réglages',
         permissionPlist:
           "EventEase utilise ta position uniquement pour calculer la distance jusqu'au lieu d'un événement.",
@@ -205,7 +204,8 @@ export const fr = {
         count_one: '{{count}} suggestion',
         count_other: '{{count}} suggestions',
         none: "Aucune adresse trouvée pour « {{query}} ». Vérifie l'orthographe, ou crée l'événement sans lieu.",
-        offline: "Pas de connexion : la recherche d'adresse ne répond pas. Tu peux créer l'événement sans lieu et l'ajouter plus tard.",
+        offline:
+          "Pas de connexion : la recherche d'adresse ne répond pas. Tu peux créer l'événement sans lieu et l'ajouter plus tard.",
         chosen: 'Lieu choisi : {{label}}',
         found: 'Lieu trouvé : la fiche affichera la météo prévue et la distance.',
         credit: "Adresses et lieux : Géoplateforme de l'IGN",
@@ -213,8 +213,7 @@ export const fr = {
       locationSearching: 'Recherche du lieu…',
       locationFound: 'Lieu trouvé : {{label}}',
       locationNotFound: "Adresse introuvable. Vérifie l'orthographe, ou crée l'événement sans lieu.",
-      locationError:
-        "Impossible de vérifier l'adresse pour le moment. Réessaie ou crée l'événement sans lieu.",
+      locationError: "Impossible de vérifier l'adresse pour le moment. Réessaie ou crée l'événement sans lieu.",
       removeLocation: 'Retirer le lieu',
       errors: {
         titleRequired: "Donne un titre à l'événement.",

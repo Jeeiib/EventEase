@@ -73,16 +73,12 @@ export function EventListScreen({ navigation, route }: MainTabScreenProps<'Event
         <FilterChip label={t('list.mine')} selected={mineOnly} onPress={() => setMineOnly(!mineOnly)} />
       </View>
 
-      {!!deletedTitle && <DeletedBanner message={t('list.deletedBanner', { title: deletedTitle })} onHide={hideDeleted} />}
+      {!!deletedTitle && (
+        <DeletedBanner message={t('list.deletedBanner', { title: deletedTitle })} onHide={hideDeleted} />
+      )}
 
       {view === 'upcoming' && (
-        <WeekStrip
-          week={week}
-          weekEvents={weekEvents}
-          markers={markers}
-          now={now}
-          onPress={openCalendar}
-        />
+        <WeekStrip week={week} weekEvents={weekEvents} markers={markers} now={now} onPress={openCalendar} />
       )}
 
       {listSections.length === 0 ? (

@@ -33,7 +33,11 @@ export function MainTabs(): React.JSX.Element {
       <Tab.Screen
         name="Events"
         component={EventListScreen}
-        options={{ title: t('common.tabs.events'), tabBarAccessibilityLabel: t('common.tabs.events'), tabBarIcon: tabIcon('list') }}
+        options={{
+          title: t('common.tabs.events'),
+          tabBarAccessibilityLabel: t('common.tabs.events'),
+          tabBarIcon: tabIcon('list'),
+        }}
       />
       <Tab.Screen
         name="Calendar"
@@ -47,7 +51,11 @@ export function MainTabs(): React.JSX.Element {
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{ title: t('common.tabs.profile'), tabBarAccessibilityLabel: t('common.tabs.profile'), tabBarIcon: tabIcon('user') }}
+        options={{
+          title: t('common.tabs.profile'),
+          tabBarAccessibilityLabel: t('common.tabs.profile'),
+          tabBarIcon: tabIcon('user'),
+        }}
       />
     </Tab.Navigator>
   );
