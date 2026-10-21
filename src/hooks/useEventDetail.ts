@@ -29,7 +29,16 @@ export function useEventDetail(eventId: number) {
   const refresh = useCallback(async () => {
     if (userId === null) return;
     const ticket = ++latest.current;
-    const event = await eventsRepo.getById(db, eventId, userId);
+    let event: EventWithStatus | null;
+    try {
+      event = await eventsRepo.getById(db, eventId, userId);
+    } catch {
+      // Lecture impossible : sans fiche déjà affichée, on passe en « missing », que l'écran gère par un retour.
+      if (mounted.current && ticket === latest.current) {
+        setLoaded((prev) => (prev?.eventId === eventId && prev.event ? prev : { eventId, event: null }));
+      }
+      return;
+    }
     if (mounted.current && ticket === latest.current) setLoaded({ eventId, event });
   }, [db, eventId, userId]);
 
@@ -68,5 +77,5 @@ export function useEventDetail(eventId: number) {
       throw new Error("Suppression refusée : l'événement n'existe plus ou n'appartient pas à l'utilisateur");
   }, [db, userId, eventId]);
 
-  return { event, status, isAuthor, toggleParticipation, remove, refresh };
+  return { event, status, isAuthor, toggleParticipation, remove };
 }
