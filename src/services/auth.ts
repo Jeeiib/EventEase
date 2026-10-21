@@ -17,6 +17,9 @@ export function hashPassword(password: string, salt: string, digest: Digest): Pr
   return digest(salt + password);
 }
 
+// Hachage de production, tel que le branchent le jeu de démo et sa réinitialisation.
+export const hashWithSha256 = (password: string, salt: string): Promise<string> => hashPassword(password, salt, sha256);
+
 export function makeSalt(): string {
   return Array.from(Crypto.getRandomBytes(16), (b) => b.toString(16).padStart(2, '0')).join('');
 }

@@ -4,10 +4,8 @@ import { t } from 'i18next';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AccessibilityInfo } from 'react-native';
 import type { EventLocation } from '@/data/types';
-import { getLocationPermission, getPositionForDistance } from '@/services/location';
+import { getLocationPermission, getPositionForDistance, type Coords } from '@/services/location';
 import { distanceMeters } from '@/utils/distance';
-
-type Coords = { latitude: number; longitude: number };
 
 export type DistanceState =
   | { status: 'idle' }

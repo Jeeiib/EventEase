@@ -5,10 +5,8 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { getAppLocale } from '@/i18n';
 import { colors, font, size } from '@/theme/tokens';
-import { formatDayLong, formatTime } from '@/utils/dates';
+import { formatDayLong, formatTime, STEP_MS } from '@/utils/dates';
 import { BottomSheet } from './BottomSheet';
-
-const STEP_MS = 5 * 60 * 1000;
 
 type Props = {
   visible: boolean;

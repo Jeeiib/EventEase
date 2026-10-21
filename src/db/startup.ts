@@ -1,8 +1,8 @@
 // Préparation de la base au lancement : ouverture, migrations, jeu de démo au premier lancement.
 import { openDatabase, type Db } from './connection';
 import { migrate } from './migrations';
-import { seedIfEmpty } from './seed';
-import { hashPassword, makeSalt, sha256 } from '@/services/auth';
+import { resetDemoData, seedIfEmpty } from './seed';
+import { hashWithSha256, makeSalt } from '@/services/auth';
 
 let pending: Promise<Db> | null = null;
 
@@ -11,7 +11,7 @@ export function prepareDatabase(): Promise<Db> {
   pending ??= (async () => {
     const db = await openDatabase();
     await migrate(db);
-    await seedIfEmpty(db, new Date(), (password, salt) => hashPassword(password, salt, sha256), makeSalt);
+    await seedIfEmpty(db, new Date(), hashWithSha256, makeSalt);
     return db;
   })().catch((error: unknown) => {
     // Un échec n'est pas mémorisé : « Réessayer » relance une vraie préparation.
@@ -19,4 +19,9 @@ export function prepareDatabase(): Promise<Db> {
     throw error;
   });
   return pending;
+}
+
+// Remet la base dans l'état du premier lancement, avec le hachage de production.
+export function resetDemo(db: Db): Promise<void> {
+  return resetDemoData(db, new Date(), hashWithSha256, makeSalt);
 }

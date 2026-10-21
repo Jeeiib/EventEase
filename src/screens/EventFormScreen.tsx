@@ -25,7 +25,7 @@ import type { EventLocation, EventWithStatus } from '@/data/types';
 import { useDb } from '@/db/DbContext';
 import type { RootStackParamList } from '@/navigation/types';
 import { colors, space } from '@/theme/tokens';
-import { formatDayWithTime } from '@/utils/dates';
+import { formatDayWithTime, STEP_MS } from '@/utils/dates';
 import { validateEventForm, type EventFormErrors } from '@/utils/validation';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'EventForm'>;
@@ -33,7 +33,6 @@ type Values = { title: string; description: string; startsAt: string | null; pla
 type Field = keyof EventFormErrors;
 
 const FIELD_ORDER: Field[] = ['title', 'description', 'startsAt', 'place'];
-const STEP_MS = 5 * 60 * 1000;
 
 // Le sélecteur avance par 5 minutes : on part du prochain créneau rond.
 function nextSlot(from: Date): Date {
