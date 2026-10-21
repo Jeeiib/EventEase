@@ -24,6 +24,7 @@ const migrations: ((db: Db) => Promise<void>)[] = [
 
 export const SCHEMA_VERSION = migrations.length;
 
+/** Applique les migrations manquantes dans l'ordre ; chacune est atomique. Sans effet si la base est à jour. */
 export async function migrate(db: Db): Promise<void> {
   const row = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version');
   const current = row?.user_version ?? 0;

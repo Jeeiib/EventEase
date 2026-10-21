@@ -7,15 +7,16 @@ import { colors, font } from '@/theme/tokens';
 
 type Props = {
   icon: React.ComponentProps<typeof Feather>['name'];
-  // Icône hors de Feather (météo « éclaircies »), à la place de `icon`.
+  /** Icône hors de Feather (météo « éclaircies »), à la place de `icon`. */
   iconElement?: ReactNode;
-  // Information pas encore disponible : titre en gris.
+  /** Information pas encore disponible : titre en gris. */
   muted?: boolean;
   busy?: boolean;
   title: string;
   subtitle?: string;
+  /** Dernière ligne du bloc : ajoute le filet du bas. */
   last?: boolean;
-  // Boutons de la ligne (distance, météo) : frères du bloc lu, jamais ses enfants.
+  /** Boutons de la ligne (distance, météo) : frères du bloc lu, jamais ses enfants. */
   children?: ReactNode;
 };
 

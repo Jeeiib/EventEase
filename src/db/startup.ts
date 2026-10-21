@@ -6,7 +6,7 @@ import { hashWithSha256, makeSalt } from '@/services/auth';
 
 let pending: Promise<Db> | null = null;
 
-// Une seule préparation par lancement, même si l'effet qui l'appelle est rejoué en développement.
+/** Ouvre la base, migre et insère la démo ; une seule préparation par lancement, même si l'effet appelant est rejoué en développement, et un échec se réessaie. */
 export function prepareDatabase(): Promise<Db> {
   pending ??= (async () => {
     const db = await openDatabase();
@@ -21,7 +21,7 @@ export function prepareDatabase(): Promise<Db> {
   return pending;
 }
 
-// Remet la base dans l'état du premier lancement, avec le hachage de production.
+/** Remet la base dans l'état du premier lancement, avec le hachage de production. */
 export function resetDemo(db: Db): Promise<void> {
   return resetDemoData(db, new Date(), hashWithSha256, makeSalt);
 }

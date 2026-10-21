@@ -19,7 +19,13 @@ const ICONS: Record<Exclude<WeatherKind, 'partlyCloudy'>, React.ComponentProps<t
   thunderstorm: 'cloud-lightning',
 };
 
-type Props = { weather: WeatherState; now: Date; onRetry: () => void; last?: boolean };
+type Props = {
+  weather: WeatherState;
+  now: Date;
+  onRetry: () => void;
+  /** Dernière ligne du bloc : ajoute le filet du bas. */
+  last?: boolean;
+};
 
 export function WeatherRow({ weather, now, onRetry, last }: Props): React.JSX.Element | null {
   const { t } = useTranslation();

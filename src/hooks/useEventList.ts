@@ -9,6 +9,7 @@ import { buildListSections, dayMarkers, eventsInWeek, selectVisible, splitByTime
 
 export type EventListView = 'upcoming' | 'past';
 
+/** Liste, semaine et marqueurs du calendrier, relus à chaque focus. `now` est figé à chaque lecture pour que le rendu reste cohérent avec les données. */
 export function useEventList() {
   const db = useDb();
   const { user } = useAuth();

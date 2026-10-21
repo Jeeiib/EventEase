@@ -7,6 +7,7 @@ import { settingsRepo } from '@/data/settings';
 import { usersRepo } from '@/data/users';
 import { login, register, sha256, type LoginError, type RegisterError } from '@/services/auth';
 
+/** `signIn` et `signUp` renvoient le code d'erreur, ou `null` si tout s'est bien passé ; `status` vaut `loading` tant que la session n'est pas relue. */
 type AuthValue = {
   status: 'loading' | 'signedOut' | 'signedIn';
   user: User | null;

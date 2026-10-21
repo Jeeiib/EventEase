@@ -17,6 +17,7 @@ void registerPlugin(initReactI18next).init({
   returnNull: false,
 });
 
+/** Étiquette de langue de l'appareil (« fr-FR », « fr-BE ») si la langue est gérée, sinon `fr-FR` ; sert au formatage des dates et des nombres. */
 export function getAppLocale(): string {
   const device = getLocales()[0];
   const language = device?.languageCode;

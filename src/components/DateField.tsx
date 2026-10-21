@@ -9,7 +9,7 @@ import { FieldLabel, FieldMessage } from './FieldError';
 
 type Props = {
   label: string;
-  // Valeur déjà formatée (« Samedi 31 octobre, 9h30 »), ou null tant qu'aucune date n'est choisie.
+  /** Valeur déjà formatée (« Samedi 31 octobre, 9h30 »), ou null tant qu'aucune date n'est choisie. */
   value: string | null;
   placeholder: string;
   error?: string | null;
