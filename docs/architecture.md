@@ -1,12 +1,12 @@
 # EventEase : architecture et choix techniques
 
-- **Couches** : `db` (connexion, migrations, jeu de démonstration), `data` (accès par table), `services` (authentification, météo, adresses, localisation, cartes, calendrier du téléphone), `auth` (session), `navigation`, `screens`, `components`, `theme`, `utils`. Les écrans n'écrivent pas de SQL, pour qu'un changement de schéma reste dans `db` et `data`.
-- **SQLite plutôt qu'AsyncStorage** : les données sont relationnelles (utilisateurs, événements, participations). Les clés étrangères avec suppression en cascade garantissent qu'un événement supprimé emporte ses participations, ce qu'une paire clé-valeur ne ferait pas. Le schéma est versionné par `PRAGMA user_version`, ce qui permet de le faire évoluer sans perdre une base existante.
-- **Navigation** : React Navigation, avec une pile d'authentification (connexion, inscription) quand personne n'est connecté, et trois onglets (événements, calendrier, profil) sinon. La fiche et le formulaire s'ouvrent par-dessus les onglets, et l'aiguillage suit l'état de la session.
-- **Authentification locale** : le mot de passe est concaténé à un sel aléatoire de 16 octets, puis haché en SHA-256 (`expo-crypto`), et jamais stocké en clair. C'est un hachage rapide : il protège d'une lecture directe du fichier, pas d'une attaque par force brute. Sur le téléphone, c'est le bac à sable du système qui protège la base, et un vrai serveur hacherait avec Argon2. Un message unique pour un e-mail inconnu et un mauvais mot de passe évite de révéler quels comptes existent.
-- **APIs sans clé** : la météo vient d'Open-Meteo et les adresses de la Géoplateforme de l'IGN. Elles sont gratuites et n'exigent aucune clé, alors qu'une clé OpenWeather serait lisible dans un dépôt public. L'application demande la météo jusqu'à 15 jours à l'avance, et au-delà l'application affiche la date à partir de laquelle la prévision sera disponible.
-- **Dates en heure locale** : un seul utilitaire (`utils/dates.ts`) formate les dates et calcule les clés de jour du calendrier, pour qu'un événement à 23 h ne change pas de jour en passant par l'UTC.
-- **Internationalisation** : i18next est en place dès le début, même avec le français seul. Aucun texte visible n'est écrit en dur, et une règle ESLint le vérifie. Les validateurs et les services renvoient des codes que les écrans traduisent, si bien qu'ajouter une langue ne touche pas à la logique.
-- **Accessibilité** : chaque élément tactile a un rôle, un libellé et un état pour VoiceOver, et mesure au moins 44 pt. La mise en page suit Dynamic Type, et les contrastes respectent WCAG AA, pour qu'aucune information ne repose sur la seule couleur.
-- **Permissions à la demande** : la position n'est demandée qu'au toucher de « Voir à quelle distance », après une explication. L'ajout au calendrier passe par la feuille native du système, sans permission sur Android et iOS 17. L'application reste entièrement utilisable sans ces accès.
-- **Tests et CI** : Jest couvre la logique pure, la couche de données, la base et les services. Le hachage reçoit son outil en paramètre pour tourner sous Node, car le module natif manque à Jest. La CI vérifie à chaque pull request les versions du SDK (`expo install --check`, `expo-doctor`), ESLint, Prettier, les types et les tests.
+- **Couches** : tout le SQL vit dans `db` et `data`, les écrans passent par eux sans en écrire.
+- **SQLite** plutôt qu'AsyncStorage : données relationnelles, participations supprimées en cascade.
+- **Schéma versionné** par `PRAGMA user_version`, pour le faire évoluer sans perdre une base existante.
+- **Navigation** : React Navigation, pile de connexion sans session, trois onglets une fois connecté.
+- **Mots de passe** salés et hachés en SHA-256, jamais en clair ; un serveur prendrait Argon2.
+- **APIs sans clé** : météo Open-Meteo et adresses de l'IGN, aucun secret dans un dépôt public.
+- **Permissions** demandées au moment du besoin, et l'application reste utilisable sans elles.
+- **i18next** dès le départ : aucun texte en dur, une règle ESLint le vérifie.
+- **Accessibilité** : VoiceOver, cibles de 44 pt, Dynamic Type et contrastes WCAG AA.
+- **Qualité** : tests Jest, et une CI qui vérifie SDK, ESLint, Prettier, types et tests à chaque PR.

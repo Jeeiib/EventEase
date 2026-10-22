@@ -121,7 +121,7 @@ src/
   utils/       dates, distance, validation, regroupement des événements
 ```
 
-Les écrans n'écrivent pas de SQL : ils passent par `data/`. Les choix et leurs raisons sont détaillés dans [docs/architecture.md](docs/architecture.md).
+Les écrans n'écrivent pas de SQL : ils passent par `data/`. Les choix techniques sont résumés en dix lignes dans [docs/architecture.md](docs/architecture.md).
 
 ## Qualité
 
