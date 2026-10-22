@@ -15,7 +15,7 @@ EventEase est une application mobile qui permet aux membres et aux bénévoles d
 - [Stack](#stack)
 - [Architecture](#architecture)
 - [Qualité](#qualité)
-- [Release](#release)
+- [Builds](#builds)
 - [Limites connues](#limites-connues)
 - [Crédits](#crédits)
 - [Auteur](#auteur)
@@ -130,13 +130,23 @@ Les écrans n'écrivent pas de SQL : ils passent par `data/`. Les choix et leurs
 - **Accessibilité** : rôles, libellés et états pour VoiceOver sur les éléments tactiles, cibles d'au moins 44 pt, Dynamic Type (les écrans défilent et le texte passe à la ligne), contrastes conformes à WCAG AA.
 - **Internationalisation** : i18next dès le départ, tous les textes passent par `t()`, libellés d'accessibilité compris. Une règle ESLint refuse les textes visibles écrits en dur.
 
-## Release
+## Builds
 
-Pousser un tag `v*` lance `release.yml` : EAS Build produit un APK Android et un build pour simulateur iOS, joints à une release GitHub. Prérequis : un compte Expo, `eas init` exécuté une fois sur le projet, et le secret `EXPO_TOKEN` dans les secrets du dépôt.
+Les builds se font en local avec `eas build --local` : la compilation tourne sur la machine, sans passer par les serveurs d'EAS. Le projet doit être lié une fois à un compte Expo (`npx eas-cli login`, puis `npx eas-cli init`).
+
+```bash
+# APK Android (JDK 17 et SDK Android requis), arm64 seulement pour un fichier deux fois plus léger
+npx eas-cli build --local --platform android --profile preview --output EventEase.apk
+
+# Application pour le simulateur iOS (Xcode requis)
+npx eas-cli build --local --platform ios --profile preview --output EventEase-simulateur.tar.gz
+```
+
+Le profil `preview` est décrit dans `eas.json`. Le premier build Android demande de créer le keystore de signature, en mode interactif.
 
 ## Limites connues
 
-- Dans Expo Go, l'icône et l'écran de lancement affichés sont ceux d'Expo Go : seuls les builds de la release montrent ceux d'EventEase.
+- Dans Expo Go, l'icône et l'écran de lancement affichés sont ceux d'Expo Go : seul un build montre ceux d'EventEase.
 - Les données restent sur l'appareil : il n'y a ni serveur ni synchronisation, ce qui correspond au cahier des charges. Un compte créé sur un téléphone n'existe pas sur un autre.
 
 ## Crédits
