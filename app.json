@@ -52,7 +52,8 @@
           "calendarPermission": "EventEase ajoute à ton calendrier les événements que tu choisis, seulement quand tu le demandes.",
           "remindersPermission": false
         }
-      ]
+      ],
+      "./plugins/withSceneLifecycle"
     ],
     "scheme": "eventease",
     "extra": {
