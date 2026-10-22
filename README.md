@@ -152,7 +152,7 @@ Le profil `preview` est décrit dans `eas.json`. Le premier build Android demand
 ## Crédits
 
 - Météo : [Open-Meteo](https://open-meteo.com), données sous licence [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (attribution requise).
-- Adresses : [Géoplateforme de l'IGN](https://data.geopf.fr), sous [Licence Ouverte Etalab 2.0](https://www.etalab.gouv.fr/licence-ouverte-open-licence/).
+- Adresses : [Géoplateforme de l'IGN](https://cartes.gouv.fr/aide/fr/guides-utilisateur/utiliser-les-services-de-la-geoplateforme/geocodage/), sous [Licence Ouverte Etalab 2.0](https://www.data.gouv.fr/pages/legal/licences/etalab-2.0).
 - Police : [Geist](https://vercel.com/font), sous licence SIL OFL.
 - Icônes : [Feather](https://feathericons.com).
 
