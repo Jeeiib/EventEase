@@ -1,6 +1,7 @@
 // Onglets texte soulignés (À venir / Passés), annoncés comme onglets par VoiceOver.
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, font, size } from '@/theme/tokens';
+import { BAR_MAX_SCALE } from '@/theme/typography';
 
 type Props<T extends string> = {
   options: { value: T; label: string }[];
@@ -22,7 +23,7 @@ export function SegmentedTabs<T extends string>({ options, value, onChange }: Pr
             onPress={() => onChange(option.value)}
             style={[styles.tab, selected && styles.tabSelected]}
           >
-            <Text style={[styles.label, selected && styles.labelSelected]} maxFontSizeMultiplier={1.6}>
+            <Text style={[styles.label, selected && styles.labelSelected]} maxFontSizeMultiplier={BAR_MAX_SCALE}>
               {option.label}
             </Text>
           </Pressable>

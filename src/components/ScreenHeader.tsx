@@ -3,6 +3,7 @@ import { Feather } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, font, size } from '@/theme/tokens';
+import { BAR_MAX_SCALE } from '@/theme/typography';
 import { IconButton } from './IconButton';
 
 type Props = {
@@ -24,7 +25,9 @@ export function ScreenHeader({ backLabel, onBack, action }: Props): React.JSX.El
           style={({ pressed }) => [styles.action, pressed && styles.pressed]}
         >
           <Feather name={action.icon} size={18} color={colors.text} />
-          <Text style={styles.actionLabel}>{action.label}</Text>
+          <Text style={styles.actionLabel} maxFontSizeMultiplier={BAR_MAX_SCALE}>
+            {action.label}
+          </Text>
         </Pressable>
       )}
     </View>

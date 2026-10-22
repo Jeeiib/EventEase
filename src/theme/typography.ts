@@ -5,6 +5,9 @@ import { colors, font } from './tokens';
 /** Plafond du grand titre aux tailles de texte d'accessibilité : comme les grands titres d'iOS, il grossit moins que le texte courant, sinon il déborde sur les boutons voisins. */
 export const LARGE_TITLE_MAX_SCALE = 1.25;
 
+/** Plafond des boutons de barre (en-têtes, onglets) : comme dans les barres d'iOS, ils grossissent moins que le contenu, qu'ils finiraient par masquer. */
+export const BAR_MAX_SCALE = 1.6;
+
 export const text = StyleSheet.create({
   h1: {
     fontFamily: font.semiBold,

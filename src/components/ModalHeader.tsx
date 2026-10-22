@@ -1,6 +1,7 @@
 // En-tête d'une feuille modale : Annuler à gauche, titre au centre, action principale à droite.
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, font, size } from '@/theme/tokens';
+import { BAR_MAX_SCALE } from '@/theme/typography';
 
 type Action = { label: string; onPress: () => void };
 
@@ -14,7 +15,9 @@ function HeaderButton({ action, strong }: { action: Action; strong?: boolean }) 
       onPress={action.onPress}
       style={({ pressed }) => [styles.button, pressed && styles.pressed]}
     >
-      <Text style={[styles.buttonText, strong && styles.strong]}>{action.label}</Text>
+      <Text style={[styles.buttonText, strong && styles.strong]} maxFontSizeMultiplier={BAR_MAX_SCALE}>
+        {action.label}
+      </Text>
     </Pressable>
   );
 }
@@ -23,7 +26,7 @@ export function ModalHeader({ title, cancel, confirm }: Props): React.JSX.Elemen
   return (
     <View style={styles.header}>
       <HeaderButton action={cancel} />
-      <Text style={styles.title} accessibilityRole="header" numberOfLines={1}>
+      <Text style={styles.title} accessibilityRole="header" numberOfLines={1} maxFontSizeMultiplier={BAR_MAX_SCALE}>
         {title}
       </Text>
       <HeaderButton action={confirm} strong />
