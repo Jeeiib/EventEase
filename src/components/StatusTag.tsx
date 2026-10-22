@@ -21,5 +21,6 @@ export function StatusTag({ label, icon, tone }: Props): React.JSX.Element {
 
 const styles = StyleSheet.create({
   tag: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  label: { fontFamily: font.medium, fontSize: font.size.row },
+  // Rétrécit pour passer à la ligne aux grandes tailles de texte au lieu de sortir de l'écran.
+  label: { flexShrink: 1, fontFamily: font.medium, fontSize: font.size.row },
 });
