@@ -49,8 +49,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "jest",
-    "format": "prettier --write src tests App.tsx index.ts app.json eslint.config.js",
-    "format:check": "prettier --check src tests App.tsx index.ts app.json eslint.config.js"
+    "format": "prettier --write src tests App.tsx index.ts app.json eslint.config.js plugins",
+    "format:check": "prettier --check src tests App.tsx index.ts app.json eslint.config.js plugins"
   },
   "private": true
 }
