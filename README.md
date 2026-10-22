@@ -49,7 +49,7 @@ Sur un réseau qui isole les appareils entre eux (Wi-Fi public, d'école ou d'en
 - Inscription et connexion en local, sans serveur : le mot de passe est salé puis haché, la session est conservée entre deux lancements.
 - Liste des événements avec titre, extrait de la description, date et lieu, en deux vues (« À venir » et « Passés ») et un filtre « Mes participations ».
 - Création, modification et suppression d'un événement. Seul l'auteur peut le modifier ou le supprimer, et la suppression demande une confirmation.
-- Participation : un bouton à bascule sur chaque fiche, un badge « Tu participes » dans la liste et le nombre de participants.
+- Participation : un bouton à bascule sur chaque fiche (« Je participe », ou « Marquer comme participé » pour un événement passé), un badge dans la liste et le nombre de participants.
 - Persistance locale dans une base SQLite, avec un schéma versionné.
 
 ### Bonus
@@ -142,7 +142,7 @@ npx eas-cli build --local --platform android --profile preview --output EventEas
 npx eas-cli build --local --platform ios --profile preview --output EventEase-simulateur.tar.gz
 ```
 
-Le profil `preview` est décrit dans `eas.json`. Le premier build Android demande de créer le keystore de signature, en mode interactif.
+Le profil `preview` est décrit dans `eas.json`. Le SDK d'iOS 27 exige le cycle de vie UIScene, qu'Expo 57 ne gère pas encore : le plugin de config `plugins/withSceneLifecycle.js` adapte l'`AppDelegate` au moment du prebuild. Le premier build Android demande de créer le keystore de signature, en mode interactif.
 
 ## Limites connues
 
