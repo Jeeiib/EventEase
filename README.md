@@ -126,7 +126,7 @@ Les écrans n'écrivent pas de SQL : ils passent par `data/`. Les choix et leurs
 ## Qualité
 
 - **Intégration continue** : `ci.yml` s'exécute à chaque pull request et à chaque push sur `main`. Il installe les dépendances (`npm ci`), contrôle qu'elles sont celles du SDK (`npx expo install --check`, `npx expo-doctor`), puis lance ESLint, la vérification Prettier, `tsc --noEmit` et Jest.
-- **Tests** : 23 suites Jest, sur la logique pure (dates, distance, validation), la couche de données, la base, les services, l'internationalisation et un composant.
+- **Tests** : 24 suites Jest, sur la logique pure (dates, distance, validation), la couche de données, la base, les services, l'internationalisation et un composant.
 - **Accessibilité** : rôles, libellés et états pour VoiceOver sur les éléments tactiles, cibles d'au moins 44 pt, Dynamic Type (les écrans défilent et le texte passe à la ligne), contrastes conformes à WCAG AA.
 - **Internationalisation** : i18next dès le départ, tous les textes passent par `t()`, libellés d'accessibilité compris. Une règle ESLint refuse les textes visibles écrits en dur.
 
