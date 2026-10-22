@@ -54,6 +54,12 @@
         }
       ]
     ],
-    "scheme": "eventease"
+    "scheme": "eventease",
+    "extra": {
+      "eas": {
+        "projectId": "2a0cbe52-6e14-41c5-9990-c34c114663f8"
+      }
+    },
+    "owner": "jeeiib"
   }
 }
